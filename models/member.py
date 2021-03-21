@@ -23,6 +23,7 @@ class MemberModel(db.Model, ModelMixin):
     role_id = db.Column(db.Integer, db.ForeignKey("roles.id"), nullable=False)
     role = db.relationship("RoleModel")
     tokens = db.relationship("TokenModel", lazy="dynamic")
+    meetings = db.relationship("MeetingModel", lazy="dynamic")
 
     @classmethod
     def find_all(cls) -> List["MemberModel"]:

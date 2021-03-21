@@ -24,7 +24,7 @@ class MeetingModel(db.Model, ModelMixin):
         return cls.query.order_by(desc(cls.datetime)).all()
 
     @classmethod
-    def find_by_creator(cls, creator_id: int) -> List["MeetingModel"]:
+    def find_by_creator_id(cls, creator_id: int) -> List["MeetingModel"]:
         return (
             cls.query.filter_by(creator_id=creator_id)
             .order_by(desc(cls.datetime))

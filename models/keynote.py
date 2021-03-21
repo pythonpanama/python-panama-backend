@@ -25,12 +25,8 @@ class KeynoteModel(db.Model, ModelMixin):
         return cls.query.order_by(desc(cls.meeting_id)).all()
 
     @classmethod
-    def find_by_speaker_id(cls, speaker_id: int) -> List["KeynoteModel"]:
-        return (
-            cls.query.filter_by(speaker_id=speaker_id)
-            .order_by(desc(cls.meeting_id))
-            .all()
-        )
+    def find_by_id(cls, id: int) -> "KeynoteModel":
+        return cls.query.filter_by(id=id).first()
 
     @classmethod
     def find_by_meeting_id(cls, meeting_id: int) -> List["KeynoteModel"]:
@@ -41,5 +37,9 @@ class KeynoteModel(db.Model, ModelMixin):
         )
 
     @classmethod
-    def find_by_id(cls, id: int) -> "KeynoteModel":
-        return cls.query.filter_by(id=id).first()
+    def find_by_speaker_id(cls, speaker_id: int) -> List["KeynoteModel"]:
+        return (
+            cls.query.filter_by(speaker_id=speaker_id)
+            .order_by(desc(cls.meeting_id))
+            .all()
+        )

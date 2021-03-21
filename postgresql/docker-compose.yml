@@ -1,0 +1,18 @@
+version: '3.4'
+
+services:
+  db:
+    build:
+      context: .
+    env_file:
+      - './.env'
+    networks:
+      - backend
+    ports:
+      - '5432:5432'
+    volumes:
+      - './data/pgdata:/var/lib/postgresql/data/ppty'
+    restart: always
+
+networks:
+  backend:

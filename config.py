@@ -26,9 +26,7 @@ class DevelopmentConfig(Config):
 class TestingConfig(Config):
     DEBUG = False
     TESTING = True
-    SQLALCHEMY_DATABASE_URI = (
-        "postgresql://ppty:pass@localhost:5432/ppty_test"
-    )
+    SQLALCHEMY_DATABASE_URI = "postgresql://ppty:pass@localhost:5432/ppty_test"
 
 
 class ProductionConfig(Config):

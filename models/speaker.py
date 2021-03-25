@@ -15,7 +15,6 @@ class SpeakerModel(db.Model, ModelMixin):
     twitter_profile = db.Column(db.String(75))
     bio = db.Column(db.String(500), nullable=False)
     profile_picture = db.Column(db.String(150))
-    keynotes = db.relationship("KeynoteModel", lazy="dynamic")
 
     @classmethod
     def find_all(cls) -> List["SpeakerModel"]:

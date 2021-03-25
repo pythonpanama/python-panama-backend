@@ -28,7 +28,6 @@ class ProjectModel(db.Model, ModelMixin):
     admin_id = db.Column(
         db.Integer, db.ForeignKey("members.id"), nullable=False
     )
-    admin = db.relationship("MemberModel")
 
     @classmethod
     def find_all(cls) -> List["ProjectModel"]:

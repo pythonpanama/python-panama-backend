@@ -21,7 +21,6 @@ class RoleModel(db.Model, ModelMixin):
 
     id = db.Column(db.Integer, primary_key=True)
     role_name = db.Column(db.String(20), unique=True, nullable=False)
-    members = db.relationship("MemberModel", lazy="dynamic")
     permissions = db.relationship(
         "PermissionModel",
         secondary="roles_permissions",

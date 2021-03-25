@@ -23,14 +23,14 @@ app = create_app("testing")
 
 # noinspection PyArgumentList
 class BaseTest(TestCase):
-    """Base class which is inherited by all test classes."""
+    """Base class which is inherited by all test classes"""
 
     @classmethod
     def setUpClass(cls) -> None:
         pass
 
     def setUp(self) -> None:
-        """Create all db tables before each test."""
+        """Create all db tables before each test"""
         self.client = app.test_client()
         self.app_context = app.app_context()
 
@@ -46,6 +46,6 @@ class BaseTest(TestCase):
             self.speaker = SpeakerModel(**TEST_SPEAKER)
 
     def tearDown(self):
-        """Clear db tables after each test."""
+        """Clear db tables after each test"""
         with self.app_context:
             db.drop_all()

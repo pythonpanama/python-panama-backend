@@ -18,6 +18,7 @@ class KeynoteModel(db.Model, ModelMixin):
         db.Integer, db.ForeignKey("meetings.id"), nullable=False
     )
     speaker = db.relationship("SpeakerModel")
+    meeting = db.relationship("MeetingModel")
 
     @classmethod
     def find_all(cls) -> List["KeynoteModel"]:

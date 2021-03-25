@@ -17,7 +17,6 @@ class MeetingModel(db.Model, ModelMixin):
         db.Integer, db.ForeignKey("members.id"), nullable=False
     )
     creator = db.relationship("MemberModel")
-    keynotes = db.relationship("KeynoteModel", lazy="dynamic")
 
     @classmethod
     def find_all(cls) -> List["MeetingModel"]:

@@ -22,7 +22,7 @@ class MemberModel(db.Model, ModelMixin):
     is_active = db.Column(db.Boolean, default=True)
     role_id = db.Column(db.Integer, db.ForeignKey("roles.id"), nullable=False)
     role = db.relationship("RoleModel")
-    tokens = db.relationship("TokenModel", lazy="dynamic")
+    # tokens = db.relationship("TokenModel", lazy="dynamic")
     meetings = db.relationship("MeetingModel", lazy="dynamic")
     projects = db.relationship("ProjectModel", lazy="dynamic")
 

@@ -6,6 +6,7 @@ from db import db
 from ma import ma
 
 from resources.keynote import keynotes
+from resources.meeting import meetings
 
 
 def create_app(config_name: str = "development") -> Flask:
@@ -31,5 +32,6 @@ def create_app(config_name: str = "development") -> Flask:
         return jsonify(error=str(err)), 404
 
     app.register_blueprint(keynotes, url_prefix="/keynotes")
+    app.register_blueprint(meetings, url_prefix="/meetings")
 
     return app

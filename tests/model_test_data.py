@@ -39,6 +39,18 @@ TEST_MEETING = {
     "creator_id": 1,
 }
 
+TEST_MEETING_2 = {
+    "datetime": "2021-04-15 20:00:00",
+    "type": "online",
+    "location": "https://www.meetup.com/Python-Panama/events/276661571",
+    "description": "Python Meetup Vol. 26",
+    "creator_id": 1,
+}
+
+TEST_MEETING_400 = {
+    "creator_id": 1,
+}
+
 TEST_PERMISSION = {"permission_name": "post:project"}
 
 TEST_PROJECT = {

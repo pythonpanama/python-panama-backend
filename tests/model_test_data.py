@@ -5,6 +5,18 @@ TEST_KEYNOTE = {
     "meeting_id": 1,
 }
 
+TEST_KEYNOTE_2 = {
+    "title": "Creando pruebas con UnitTest",
+    "description": "Cómo usar UnitTest para control de calidad de la código",
+    "speaker_id": 1,
+    "meeting_id": 1,
+}
+
+TEST_KEYNOTE_400 = {
+    "speaker_id": 1,
+    "meeting_id": 1,
+}
+
 TEST_MEMBER = {
     "email": "jperez@ppty.com",
     "password": "pass",

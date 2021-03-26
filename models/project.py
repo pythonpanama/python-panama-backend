@@ -1,6 +1,7 @@
 from typing import List
 
 from db import db
+from models.member import MemberModel
 from models.model_mixin import ModelMixin
 
 projects_members = db.Table(

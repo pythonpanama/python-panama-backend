@@ -22,7 +22,7 @@ class ProjectModel(db.Model, ModelMixin):
     id = db.Column(db.Integer, primary_key=True)
     start_date = db.Column(db.Date, nullable=False)
     end_date = db.Column(db.Date)
-    title = db.Column(db.String(100), nullable=False)
+    title = db.Column(db.String(100), unique=True, nullable=False)
     description = db.Column(db.String(500), nullable=False)
     goals = db.Column(db.String(500), nullable=False)
     status = db.Column(db.String(50), nullable=False)
@@ -54,3 +54,7 @@ class ProjectModel(db.Model, ModelMixin):
             .order_by(cls.admin_id, cls.start_date)
             .all()
         )
+
+    @classmethod
+    def find_by_title(cls, title: str) -> "ProjectModel":
+        return cls.query.filter_by(title=title).first()

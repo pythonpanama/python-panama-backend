@@ -123,6 +123,8 @@ class TestKeynoteResource(BaseTest):
                     data["keynote"]["description"],
                     "Cómo usar UnitTest para control de calidad de la código",
                 )
+                self.assertEqual(data["keynote"]["speaker_id"], 1)
+                self.assertEqual(data["keynote"]["meeting_id"], 1)
 
     def test_put_keynote_404(self):
         with self.client as c:
@@ -204,78 +206,6 @@ class TestKeynoteResource(BaseTest):
             with self.app_context:
                 results = c.get(
                     f"/keynotes",
-                    headers={"Content-Type": "application/json"},
-                )
-
-                data = json.loads(results.data)
-
-                self.assertEqual(
-                    data["error"],
-                    "404 Not Found: No keynotes found.",
-                )
-
-    def test_get_keynotes_for_meeting_200(self):
-        with self.client as c:
-            with self.app_context:
-                self.role.save_to_db()
-                self.member.save_to_db()
-                self.speaker.save_to_db()
-                meeting_id = self.meeting.save_to_db().id
-                keynote_1_id = self.keynote.save_to_db().id
-                keynote_2_id = self.keynote_2.save_to_db().id
-
-                results = c.get(
-                    f"/keynotes/meetings/{meeting_id}",
-                    headers={"Content-Type": "application/json"},
-                )
-
-                data = json.loads(results.data)
-
-                self.assertEqual(len(data["keynotes"]), 2)
-                self.assertEqual(data["keynotes"][0]["id"], keynote_1_id)
-                self.assertEqual(data["keynotes"][1]["id"], keynote_2_id)
-
-    def test_get_keynotes_for_meeting_404(self):
-        with self.client as c:
-            with self.app_context:
-                results = c.get(
-                    f"/keynotes/meetings/99",
-                    headers={"Content-Type": "application/json"},
-                )
-
-                data = json.loads(results.data)
-
-                self.assertEqual(
-                    data["error"],
-                    "404 Not Found: No keynotes found.",
-                )
-
-    def test_get_keynotes_for_speaker_200(self):
-        with self.client as c:
-            with self.app_context:
-                self.role.save_to_db()
-                self.member.save_to_db()
-                speaker_id = self.speaker.save_to_db().id
-                self.meeting.save_to_db()
-                keynote_1_id = self.keynote.save_to_db().id
-                keynote_2_id = self.keynote_2.save_to_db().id
-
-                results = c.get(
-                    f"/keynotes/meetings/{speaker_id}",
-                    headers={"Content-Type": "application/json"},
-                )
-
-                data = json.loads(results.data)
-
-                self.assertEqual(len(data["keynotes"]), 2)
-                self.assertEqual(data["keynotes"][0]["id"], keynote_1_id)
-                self.assertEqual(data["keynotes"][1]["id"], keynote_2_id)
-
-    def test_get_keynotes_for_speaker_404(self):
-        with self.client as c:
-            with self.app_context:
-                results = c.get(
-                    f"/keynotes/meetings/99",
                     headers={"Content-Type": "application/json"},
                 )
 

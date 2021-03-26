@@ -1,3 +1,5 @@
+from typing import List
+
 from db import db
 from models.model_mixin import ModelMixin
 from models.permission import PermissionModel
@@ -28,6 +30,10 @@ class RoleModel(db.Model, ModelMixin):
         lazy="dynamic",
         backref=db.backref("roles", lazy="dynamic"),
     )
+
+    @classmethod
+    def find_all(cls) -> List["RoleModel"]:
+        return cls.query.order_by(cls.role_name).all()
 
     @classmethod
     def find_by_id(cls, id: int) -> "RoleModel":

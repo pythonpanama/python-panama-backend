@@ -19,7 +19,7 @@ class TestProject(BaseTest):
             )
             self.assertEqual(
                 self.project.goals,
-                "Generar páginas de forma dinamica para miembros, reuniones "
+                "Generar páginas de forma dinámica para miembros, reuniones "
                 "y proyectos",
             )
             self.assertEqual(self.project.status, "in progress")

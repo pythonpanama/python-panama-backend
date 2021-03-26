@@ -39,19 +39,54 @@ TEST_MEETING = {
     "creator_id": 1,
 }
 
+TEST_MEETING_2 = {
+    "datetime": "2021-04-15 20:00:00",
+    "type": "online",
+    "location": "https://www.meetup.com/Python-Panama/events/276661571",
+    "description": "Python Meetup Vol. 26",
+    "creator_id": 1,
+}
+
+TEST_MEETING_400 = {
+    "creator_id": 1,
+}
+
 TEST_PERMISSION = {"permission_name": "post:project"}
+
+TEST_PERMISSION_2 = {"permission_name": "post:meeting"}
+
+TEST_PERMISSION_400 = {}
 
 TEST_PROJECT = {
     "start_date": "2021-03-16",
     "end_date": "2021-04-15",
     "title": "REST API para sitio web",
     "description": "Un API en Python/Flask para conectar el frontend a la base de datos",
-    "goals": "Generar páginas de forma dinamica para miembros, reuniones y proyectos",
+    "goals": "Generar páginas de forma dinámica para miembros, reuniones y proyectos",
     "status": "in progress",
     "admin_id": 1,
 }
 
+TEST_PROJECT_2 = {
+    "start_date": "2021-04-16",
+    "end_date": "2021-05-15",
+    "title": "Frontend para Python Panamá",
+    "description": "Sitio web de Python Panamá",
+    "goals": "Sitio para compartir información relevante",
+    "status": "completed",
+    "admin_id": 1,
+}
+
+TEST_PROJECT_400 = {
+    "end_date": "2021-04-15",
+    "admin_id": 1,
+}
+
 TEST_ROLE = {"role_name": "admin"}
+
+TEST_ROLE_2 = {"role_name": "member"}
+
+TEST_ROLE_400 = {}
 
 TEST_SPEAKER = {
     "first_name": "Tomás",

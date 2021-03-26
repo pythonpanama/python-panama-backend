@@ -123,6 +123,8 @@ class TestKeynoteResource(BaseTest):
                     data["keynote"]["description"],
                     "Cómo usar UnitTest para control de calidad de la código",
                 )
+                self.assertEqual(data["keynote"]["speaker_id"], 1)
+                self.assertEqual(data["keynote"]["meeting_id"], 1)
 
     def test_put_keynote_404(self):
         with self.client as c:

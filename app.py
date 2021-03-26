@@ -8,6 +8,7 @@ from ma import ma
 from resources.keynote import keynotes
 from resources.meeting import meetings
 from resources.permission import permissions
+from resources.project import projects
 from resources.role import roles
 
 
@@ -40,6 +41,7 @@ def create_app(config_name: str = "development") -> Flask:
     app.register_blueprint(keynotes, url_prefix="/keynotes")
     app.register_blueprint(meetings, url_prefix="/meetings")
     app.register_blueprint(permissions, url_prefix="/permissions")
+    app.register_blueprint(projects, url_prefix="/projects")
     app.register_blueprint(roles, url_prefix="/roles")
 
     return app

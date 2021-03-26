@@ -62,8 +62,23 @@ TEST_PROJECT = {
     "end_date": "2021-04-15",
     "title": "REST API para sitio web",
     "description": "Un API en Python/Flask para conectar el frontend a la base de datos",
-    "goals": "Generar páginas de forma dinamica para miembros, reuniones y proyectos",
+    "goals": "Generar páginas de forma dinámica para miembros, reuniones y proyectos",
     "status": "in progress",
+    "admin_id": 1,
+}
+
+TEST_PROJECT_2 = {
+    "start_date": "2021-04-16",
+    "end_date": "2021-05-15",
+    "title": "Frontend para Python Panamá",
+    "description": "Sitio web de Python Panamá",
+    "goals": "Sitio para compartir información relevante",
+    "status": "completed",
+    "admin_id": 1,
+}
+
+TEST_PROJECT_400 = {
+    "end_date": "2021-04-15",
     "admin_id": 1,
 }
 

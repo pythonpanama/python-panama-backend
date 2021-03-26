@@ -109,29 +109,3 @@ def get_keynotes() -> ApiResponse:
         jsonify({"keynotes": keynote_list_schema.dump(keynote_list)}),
         200,
     )
-
-
-@keynotes.route("/meetings/<int:meeting_id>")
-def get_keynotes_for_meeting(meeting_id: int) -> ApiResponse:
-    keynote_list = KeynoteModel.find_by_meeting_id(meeting_id)
-
-    if not keynote_list:
-        abort(404, description=ERROR_404_LIST.format("keynotes"))
-
-    return (
-        jsonify({"keynotes": keynote_list_schema.dump(keynote_list)}),
-        200,
-    )
-
-
-@keynotes.route("/speakers/<int:speaker_id>")
-def get_keynotes_for_speaker(speaker_id: int) -> ApiResponse:
-    keynote_list = KeynoteModel.find_by_speaker_id(speaker_id)
-
-    if not keynote_list:
-        abort(404, description=ERROR_404_LIST.format("keynotes"))
-
-    return (
-        jsonify({"keynotes": keynote_list_schema.dump(keynote_list)}),
-        200,
-    )

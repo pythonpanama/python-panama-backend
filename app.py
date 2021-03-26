@@ -7,6 +7,7 @@ from ma import ma
 
 from resources.keynote import keynotes
 from resources.meeting import meetings
+from resources.permission import permissions
 
 
 def create_app(config_name: str = "development") -> Flask:
@@ -31,7 +32,12 @@ def create_app(config_name: str = "development") -> Flask:
     def resource_not_found(err):
         return jsonify(error=str(err)), 404
 
+    @app.errorhandler(409)
+    def resource_not_found(err):
+        return jsonify(error=str(err)), 409
+
     app.register_blueprint(keynotes, url_prefix="/keynotes")
     app.register_blueprint(meetings, url_prefix="/meetings")
+    app.register_blueprint(permissions, url_prefix="/permissions")
 
     return app

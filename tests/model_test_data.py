@@ -53,6 +53,10 @@ TEST_MEETING_400 = {
 
 TEST_PERMISSION = {"permission_name": "post:project"}
 
+TEST_PERMISSION_2 = {"permission_name": "post:meeting"}
+
+TEST_PERMISSION_400 = {}
+
 TEST_PROJECT = {
     "start_date": "2021-03-16",
     "end_date": "2021-04-15",

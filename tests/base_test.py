@@ -15,6 +15,7 @@ from tests.model_test_data import (
     TEST_MEETING,
     TEST_MEETING_2,
     TEST_PERMISSION,
+    TEST_PERMISSION_2,
     TEST_PROJECT,
     TEST_ROLE,
     TEST_SPEAKER,
@@ -45,6 +46,7 @@ class BaseTest(TestCase):
             self.meeting = MeetingModel(**TEST_MEETING)
             self.meeting_2 = MeetingModel(**TEST_MEETING_2)
             self.permission = PermissionModel(**TEST_PERMISSION)
+            self.permission_2 = PermissionModel(**TEST_PERMISSION_2)
             self.project = ProjectModel(**TEST_PROJECT)
             self.role = RoleModel(**TEST_ROLE)
             self.speaker = SpeakerModel(**TEST_SPEAKER)

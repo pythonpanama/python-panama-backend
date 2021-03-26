@@ -1,5 +1,6 @@
 from db import db
 from models.model_mixin import ModelMixin
+from models.permission import PermissionModel
 
 roles_permissions = db.Table(
     "roles_permissions",

@@ -10,6 +10,7 @@ from models.role import RoleModel
 from models.speaker import SpeakerModel
 from tests.model_test_data import (
     TEST_KEYNOTE,
+    TEST_KEYNOTE_2,
     TEST_MEMBER,
     TEST_MEETING,
     TEST_PERMISSION,
@@ -38,6 +39,7 @@ class BaseTest(TestCase):
             db.create_all()
 
             self.keynote = KeynoteModel(**TEST_KEYNOTE)
+            self.keynote_2 = KeynoteModel(**TEST_KEYNOTE_2)
             self.member = MemberModel(**TEST_MEMBER)
             self.meeting = MeetingModel(**TEST_MEETING)
             self.permission = PermissionModel(**TEST_PERMISSION)

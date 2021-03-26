@@ -69,6 +69,10 @@ TEST_PROJECT = {
 
 TEST_ROLE = {"role_name": "admin"}
 
+TEST_ROLE_2 = {"role_name": "member"}
+
+TEST_ROLE_400 = {}
+
 TEST_SPEAKER = {
     "first_name": "Tomás",
     "last_name": "González",

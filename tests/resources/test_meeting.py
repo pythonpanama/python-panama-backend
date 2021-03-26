@@ -30,15 +30,14 @@ class TestMeetingResource(BaseTest):
                 self.assertEqual(
                     data["meeting"]["datetime"], "2021-03-31T20:00:00"
                 )
-                self.assertEqual(
-                    data["meeting"]["type"], "online"
-                )
+                self.assertEqual(data["meeting"]["type"], "online")
                 self.assertEqual(
                     data["meeting"]["location"],
-                    "https://www.meetup.com/Python-Panama/events/276661559"
+                    "https://www.meetup.com/Python-Panama/events/276661559",
                 )
                 self.assertEqual(
-                    data["meeting"]["description"], "Python Meetup Vol. 25",
+                    data["meeting"]["description"],
+                    "Python Meetup Vol. 25",
                 )
                 self.assertEqual(data["meeting"]["creator_id"], 1)
 
@@ -74,15 +73,14 @@ class TestMeetingResource(BaseTest):
                 self.assertEqual(
                     data["meeting"]["datetime"], "2021-03-31T20:00:00"
                 )
-                self.assertEqual(
-                    data["meeting"]["type"], "online"
-                )
+                self.assertEqual(data["meeting"]["type"], "online")
                 self.assertEqual(
                     data["meeting"]["location"],
-                    "https://www.meetup.com/Python-Panama/events/276661559"
+                    "https://www.meetup.com/Python-Panama/events/276661559",
                 )
                 self.assertEqual(
-                    data["meeting"]["description"], "Python Meetup Vol. 25",
+                    data["meeting"]["description"],
+                    "Python Meetup Vol. 25",
                 )
                 self.assertEqual(data["meeting"]["creator_id"], 1)
 
@@ -123,15 +121,14 @@ class TestMeetingResource(BaseTest):
                 self.assertEqual(
                     data["meeting"]["datetime"], "2021-04-15T20:00:00"
                 )
-                self.assertEqual(
-                    data["meeting"]["type"], "online"
-                )
+                self.assertEqual(data["meeting"]["type"], "online")
                 self.assertEqual(
                     data["meeting"]["location"],
-                    "https://www.meetup.com/Python-Panama/events/276661571"
+                    "https://www.meetup.com/Python-Panama/events/276661571",
                 )
                 self.assertEqual(
-                    data["meeting"]["description"], "Python Meetup Vol. 26",
+                    data["meeting"]["description"],
+                    "Python Meetup Vol. 26",
                 )
                 self.assertEqual(data["meeting"]["creator_id"], 1)
 

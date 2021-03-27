@@ -97,3 +97,20 @@ TEST_SPEAKER = {
     "bio": "Experto en Python y el uso de type hints",
     "profile_picture": "https://ppty.com/img/hA4oCfR&o17mqsXm.png",
 }
+
+TEST_SPEAKER_2 = {
+    "first_name": "Edgar",
+    "last_name": "Espino",
+    "linkedin_profile": "https://linkedin.com/in/edgar_espino",
+    "github_profile": "https://github.com/edgar_espino",
+    "twitter_profile": "https://twitter.com/edgar_espino",
+    "bio": "Experto en Flask",
+    "profile_picture": "https://ppty.com/img/hA4oCfR&o17K3fOm.png",
+}
+
+TEST_SPEAKER_400 = {
+    "linkedin_profile": "https://linkedin.com/in/javier_real",
+    "github_profile": "https://github.com/javier_real",
+    "twitter_profile": "https://twitter.com/javier_real",
+    "profile_picture": "https://ppty.com/img/hA4oCfR&o178P2fOm.png",
+}

@@ -21,6 +21,7 @@ from tests.model_test_data import (
     TEST_ROLE,
     TEST_ROLE_2,
     TEST_SPEAKER,
+    TEST_SPEAKER_2,
 )
 
 app = create_app("testing")
@@ -54,6 +55,7 @@ class BaseTest(TestCase):
             self.role = RoleModel(**TEST_ROLE)
             self.role_2 = RoleModel(**TEST_ROLE_2)
             self.speaker = SpeakerModel(**TEST_SPEAKER)
+            self.speaker_2 = SpeakerModel(**TEST_SPEAKER_2)
 
     def tearDown(self):
         """Clear db tables after each test"""

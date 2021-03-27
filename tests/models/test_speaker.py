@@ -48,5 +48,5 @@ class TestSpeaker(BaseTest):
             self.assertEqual(speaker.first_name, "Tomás")
 
 
-if __name__ == "__main__":
+if __name__ == "__main__": # pragma: no cover
     unittest.main()

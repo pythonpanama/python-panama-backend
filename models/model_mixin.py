@@ -6,22 +6,12 @@ from db import db
 
 # noinspection PyAttributeOutsideInit
 class ModelMixin:
-    def activate(self) -> db.Model:
-        """Make a record active"""
-        self.is_active = True
-        return self.save_to_db()
-
-    def deactivate(self) -> db.Model:
-        """Make a record inactive"""
-        self.is_active = False
-        return self.save_to_db()
-
     def delete_from_db(self) -> None:
         """Delete a record"""
         try:
             db.session.delete(self)
             db.session.commit()
-        except exc.SQLAlchemyError as e:
+        except exc.SQLAlchemyError as e: # pragma: no cover
             db.session.rollback()
             abort(500, description=e)
 
@@ -31,6 +21,6 @@ class ModelMixin:
             db.session.add(self)
             db.session.commit()
             return self
-        except exc.SQLAlchemyError as e:
+        except exc.SQLAlchemyError as e: # pragma: no cover
             db.session.rollback()
             abort(500, description=e)

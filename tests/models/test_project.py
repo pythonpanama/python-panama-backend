@@ -66,5 +66,5 @@ class TestProject(BaseTest):
             self.assertEqual(projects[0].id, poject_id)
 
 
-if __name__ == "__main__":
+if __name__ == "__main__": # pragma: no cover
     unittest.main()

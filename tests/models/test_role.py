@@ -28,5 +28,5 @@ class TestRole(BaseTest):
             self.assertEqual(role.id, role_id)
 
 
-if __name__ == "__main__":
+if __name__ == "__main__": # pragma: no cover
     unittest.main()

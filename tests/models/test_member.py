@@ -8,8 +8,8 @@ from models.role import RoleModel
 from tests.base_test import BaseTest
 
 
-class TestUser(BaseTest):
-    """Test all methods for the UserModel"""
+class TestMember(BaseTest):
+    """Test all methods for the MemberModel"""
 
     def test_init(self):
         with self.app_context:
@@ -91,5 +91,5 @@ class TestUser(BaseTest):
             )
 
 
-if __name__ == "__main__":
+if __name__ == "__main__": # pragma: no cover
     unittest.main()

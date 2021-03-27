@@ -10,6 +10,7 @@ from resources.meeting import meetings
 from resources.permission import permissions
 from resources.project import projects
 from resources.role import roles
+from resources.speaker import speakers
 
 
 def create_app(config_name: str = "development") -> Flask:
@@ -43,5 +44,6 @@ def create_app(config_name: str = "development") -> Flask:
     app.register_blueprint(permissions, url_prefix="/permissions")
     app.register_blueprint(projects, url_prefix="/projects")
     app.register_blueprint(roles, url_prefix="/roles")
+    app.register_blueprint(speakers, url_prefix="/speakers")
 
     return app

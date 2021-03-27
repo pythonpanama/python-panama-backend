@@ -6,6 +6,20 @@ from models.member import MemberModel
 from models.model_mixin import ModelMixin
 
 
+meetings_members = db.Table(
+    "meetings_members",
+    db.Column(
+        "meeting_id", db.Integer, db.ForeignKey("meetings.id"), nullable=False
+    ),
+    db.Column(
+        "member_id", db.Integer, db.ForeignKey("members.id"), nullable=False
+    ),
+    db.Column("will_attend", db.Boolean),
+    db.Column("attended", db.Boolean),
+    db.PrimaryKeyConstraint("meeting_id", "member_id"),
+)
+
+
 class MeetingModel(db.Model, ModelMixin):
     __tablename__ = "meetings"
 
@@ -18,6 +32,12 @@ class MeetingModel(db.Model, ModelMixin):
         db.Integer, db.ForeignKey("members.id"), nullable=False
     )
     creator = db.relationship("MemberModel")
+    members = db.relationship(
+        "MemberModel",
+        secondary="meetings_members",
+        lazy="dynamic",
+        backref=db.backref("meetings", lazy="dynamic"),
+    )
 
     @classmethod
     def find_all(cls) -> List["MeetingModel"]:

@@ -1,5 +1,6 @@
 import unittest
 
+from models.member import MemberModel
 from models.project import ProjectModel
 from tests.base_test import BaseTest
 
@@ -64,6 +65,19 @@ class TestProject(BaseTest):
             projects = ProjectModel.find_by_status("in progress")
 
             self.assertEqual(projects[0].id, poject_id)
+
+    def test_projects_members_relation(self):
+        with self.app_context:
+            self.role.save_to_db()
+            self.member.save_to_db()
+            project_id = self.project.save_to_db().id
+            member_id = self.member.save_to_db().id
+
+            project = ProjectModel.find_by_id(project_id)
+            member = MemberModel.find_by_id(member_id)
+            project.members.append(member)
+
+            self.assertEqual(project.members[0].email, "jperez@ppty.com")
 
 
 if __name__ == "__main__":  # pragma: no cover

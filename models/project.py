@@ -5,7 +5,7 @@ from models.member import MemberModel
 from models.model_mixin import ModelMixin
 
 projects_members = db.Table(
-    "projects_members ",
+    "projects_members",
     db.Column(
         "project_id", db.Integer, db.ForeignKey("projects.id"), nullable=False
     ),
@@ -30,6 +30,12 @@ class ProjectModel(db.Model, ModelMixin):
         db.Integer, db.ForeignKey("members.id"), nullable=False
     )
     admin = db.relationship("MemberModel")
+    members = db.relationship(
+        "MemberModel",
+        secondary="projects_members",
+        lazy="dynamic",
+        backref=db.backref("projects", lazy="dynamic"),
+    )
 
     @classmethod
     def find_all(cls) -> List["ProjectModel"]:

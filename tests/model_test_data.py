@@ -91,6 +91,7 @@ TEST_ROLE_400 = {}
 TEST_SPEAKER = {
     "first_name": "Tomás",
     "last_name": "González",
+    "email": "tgonz@python.org",
     "linkedin_profile": "https://linkedin.com/in/tomas_gonzalez",
     "github_profile": "https://github.com/tomas_gonzalez",
     "twitter_profile": "https://twitter.com/tomas_gonzalez",
@@ -101,6 +102,7 @@ TEST_SPEAKER = {
 TEST_SPEAKER_2 = {
     "first_name": "Edgar",
     "last_name": "Espino",
+    "email": "eespin@python.org",
     "linkedin_profile": "https://linkedin.com/in/edgar_espino",
     "github_profile": "https://github.com/edgar_espino",
     "twitter_profile": "https://twitter.com/edgar_espino",

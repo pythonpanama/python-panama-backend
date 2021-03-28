@@ -69,6 +69,7 @@ def put_speaker(speaker_id: int) -> ApiResponse:
     speaker_json = request.get_json()
     speaker.first_name = speaker_json.get("first_name")
     speaker.last_name = speaker_json.get("last_name")
+    speaker.email = speaker_json.get("email")
     speaker.linkedin_profile = speaker_json.get("linkedin_profile")
     speaker.github_profile = speaker_json.get("github_profile")
     speaker.twitter_profile = speaker_json.get("twitter_profile")

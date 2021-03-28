@@ -11,6 +11,7 @@ class TestSpeaker(BaseTest):
         with self.app_context:
             self.assertEqual(self.speaker.first_name, "Tomás")
             self.assertEqual(self.speaker.last_name, "González")
+            self.assertEqual(self.speaker.email, "tgonz@python.org")
             self.assertEqual(
                 self.speaker.linkedin_profile,
                 "https://linkedin.com/in/tomas_gonzalez",
@@ -38,6 +39,14 @@ class TestSpeaker(BaseTest):
             speakers = SpeakerModel.find_all()
 
             self.assertEqual(speakers[0].id, speaker_id)
+
+    def test_find_by_email(self):
+        with self.app_context:
+            speaker_email = self.speaker.save_to_db().email
+
+            speaker = SpeakerModel.find_by_email(speaker_email)
+
+            self.assertEqual(speaker.email, "tgonz@python.org")
 
     def test_find_by_id(self):
         with self.app_context:

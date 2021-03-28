@@ -27,6 +27,7 @@ class TestSpeakerResource(BaseTest):
 
                 self.assertEqual(data["speaker"]["first_name"], "Tomás")
                 self.assertEqual(data["speaker"]["last_name"], "González")
+                self.assertEqual(data["speaker"]["email"], "tgonz@python.org")
                 self.assertEqual(
                     data["speaker"]["linkedin_profile"],
                     "https://linkedin.com/in/tomas_gonzalez",
@@ -76,6 +77,7 @@ class TestSpeakerResource(BaseTest):
 
                 self.assertEqual(data["speaker"]["first_name"], "Tomás")
                 self.assertEqual(data["speaker"]["last_name"], "González")
+                self.assertEqual(data["speaker"]["email"], "tgonz@python.org")
                 self.assertEqual(
                     data["speaker"]["linkedin_profile"],
                     "https://linkedin.com/in/tomas_gonzalez",
@@ -127,6 +129,7 @@ class TestSpeakerResource(BaseTest):
 
                 self.assertEqual(data["speaker"]["first_name"], "Edgar")
                 self.assertEqual(data["speaker"]["last_name"], "Espino")
+                self.assertEqual(data["speaker"]["email"], "eespin@python.org")
                 self.assertEqual(
                     data["speaker"]["linkedin_profile"],
                     "https://linkedin.com/in/edgar_espino",

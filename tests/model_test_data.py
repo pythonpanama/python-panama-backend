@@ -31,6 +31,29 @@ TEST_MEMBER = {
     "role_id": 1,
 }
 
+TEST_MEMBER_2 = {
+    "email": "lcohen@ppty.com",
+    "password": "pass2",
+    "mobile_phone": "+50768765432",
+    "first_name": "Luis",
+    "last_name": "Cohen",
+    "linkedin_profile": "https://linkedin.com/in/luis_cohen",
+    "github_profile": "https://github.com/luis_cohen",
+    "twitter_profile": "https://twitter.com/luis_cohen",
+    "profile_picture": "https://ppty.com/img/D6e6lKNRCbblCoH3n.png",
+    "is_active": True,
+    "role_id": 1,
+}
+
+TEST_MEMBER_400 = {
+    "mobile_phone": "+50769876543",
+    "linkedin_profile": "https://linkedin.com/in/juan_perez",
+    "github_profile": "https://github.com/juan_perez",
+    "twitter_profile": "https://twitter.com/juan_perez",
+    "profile_picture": "https://ppty.com/img/D6e6lKNRCbb4RXs6.png",
+    "is_active": True,
+}
+
 TEST_MEETING = {
     "datetime": "2021-03-31 20:00:00",
     "type": "online",
@@ -61,8 +84,10 @@ TEST_PROJECT = {
     "start_date": "2021-03-16",
     "end_date": "2021-04-15",
     "title": "REST API para sitio web",
-    "description": "Un API en Python/Flask para conectar el frontend a la base de datos",
-    "goals": "Generar páginas de forma dinámica para miembros, reuniones y proyectos",
+    "description": "Un API en Python/Flask para conectar el frontend a la "
+    "base de datos",
+    "goals": "Generar páginas de forma dinámica para miembros, reuniones y "
+    "proyectos",
     "status": "in progress",
     "admin_id": 1,
 }

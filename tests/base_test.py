@@ -1,6 +1,8 @@
+import json
 from unittest import TestCase
 
 from app import create_app, db
+from custom_types import LoginJSON
 from models.keynote import KeynoteModel
 from models.meeting import MeetingModel
 from models.member import MemberModel
@@ -57,7 +59,23 @@ class BaseTest(TestCase):
             self.speaker = SpeakerModel(**TEST_SPEAKER)
             self.speaker_2 = SpeakerModel(**TEST_SPEAKER_2)
 
-    def tearDown(self):
+    def tearDown(self) -> None:
         """Clear db tables after each test"""
         with self.app_context:
             db.drop_all()
+
+    def login(
+        self, client: app.test_client, email: str, password: str
+    ) -> LoginJSON:
+        results = client.post(
+            f"/members/login",
+            data=json.dumps(
+                {
+                    "email": email,
+                    "password": password,
+                }
+            ),
+            headers={"Content-Type": "application/json"},
+        )
+
+        return json.loads(results.data)

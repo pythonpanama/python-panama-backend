@@ -28,5 +28,5 @@ class TestPermission(BaseTest):
             self.assertEqual(permission.id, permission_id)
 
 
-if __name__ == "__main__": # pragma: no cover
+if __name__ == "__main__":  # pragma: no cover
     unittest.main()

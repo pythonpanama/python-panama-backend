@@ -66,5 +66,5 @@ class TestKeynote(BaseTest):
             self.assertEqual(keynotes[0].id, keynote_id)
 
 
-if __name__ == "__main__": # pragma: no cover
+if __name__ == "__main__":  # pragma: no cover
     unittest.main()

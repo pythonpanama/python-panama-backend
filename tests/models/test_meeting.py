@@ -49,5 +49,5 @@ class TestMeeting(BaseTest):
             self.assertEqual(meeting.description, "Python Meetup Vol. 25")
 
 
-if __name__ == "__main__": # pragma: no cover
+if __name__ == "__main__":  # pragma: no cover
     unittest.main()

@@ -1,6 +1,7 @@
 import unittest
 
 from models.meeting import MeetingModel
+from models.member import MemberModel
 from tests.base_test import BaseTest
 
 
@@ -47,6 +48,19 @@ class TestMeeting(BaseTest):
             meeting = MeetingModel.find_by_id(meeting_id)
 
             self.assertEqual(meeting.description, "Python Meetup Vol. 25")
+
+    def test_meetings_members_relation(self):
+        with self.app_context:
+            self.role.save_to_db()
+            self.member.save_to_db()
+            meeting_id = self.meeting.save_to_db().id
+            member_id = self.member.save_to_db().id
+
+            meeting = MeetingModel.find_by_id(meeting_id)
+            member = MemberModel.find_by_id(member_id)
+            meeting.members.append(member)
+
+            self.assertEqual(meeting.members[0].email, "jperez@ppty.com")
 
 
 if __name__ == "__main__":  # pragma: no cover

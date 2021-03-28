@@ -1,5 +1,6 @@
 import unittest
 
+from models.permission import PermissionModel
 from models.role import RoleModel
 from tests.base_test import BaseTest
 
@@ -27,6 +28,19 @@ class TestRole(BaseTest):
 
             self.assertEqual(role.id, role_id)
 
+    def test_role_permission_relation(self):
+        with self.app_context:
+            role_id = self.role.save_to_db().id
+            permission_id = self.permission.save_to_db().id
 
-if __name__ == "__main__": # pragma: no cover
+            role = RoleModel.find_by_id(role_id)
+            permission = PermissionModel.find_by_id(permission_id)
+            role.permissions.append(permission)
+
+            self.assertEqual(
+                role.permissions[0].permission_name, "post:project"
+            )
+
+
+if __name__ == "__main__":  # pragma: no cover
     unittest.main()

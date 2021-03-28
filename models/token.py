@@ -1,4 +1,4 @@
-from typing import Dict, Union
+from typing import Dict, List, Union
 
 from db import db
 from .model_mixin import ModelMixin
@@ -22,6 +22,14 @@ class TokenModel(db.Model, ModelMixin):
         super(TokenModel, self).__init__(**kwargs)
 
     @classmethod
+    def find_by_member_id(cls, member_id: int) -> List["TokenModel"]:
+        return (
+            cls.query.filter_by(member_id=member_id)
+            .order_by(cls.token_type)
+            .all()
+        )
+
+    @classmethod
     def revoke(
         cls, member_id: int, token_type: str = None
     ) -> Dict[str, Union[str, int]]:
@@ -34,7 +42,7 @@ class TokenModel(db.Model, ModelMixin):
                 member_id=member_id, revoked=False
             ).all()
 
-        if len(tokens) is 0:
+        if len(tokens) == 0:
             return {"message": MEMBER_400, "status": 400}
 
         for token in tokens:

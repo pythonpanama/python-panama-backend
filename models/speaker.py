@@ -10,6 +10,7 @@ class SpeakerModel(db.Model, ModelMixin):
     id = db.Column(db.Integer, primary_key=True)
     first_name = db.Column(db.String(50), nullable=False)
     last_name = db.Column(db.String(50), nullable=False)
+    email = db.Column(db.String(100), nullable=False, unique=True)
     linkedin_profile = db.Column(db.String(75))
     github_profile = db.Column(db.String(75))
     twitter_profile = db.Column(db.String(75))
@@ -19,6 +20,10 @@ class SpeakerModel(db.Model, ModelMixin):
     @classmethod
     def find_all(cls) -> List["SpeakerModel"]:
         return cls.query.order_by(cls.first_name, cls.last_name).all()
+
+    @classmethod
+    def find_by_email(cls, email: str) -> "SpeakerModel":
+        return cls.query.filter_by(email=email).first()
 
     @classmethod
     def find_by_id(cls, id: int) -> "SpeakerModel":

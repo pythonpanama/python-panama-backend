@@ -11,7 +11,7 @@ class ModelMixin:
         try:
             db.session.delete(self)
             db.session.commit()
-        except exc.SQLAlchemyError as e: # pragma: no cover
+        except exc.SQLAlchemyError as e:  # pragma: no cover
             db.session.rollback()
             abort(500, description=e)
 
@@ -21,6 +21,6 @@ class ModelMixin:
             db.session.add(self)
             db.session.commit()
             return self
-        except exc.SQLAlchemyError as e: # pragma: no cover
+        except exc.SQLAlchemyError as e:  # pragma: no cover
             db.session.rollback()
             abort(500, description=e)

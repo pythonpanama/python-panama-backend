@@ -37,17 +37,34 @@ class TestMemberResource(BaseTest):
 
                 data = json.loads(results.data)
 
-                TEST_MEMBER["id"] = member_id
-                TEST_MEMBER.pop("password")
+                member = TEST_MEMBER.copy()
+                member["id"] = member_id
+                member.pop("password")
                 tokens = TokenModel.find_by_member_id(member_id)
 
-                self.assertDictEqual(data["member"], TEST_MEMBER)
+                self.assertDictEqual(data["member"], member)
                 self.assertEqual(
                     decode_token(data["access_token"])["jti"], tokens[0].jti
                 )
                 self.assertEqual(
                     decode_token(data["refresh_token"])["jti"], tokens[1].jti
                 )
+
+    def test_login_401(self):
+        with self.client as c:
+            with self.app_context:
+                results = c.post(
+                    f"/members/login",
+                    data=json.dumps(
+                        {
+                            "email": TEST_MEMBER["email"],
+                            "password": TEST_MEMBER["password"],
+                        }
+                    ),
+                    headers={"Content-Type": "application/json"},
+                )
+
+                self.assertEqual(results.status, "401 UNAUTHORIZED")
 
     def test_logout_200(self):
         with self.client as c:
@@ -57,7 +74,7 @@ class TestMemberResource(BaseTest):
                 role.permissions.append(permission)
                 member = self.member.save_to_db()
                 member_id = member.id
-                login = self.login(c, member.email, "pass")
+                login = self.login(c, member.email, TEST_MEMBER["password"])
 
                 results = c.get(
                     f"/members/logout",
@@ -72,6 +89,19 @@ class TestMemberResource(BaseTest):
 
                 self.assertTrue(tokens[0].revoke)
                 self.assertTrue(tokens[1].revoke)
+
+    def test_logout_401(self):
+        with self.client as c:
+            with self.app_context:
+                results = c.get(
+                    f"/members/logout",
+                    headers={"Content-Type": "application/json"},
+                )
+
+                data = json.loads(results.data)
+
+                self.assertEqual(results.status, "401 UNAUTHORIZED")
+                self.assertTrue(data["msg"], "Missing Authorization Header")
 
 
 if __name__ == "__main__":  # pragma: no cover

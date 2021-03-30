@@ -103,6 +103,13 @@ class TestMeetingResource(BaseTest):
                 self.assertTrue("location" in data["error"])
                 self.assertTrue("description" in data["error"])
 
+                results = c.post(
+                    "/meetings",
+                    headers={"Content-Type": "application/json"},
+                )
+
+                self.assertEqual(results.status, "400 BAD REQUEST")
+
     def test_put_meeting_200(self):
         with self.client as c:
             with self.app_context:
@@ -131,6 +138,20 @@ class TestMeetingResource(BaseTest):
                     "Python Meetup Vol. 26",
                 )
                 self.assertEqual(data["meeting"]["creator_id"], 1)
+
+    def test_put_meeting_400(self):
+        with self.client as c:
+            with self.app_context:
+                self.role.save_to_db()
+                self.member.save_to_db()
+                meeting_id = self.meeting.save_to_db().id
+
+                results = c.put(
+                    f"/meetings/{meeting_id}",
+                    headers={"Content-Type": "application/json"},
+                )
+
+                self.assertEqual(results.status, "400 BAD REQUEST")
 
     def test_put_meeting_404(self):
         with self.client as c:

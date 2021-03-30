@@ -99,6 +99,13 @@ class TestKeynoteResource(BaseTest):
                 self.assertTrue("title" in data["error"])
                 self.assertTrue("description" in data["error"])
 
+                results = c.post(
+                    "/keynotes",
+                    headers={"Content-Type": "application/json"},
+                )
+
+                self.assertEqual(results.status, "400 BAD REQUEST")
+
     def test_put_keynote_200(self):
         with self.client as c:
             with self.app_context:
@@ -125,6 +132,22 @@ class TestKeynoteResource(BaseTest):
                 )
                 self.assertEqual(data["keynote"]["speaker_id"], 1)
                 self.assertEqual(data["keynote"]["meeting_id"], 1)
+
+    def test_put_keynote_400(self):
+        with self.client as c:
+            with self.app_context:
+                self.role.save_to_db()
+                self.member.save_to_db()
+                self.speaker.save_to_db()
+                self.meeting.save_to_db()
+                keynote_id = self.keynote.save_to_db().id
+
+                results = c.put(
+                    f"/keynotes/{keynote_id}",
+                    headers={"Content-Type": "application/json"},
+                )
+
+                self.assertEqual(results.status, "400 BAD REQUEST")
 
     def test_put_keynote_404(self):
         with self.client as c:

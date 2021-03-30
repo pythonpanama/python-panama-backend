@@ -50,6 +50,16 @@ class TestMemberResource(BaseTest):
                     decode_token(data["refresh_token"])["jti"], tokens[1].jti
                 )
 
+    def test_login_400(self):
+        with self.client as c:
+            with self.app_context:
+                results = c.post(
+                    f"/members/login",
+                    headers={"Content-Type": "application/json"},
+                )
+
+                self.assertEqual(results.status, "400 BAD REQUEST")
+
     def test_login_401(self):
         with self.client as c:
             with self.app_context:

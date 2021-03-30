@@ -109,6 +109,13 @@ class TestProjectResource(BaseTest):
                 self.assertTrue("goals" in data["error"])
                 self.assertTrue("status" in data["error"])
 
+                results = c.post(
+                    "/projects",
+                    headers={"Content-Type": "application/json"},
+                )
+
+                self.assertEqual(results.status, "400 BAD REQUEST")
+
     def test_post_project_409(self):
         with self.client as c:
             with self.app_context:
@@ -160,6 +167,21 @@ class TestProjectResource(BaseTest):
                 )
                 self.assertEqual(data["project"]["status"], "completed")
                 self.assertEqual(data["project"]["admin_id"], 1)
+
+    def test_put_project_400(self):
+        with self.client as c:
+            with self.app_context:
+                self.role.save_to_db()
+                self.member.save_to_db()
+                project_id = self.project.save_to_db().id
+
+                results = c.put(
+                    f"/projects/{project_id}",
+                    headers={"Content-Type": "application/json"},
+                )
+
+                self.assertEqual(results.status, "400 BAD REQUEST")
+
 
     def test_put_project_404(self):
         with self.client as c:

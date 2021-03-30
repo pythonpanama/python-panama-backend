@@ -72,6 +72,13 @@ class TestPermissionResource(BaseTest):
 
                 self.assertTrue("permission_name" in data["error"])
 
+                results = c.post(
+                    "/permissions",
+                    headers={"Content-Type": "application/json"},
+                )
+
+                self.assertEqual(results.status, "400 BAD REQUEST")
+
     def test_post_permission_409(self):
         with self.client as c:
             with self.app_context:
@@ -107,6 +114,18 @@ class TestPermissionResource(BaseTest):
                 self.assertEqual(
                     data["permission"]["permission_name"], "post:meeting"
                 )
+
+    def test_put_permission_400(self):
+        with self.client as c:
+            with self.app_context:
+                permission_id = self.permission.save_to_db().id
+
+                results = c.put(
+                    f"/permissions/{permission_id}",
+                    headers={"Content-Type": "application/json"},
+                )
+
+                self.assertEqual(results.status, "400 BAD REQUEST")
 
     def test_put_permission_404(self):
         with self.client as c:

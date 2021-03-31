@@ -182,7 +182,6 @@ class TestProjectResource(BaseTest):
 
                 self.assertEqual(results.status, "400 BAD REQUEST")
 
-
     def test_put_project_404(self):
         with self.client as c:
             with self.app_context:

@@ -67,3 +67,93 @@ def logout() -> ApiResponse:
     result = TokenModel.revoke(member["id"])
 
     return jsonify({"message": result["message"]}), result["status"]
+
+
+@members.route("/<int:member_id>")
+def get_member(member_id: int) -> ApiResponse:
+    member = MemberModel.find_by_id(member_id)
+
+    if not member:
+        abort(404, description=ERROR_404.format("Member", "id", member_id))
+
+    return (
+        jsonify(
+            {
+                "member": member_schema.dump(member),
+            }
+        ),
+        200,
+    )
+
+
+@members.route("", methods=["POST"])
+def post_member() -> ApiResponse:
+    member_json = request.get_json()
+
+    if MemberModel.find_by_email(member_json.get("email")):
+        abort(
+            409,
+            description=ERROR_409.format(
+                "Member",
+                "email",
+                member_json.get("email"),
+            ),
+        )
+
+    member = member_schema.load(member_json)
+    member.save_to_db()
+
+    return (
+        jsonify(
+            {
+                "message": CREATED.format("Member"),
+                "member": member_schema.dump(member),
+            }
+        ),
+        201,
+    )
+
+
+@members.route("/<int:member_id>", methods=["PUT"])
+def put_member(member_id: int) -> ApiResponse:
+    member = MemberModel.find_by_id(member_id)
+
+    if not member:
+        abort(
+            404,
+            description=ERROR_404.format("Member", "id", member_id),
+        )
+
+    member_json = request.get_json()
+
+    member_by_email = MemberModel.find_by_email(member_json.get("email"))
+
+    if member_by_email and member_by_email.id != member_id:
+        abort(
+            409,
+            description=ERROR_409.format(
+                "Member",
+                "email",
+                member_json.get("email"),
+            ),
+        )
+
+    member.email = member_json.get("email")
+    member.mobile_phone = member_json.get("mobile_phone")
+    member.first_name = member_json.get("first_name")
+    member.last_name = member_json.get("last_name")
+    member.linkedin_profile = member_json.get("linkedin_profile")
+    member.github_profile = member_json.get("github_profile")
+    member.twitter_profile = member_json.get("twitter_profile")
+    member.profile_picture = member_json.get("profile_picture")
+    member.save_to_db()
+
+    return (
+        jsonify(
+            {
+                "message": MODIFIED.format("Member"),
+                "member": member_schema.dump(member),
+            }
+        ),
+        200,
+    )

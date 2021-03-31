@@ -13,9 +13,10 @@ class MemberSchema(ma.SQLAlchemyAutoSchema):
 
     @pre_load
     def set_password_hash(self, member_data: Dict, **kwargs) -> Dict:
-        member_data["password_hash"] = generate_password_hash(
-            member_data.pop("password")
-        )
+        if "password" in member_data:
+            member_data["password_hash"] = generate_password_hash(
+                member_data.pop("password")
+            )
         return member_data
 
     class Meta:

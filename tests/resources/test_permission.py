@@ -56,6 +56,9 @@ class TestPermissionResource(BaseTest):
                 data = json.loads(results.data)
 
                 self.assertEqual(
+                    data["message"], "Permission created successfully."
+                )
+                self.assertEqual(
                     data["permission"]["permission_name"], "post:project"
                 )
 
@@ -111,6 +114,9 @@ class TestPermissionResource(BaseTest):
 
                 data = json.loads(results.data)
 
+                self.assertEqual(
+                    data["message"], "Permission modified successfully."
+                )
                 self.assertEqual(
                     data["permission"]["permission_name"], "post:meeting"
                 )

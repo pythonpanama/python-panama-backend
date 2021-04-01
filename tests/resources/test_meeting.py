@@ -71,6 +71,9 @@ class TestMeetingResource(BaseTest):
                 data = json.loads(results.data)
 
                 self.assertEqual(
+                    data["message"], "Meeting created successfully."
+                )
+                self.assertEqual(
                     data["meeting"]["datetime"], "2021-03-31T20:00:00"
                 )
                 self.assertEqual(data["meeting"]["type"], "online")
@@ -125,6 +128,9 @@ class TestMeetingResource(BaseTest):
 
                 data = json.loads(results.data)
 
+                self.assertEqual(
+                    data["message"], "Meeting modified successfully."
+                )
                 self.assertEqual(
                     data["meeting"]["datetime"], "2021-04-15T20:00:00"
                 )

@@ -48,7 +48,7 @@ def post_speaker() -> ApiResponse:
     return (
         jsonify(
             {
-                "message": CREATED.format("speaker"),
+                "message": CREATED.format("Speaker"),
                 "speaker": speaker_schema.dump(speaker),
             }
         ),
@@ -80,7 +80,7 @@ def put_speaker(speaker_id: int) -> ApiResponse:
     return (
         jsonify(
             {
-                "message": MODIFIED.format("speaker"),
+                "message": MODIFIED.format("Speaker"),
                 "speaker": speaker_schema.dump(speaker),
             }
         ),

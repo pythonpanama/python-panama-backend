@@ -74,6 +74,9 @@ class TestProjectResource(BaseTest):
 
                 data = json.loads(results.data)
 
+                self.assertEqual(
+                    data["message"], "Project created successfully."
+                )
                 self.assertEqual(data["project"]["start_date"], "2021-03-16")
                 self.assertEqual(data["project"]["end_date"], "2021-04-15")
                 self.assertEqual(
@@ -152,6 +155,9 @@ class TestProjectResource(BaseTest):
 
                 data = json.loads(results.data)
 
+                self.assertEqual(
+                    data["message"], "Project modified successfully."
+                )
                 self.assertEqual(data["project"]["start_date"], "2021-04-16")
                 self.assertEqual(data["project"]["end_date"], "2021-05-15")
                 self.assertEqual(

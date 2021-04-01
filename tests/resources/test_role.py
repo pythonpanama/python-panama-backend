@@ -53,6 +53,7 @@ class TestRoleResource(BaseTest):
 
                 data = json.loads(results.data)
 
+                self.assertEqual(data["message"], "Role created successfully.")
                 self.assertEqual(data["role"]["role_name"], "admin")
 
     def test_post_role_400(self):
@@ -107,6 +108,9 @@ class TestRoleResource(BaseTest):
 
                 data = json.loads(results.data)
 
+                self.assertEqual(
+                    data["message"], "Role modified successfully."
+                )
                 self.assertEqual(data["role"]["role_name"], "member")
 
     def test_put_role_400(self):

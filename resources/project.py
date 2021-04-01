@@ -60,7 +60,7 @@ def post_project() -> ApiResponse:
     return (
         jsonify(
             {
-                "message": CREATED.format("project"),
+                "message": CREATED.format("Project"),
                 "project": project_schema.dump(project),
             }
         ),
@@ -104,7 +104,7 @@ def put_project(project_id: int) -> ApiResponse:
     return (
         jsonify(
             {
-                "message": MODIFIED.format("project"),
+                "message": MODIFIED.format("Project"),
                 "project": project_schema.dump(project),
             }
         ),

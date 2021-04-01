@@ -75,6 +75,9 @@ class TestSpeakerResource(BaseTest):
 
                 data = json.loads(results.data)
 
+                self.assertEqual(
+                    data["message"], "Speaker created successfully."
+                )
                 self.assertEqual(data["speaker"]["first_name"], "Tomás")
                 self.assertEqual(data["speaker"]["last_name"], "González")
                 self.assertEqual(data["speaker"]["email"], "tgonz@python.org")
@@ -134,6 +137,9 @@ class TestSpeakerResource(BaseTest):
 
                 data = json.loads(results.data)
 
+                self.assertEqual(
+                    data["message"], "Speaker modified successfully."
+                )
                 self.assertEqual(data["speaker"]["first_name"], "Edgar")
                 self.assertEqual(data["speaker"]["last_name"], "Espino")
                 self.assertEqual(data["speaker"]["email"], "eespin@python.org")

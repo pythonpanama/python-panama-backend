@@ -71,6 +71,9 @@ class TestKeynoteResource(BaseTest):
                 data = json.loads(results.data)
 
                 self.assertEqual(
+                    data["message"], "Keynote created successfully."
+                )
+                self.assertEqual(
                     data["keynote"]["title"], "Uso de type hints en Python"
                 )
                 self.assertEqual(
@@ -123,6 +126,9 @@ class TestKeynoteResource(BaseTest):
 
                 data = json.loads(results.data)
 
+                self.assertEqual(
+                    data["message"], "Keynote modified successfully."
+                )
                 self.assertEqual(
                     data["keynote"]["title"], "Creando pruebas con UnitTest"
                 )

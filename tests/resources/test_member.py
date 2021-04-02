@@ -3,6 +3,7 @@ import unittest
 
 from flask_jwt_extended import decode_token
 
+from models.member import MemberModel
 from models.token import TokenModel
 from tests.base_test import BaseTest
 from tests.model_test_data import (
@@ -152,6 +153,8 @@ class TestMemberResource(BaseTest):
                 )
                 self.assertTrue(data["member"]["is_active"])
                 self.assertEqual(data["member"]["role_id"], 1)
+                self.assertFalse("password" in data)
+                self.assertFalse("password_hash" in data)
 
     def test_get_member_404(self):
         with self.client as c:
@@ -211,6 +214,8 @@ class TestMemberResource(BaseTest):
                 )
                 self.assertTrue(data["member"]["is_active"])
                 self.assertEqual(data["member"]["role_id"], 1)
+                self.assertFalse("password" in data)
+                self.assertFalse("password_hash" in data)
 
     def test_post_member_400(self):
         with self.client as c:
@@ -304,6 +309,8 @@ class TestMemberResource(BaseTest):
                 )
                 self.assertTrue(data["member"]["is_active"])
                 self.assertEqual(data["member"]["role_id"], 1)
+                self.assertFalse("password" in data)
+                self.assertFalse("password_hash" in data)
 
     def test_put_member_400(self):
         with self.client as c:
@@ -359,6 +366,109 @@ class TestMemberResource(BaseTest):
                     "409 Conflict: Member with email "
                     "'jperez@ppty.com' already exists.",
                 )
+
+    def test_activate_member_200(self):
+        with self.client as c:
+            with self.app_context:
+                role = self.role.save_to_db()
+                permission = self.permission.save_to_db()
+                role.permissions.append(permission)
+
+                member_id = self.member.save_to_db().id
+
+                results = c.put(
+                    f"/members/{member_id}/activate",
+                    headers={"Content-Type": "application/json"},
+                )
+
+                data = json.loads(results.data)
+
+                self.assertEqual(
+                    data["message"], "Member activated successfully."
+                )
+                self.assertTrue(data["member"]["is_active"])
+                self.assertFalse("password" in data)
+                self.assertFalse("password_hash" in data)
+
+    def test_activate_member_404(self):
+        with self.client as c:
+            with self.app_context:
+                results = c.put(
+                    f"/members/99/activate",
+                    headers={"Content-Type": "application/json"},
+                )
+
+                data = json.loads(results.data)
+
+                self.assertEqual(
+                    data["error"],
+                    "404 Not Found: Member with id '99' was not found.",
+                )
+
+    def test_deactivate_member_200(self):
+        with self.client as c:
+            with self.app_context:
+                role = self.role.save_to_db()
+                permission = self.permission.save_to_db()
+                role.permissions.append(permission)
+
+                member_id = self.member.save_to_db().id
+
+                results = c.put(
+                    f"/members/{member_id}/deactivate",
+                    headers={"Content-Type": "application/json"},
+                )
+
+                data = json.loads(results.data)
+
+                self.assertEqual(
+                    data["message"], "Member deactivated successfully."
+                )
+                self.assertFalse(data["member"]["is_active"])
+                self.assertFalse("password" in data)
+                self.assertFalse("password_hash" in data)
+
+    def test_deactivate_member_404(self):
+        with self.client as c:
+            with self.app_context:
+                results = c.put(
+                    f"/members/99/deactivate",
+                    headers={"Content-Type": "application/json"},
+                )
+
+                data = json.loads(results.data)
+
+                self.assertEqual(
+                    data["error"],
+                    "404 Not Found: Member with id '99' was not found.",
+                )
+
+    def test_change_member_password_200(self):
+        with self.client as c:
+            with self.app_context:
+                role = self.role.save_to_db()
+                permission = self.permission.save_to_db()
+                role.permissions.append(permission)
+
+                member_id = self.member.save_to_db().id
+
+                results = c.put(
+                    f"/members/{member_id}/change_password",
+                    data=json.dumps({"password": "new_pass"}),
+                    headers={"Content-Type": "application/json"},
+                )
+
+                data = json.loads(results.data)
+
+                self.assertEqual(
+                    data["message"],
+                    "Member password was modified successfully.",
+                )
+                self.assertFalse("password" in data)
+                self.assertFalse("password_hash" in data)
+
+                member = MemberModel.find_by_id(member_id)
+                self.assertTrue(member.verify_password("new_pass"))
 
 
 if __name__ == "__main__":  # pragma: no cover

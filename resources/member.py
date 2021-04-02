@@ -15,7 +15,6 @@ from resources.message import (
     ACTIVATED,
     CREATED,
     DEACTIVATED,
-    EMAIL_MODIFIED,
     ERROR_404,
     ERROR_409,
     MEMBER_401,
@@ -152,6 +151,70 @@ def put_member(member_id: int) -> ApiResponse:
         jsonify(
             {
                 "message": MODIFIED.format("Member"),
+                "member": member_schema.dump(member),
+            }
+        ),
+        200,
+    )
+
+
+@members.route("/<int:member_id>/activate", methods=["PUT"])
+def activate_member(member_id: int) -> ApiResponse:
+    member = MemberModel.find_by_id(member_id)
+
+    if not member:
+        abort(404, description=ERROR_404.format("Member", "id", member_id))
+
+    member.is_active = True
+    member.save_to_db()
+
+    return (
+        jsonify(
+            {
+                "message": ACTIVATED.format("Member"),
+                "member": member_schema.dump(member),
+            }
+        ),
+        200,
+    )
+
+
+@members.route("/<int:member_id>/deactivate", methods=["PUT"])
+def deactivate_member(member_id: int) -> ApiResponse:
+    member = MemberModel.find_by_id(member_id)
+
+    if not member:
+        abort(404, description=ERROR_404.format("Member", "id", member_id))
+
+    member.is_active = False
+    member.save_to_db()
+
+    return (
+        jsonify(
+            {
+                "message": DEACTIVATED.format("Member"),
+                "member": member_schema.dump(member),
+            }
+        ),
+        200,
+    )
+
+
+@members.route("/<int:member_id>/change_password", methods=["PUT"])
+def change_member_password(member_id: int) -> ApiResponse:
+    member = MemberModel.find_by_id(member_id)
+
+    if not member:
+        abort(404, description=ERROR_404.format("Member", "id", member_id))
+
+    member_json = request.get_json()
+    member.password_hash = generate_password_hash(member_json.get("password"))
+    member.save_to_db()
+
+    return (
+        jsonify(
+            {
+                "message": PASSWORD_MODIFIED,
                 "member": member_schema.dump(member),
             }
         ),

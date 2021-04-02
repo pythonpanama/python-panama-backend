@@ -3,6 +3,7 @@ import unittest
 
 from flask_jwt_extended import decode_token
 
+from models.member import MemberModel
 from models.token import TokenModel
 from tests.base_test import BaseTest
 from tests.model_test_data import (
@@ -441,6 +442,33 @@ class TestMemberResource(BaseTest):
                     data["error"],
                     "404 Not Found: Member with id '99' was not found.",
                 )
+
+    def test_change_member_password_200(self):
+        with self.client as c:
+            with self.app_context:
+                role = self.role.save_to_db()
+                permission = self.permission.save_to_db()
+                role.permissions.append(permission)
+
+                member_id = self.member.save_to_db().id
+
+                results = c.put(
+                    f"/members/{member_id}/change_password",
+                    data=json.dumps({"password": "new_pass"}),
+                    headers={"Content-Type": "application/json"},
+                )
+
+                data = json.loads(results.data)
+
+                self.assertEqual(
+                    data["message"],
+                    "Member password was modified successfully.",
+                )
+                self.assertFalse("password" in data)
+                self.assertFalse("password_hash" in data)
+
+                member = MemberModel.find_by_id(member_id)
+                self.assertTrue(member.verify_password("new_pass"))
 
 
 if __name__ == "__main__":  # pragma: no cover

@@ -74,6 +74,9 @@ class TestProjectResource(BaseTest):
 
                 data = json.loads(results.data)
 
+                self.assertEqual(
+                    data["message"], "Project created successfully."
+                )
                 self.assertEqual(data["project"]["start_date"], "2021-03-16")
                 self.assertEqual(data["project"]["end_date"], "2021-04-15")
                 self.assertEqual(
@@ -108,6 +111,13 @@ class TestProjectResource(BaseTest):
                 self.assertTrue("description" in data["error"])
                 self.assertTrue("goals" in data["error"])
                 self.assertTrue("status" in data["error"])
+
+                results = c.post(
+                    "/projects",
+                    headers={"Content-Type": "application/json"},
+                )
+
+                self.assertEqual(results.status, "400 BAD REQUEST")
 
     def test_post_project_409(self):
         with self.client as c:
@@ -145,6 +155,9 @@ class TestProjectResource(BaseTest):
 
                 data = json.loads(results.data)
 
+                self.assertEqual(
+                    data["message"], "Project modified successfully."
+                )
                 self.assertEqual(data["project"]["start_date"], "2021-04-16")
                 self.assertEqual(data["project"]["end_date"], "2021-05-15")
                 self.assertEqual(
@@ -160,6 +173,20 @@ class TestProjectResource(BaseTest):
                 )
                 self.assertEqual(data["project"]["status"], "completed")
                 self.assertEqual(data["project"]["admin_id"], 1)
+
+    def test_put_project_400(self):
+        with self.client as c:
+            with self.app_context:
+                self.role.save_to_db()
+                self.member.save_to_db()
+                project_id = self.project.save_to_db().id
+
+                results = c.put(
+                    f"/projects/{project_id}",
+                    headers={"Content-Type": "application/json"},
+                )
+
+                self.assertEqual(results.status, "400 BAD REQUEST")
 
     def test_put_project_404(self):
         with self.client as c:

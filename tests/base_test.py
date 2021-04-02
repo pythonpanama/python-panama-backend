@@ -14,6 +14,7 @@ from tests.model_test_data import (
     TEST_KEYNOTE,
     TEST_KEYNOTE_2,
     TEST_MEMBER,
+    TEST_MEMBER_2,
     TEST_MEETING,
     TEST_MEETING_2,
     TEST_PERMISSION,
@@ -48,6 +49,7 @@ class BaseTest(TestCase):
             self.keynote = KeynoteModel(**TEST_KEYNOTE)
             self.keynote_2 = KeynoteModel(**TEST_KEYNOTE_2)
             self.member = MemberModel(**TEST_MEMBER)
+            self.member_2 = MemberModel(**TEST_MEMBER_2)
             self.meeting = MeetingModel(**TEST_MEETING)
             self.meeting_2 = MeetingModel(**TEST_MEETING_2)
             self.permission = PermissionModel(**TEST_PERMISSION)

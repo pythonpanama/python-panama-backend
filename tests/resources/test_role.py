@@ -53,6 +53,7 @@ class TestRoleResource(BaseTest):
 
                 data = json.loads(results.data)
 
+                self.assertEqual(data["message"], "Role created successfully.")
                 self.assertEqual(data["role"]["role_name"], "admin")
 
     def test_post_role_400(self):
@@ -67,6 +68,13 @@ class TestRoleResource(BaseTest):
                 data = json.loads(results.data)
 
                 self.assertTrue("role_name" in data["error"])
+
+                results = c.post(
+                    "/roles",
+                    headers={"Content-Type": "application/json"},
+                )
+
+                self.assertEqual(results.status, "400 BAD REQUEST")
 
     def test_post_role_409(self):
         with self.client as c:
@@ -100,7 +108,22 @@ class TestRoleResource(BaseTest):
 
                 data = json.loads(results.data)
 
+                self.assertEqual(
+                    data["message"], "Role modified successfully."
+                )
                 self.assertEqual(data["role"]["role_name"], "member")
+
+    def test_put_role_400(self):
+        with self.client as c:
+            with self.app_context:
+                role_id = self.role.save_to_db().id
+
+                results = c.put(
+                    f"/roles/{role_id}",
+                    headers={"Content-Type": "application/json"},
+                )
+
+                self.assertEqual(results.status, "400 BAD REQUEST")
 
     def test_put_role_404(self):
         with self.client as c:

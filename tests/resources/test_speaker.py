@@ -75,6 +75,9 @@ class TestSpeakerResource(BaseTest):
 
                 data = json.loads(results.data)
 
+                self.assertEqual(
+                    data["message"], "Speaker created successfully."
+                )
                 self.assertEqual(data["speaker"]["first_name"], "Tomás")
                 self.assertEqual(data["speaker"]["last_name"], "González")
                 self.assertEqual(data["speaker"]["email"], "tgonz@python.org")
@@ -114,6 +117,13 @@ class TestSpeakerResource(BaseTest):
                 self.assertTrue("last_name" in data["error"])
                 self.assertTrue("bio" in data["error"])
 
+                results = c.post(
+                    "/speakers",
+                    headers={"Content-Type": "application/json"},
+                )
+
+                self.assertEqual(results.status, "400 BAD REQUEST")
+
     def test_put_speaker_200(self):
         with self.client as c:
             with self.app_context:
@@ -127,6 +137,9 @@ class TestSpeakerResource(BaseTest):
 
                 data = json.loads(results.data)
 
+                self.assertEqual(
+                    data["message"], "Speaker modified successfully."
+                )
                 self.assertEqual(data["speaker"]["first_name"], "Edgar")
                 self.assertEqual(data["speaker"]["last_name"], "Espino")
                 self.assertEqual(data["speaker"]["email"], "eespin@python.org")
@@ -150,6 +163,18 @@ class TestSpeakerResource(BaseTest):
                     data["speaker"]["profile_picture"],
                     "https://ppty.com/img/hA4oCfR&o17K3fOm.png",
                 )
+
+    def test_put_speaker_400(self):
+        with self.client as c:
+            with self.app_context:
+                speaker_id = self.speaker.save_to_db().id
+
+                results = c.put(
+                    f"/speakers/{speaker_id}",
+                    headers={"Content-Type": "application/json"},
+                )
+
+                self.assertEqual(results.status, "400 BAD REQUEST")
 
     def test_put_speaker_404(self):
         with self.client as c:

@@ -127,7 +127,7 @@ class TestMemberResource(BaseTest):
                 )
 
                 data = json.loads(results.data)
-                
+
                 self.assertEqual(data["member"]["email"], "jperez@ppty.com")
                 self.assertEqual(
                     data["member"]["mobile_phone"], "+50769876543"
@@ -152,6 +152,8 @@ class TestMemberResource(BaseTest):
                 )
                 self.assertTrue(data["member"]["is_active"])
                 self.assertEqual(data["member"]["role_id"], 1)
+                self.assertFalse("password" in data)
+                self.assertFalse("password_hash" in data)
 
     def test_get_member_404(self):
         with self.client as c:
@@ -211,6 +213,8 @@ class TestMemberResource(BaseTest):
                 )
                 self.assertTrue(data["member"]["is_active"])
                 self.assertEqual(data["member"]["role_id"], 1)
+                self.assertFalse("password" in data)
+                self.assertFalse("password_hash" in data)
 
     def test_post_member_400(self):
         with self.client as c:
@@ -304,6 +308,8 @@ class TestMemberResource(BaseTest):
                 )
                 self.assertTrue(data["member"]["is_active"])
                 self.assertEqual(data["member"]["role_id"], 1)
+                self.assertFalse("password" in data)
+                self.assertFalse("password_hash" in data)
 
     def test_put_member_400(self):
         with self.client as c:
@@ -380,6 +386,8 @@ class TestMemberResource(BaseTest):
                     data["message"], "Member activated successfully."
                 )
                 self.assertTrue(data["member"]["is_active"])
+                self.assertFalse("password" in data)
+                self.assertFalse("password_hash" in data)
 
     def test_activate_member_404(self):
         with self.client as c:
@@ -416,6 +424,8 @@ class TestMemberResource(BaseTest):
                     data["message"], "Member deactivated successfully."
                 )
                 self.assertFalse(data["member"]["is_active"])
+                self.assertFalse("password" in data)
+                self.assertFalse("password_hash" in data)
 
     def test_deactivate_member_404(self):
         with self.client as c:

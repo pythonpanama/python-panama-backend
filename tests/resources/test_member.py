@@ -127,7 +127,7 @@ class TestMemberResource(BaseTest):
                 )
 
                 data = json.loads(results.data)
-
+                
                 self.assertEqual(data["member"]["email"], "jperez@ppty.com")
                 self.assertEqual(
                     data["member"]["mobile_phone"], "+50769876543"
@@ -358,6 +358,78 @@ class TestMemberResource(BaseTest):
                     data["error"],
                     "409 Conflict: Member with email "
                     "'jperez@ppty.com' already exists.",
+                )
+
+    def test_activate_member_200(self):
+        with self.client as c:
+            with self.app_context:
+                role = self.role.save_to_db()
+                permission = self.permission.save_to_db()
+                role.permissions.append(permission)
+
+                member_id = self.member.save_to_db().id
+
+                results = c.put(
+                    f"/members/{member_id}/activate",
+                    headers={"Content-Type": "application/json"},
+                )
+
+                data = json.loads(results.data)
+
+                self.assertEqual(
+                    data["message"], "Member activated successfully."
+                )
+                self.assertTrue(data["member"]["is_active"])
+
+    def test_activate_member_404(self):
+        with self.client as c:
+            with self.app_context:
+                results = c.put(
+                    f"/members/99/activate",
+                    headers={"Content-Type": "application/json"},
+                )
+
+                data = json.loads(results.data)
+
+                self.assertEqual(
+                    data["error"],
+                    "404 Not Found: Member with id '99' was not found.",
+                )
+
+    def test_deactivate_member_200(self):
+        with self.client as c:
+            with self.app_context:
+                role = self.role.save_to_db()
+                permission = self.permission.save_to_db()
+                role.permissions.append(permission)
+
+                member_id = self.member.save_to_db().id
+
+                results = c.put(
+                    f"/members/{member_id}/deactivate",
+                    headers={"Content-Type": "application/json"},
+                )
+
+                data = json.loads(results.data)
+
+                self.assertEqual(
+                    data["message"], "Member deactivated successfully."
+                )
+                self.assertFalse(data["member"]["is_active"])
+
+    def test_deactivate_member_404(self):
+        with self.client as c:
+            with self.app_context:
+                results = c.put(
+                    f"/members/99/deactivate",
+                    headers={"Content-Type": "application/json"},
+                )
+
+                data = json.loads(results.data)
+
+                self.assertEqual(
+                    data["error"],
+                    "404 Not Found: Member with id '99' was not found.",
                 )
 
 

@@ -157,3 +157,45 @@ def put_member(member_id: int) -> ApiResponse:
         ),
         200,
     )
+
+
+@members.route("/<int:member_id>/activate", methods=["PUT"])
+def activate_user(member_id: int) -> ApiResponse:
+    member = MemberModel.find_by_id(member_id)
+
+    if not member:
+        abort(404, description=ERROR_404.format("Member", "id", member_id))
+
+    member.is_active = True
+    member.save_to_db()
+
+    return (
+        jsonify(
+            {
+                "message": ACTIVATED.format("Member"),
+                "member": member_schema.dump(member),
+            }
+        ),
+        200,
+    )
+
+
+@members.route("/<int:member_id>/deactivate", methods=["PUT"])
+def deactivate_user(member_id: int) -> ApiResponse:
+    member = MemberModel.find_by_id(member_id)
+
+    if not member:
+        abort(404, description=ERROR_404.format("Member", "id", member_id))
+
+    member.is_active = False
+    member.save_to_db()
+
+    return (
+        jsonify(
+            {
+                "message": DEACTIVATED.format("Member"),
+                "member": member_schema.dump(member),
+            }
+        ),
+        200,
+    )

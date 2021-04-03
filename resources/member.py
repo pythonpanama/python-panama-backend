@@ -41,7 +41,7 @@ def login() -> ApiResponse:
     if member and member.verify_password(password) and member.is_active:
         identity = member_schema.dump(member)
         access_token = create_access_token(identity=identity, fresh=True)
-        refresh_token = create_refresh_token(identity)
+        refresh_token = create_refresh_token(identity=identity)
         add_token_to_database([access_token, refresh_token], member.id)
 
         return (
@@ -66,6 +66,24 @@ def logout() -> ApiResponse:
     result = TokenModel.revoke(member["id"])
 
     return jsonify({"message": result["message"]}), result["status"]
+
+
+@members.route("/refresh", methods=["POST"])
+@jwt_required(refresh=True)
+def refresh_token():
+    identity = get_jwt_identity()
+    access_token = create_access_token(identity=identity)
+    add_token_to_database([access_token], identity["id"])
+
+    return (
+        jsonify(
+            {
+                "access_token": access_token,
+                "member": identity,
+            },
+        ),
+        200,
+    )
 
 
 @members.route("/<int:member_id>")

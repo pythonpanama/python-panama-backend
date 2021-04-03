@@ -61,6 +61,33 @@ class TestMemberResource(BaseTest):
 
                 self.assertEqual(results.status, "400 BAD REQUEST")
 
+    def test_refresh_200(self):
+        with self.client as c:
+            with self.app_context:
+                role = self.role.save_to_db()
+                permission = self.permission.save_to_db()
+                role.permissions.append(permission)
+                member = self.member.save_to_db()
+                member_id = member.id
+                login = self.login(c, member.email, TEST_MEMBER["password"])
+
+                results = c.post(
+                    f"/members/refresh",
+                    headers={
+                        "Content-Type": "application/json",
+                        "Authorization": f"Bearer {login['refresh_token']}",
+                    },
+                )
+
+                data = json.loads(results.data)
+
+                tokens = TokenModel.find_by_member_id(member_id)
+
+                self.assertEqual(
+                    decode_token(data["access_token"])["jti"], tokens[1].jti
+                )
+                self.assertTrue(tokens[0].revoked)
+
     def test_login_401(self):
         with self.client as c:
             with self.app_context:

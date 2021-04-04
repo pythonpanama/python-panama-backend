@@ -6,6 +6,7 @@ from tests.model_test_data import (
     TEST_KEYNOTE_1,
     TEST_KEYNOTE_2,
     TEST_KEYNOTE_400,
+    TEST_MEMBER_1,
 )
 
 
@@ -16,15 +17,19 @@ class TestKeynoteResource(BaseTest):
     def test_get_keynote_200(self):
         with self.client as c:
             with self.app_context:
-                self.role_1.save_to_db()
-                self.member_1.save_to_db()
+                self.add_permissions_to_admin()
+                member = self.member_1.save_to_db()
+                login = self.login(c, member.email, TEST_MEMBER_1["password"])
                 self.speaker_1.save_to_db()
                 self.meeting_1.save_to_db()
                 keynote_id = self.keynote_1.save_to_db().id
 
                 results = c.get(
                     f"/keynotes/{keynote_id}",
-                    headers={"Content-Type": "application/json"},
+                    headers={
+                        "Content-Type": "application/json",
+                        "Authorization": f"Bearer {login['access_token']}",
+                    },
                 )
 
                 data = json.loads(results.data)
@@ -42,9 +47,16 @@ class TestKeynoteResource(BaseTest):
     def test_get_keynote_404(self):
         with self.client as c:
             with self.app_context:
+                self.add_permissions_to_admin()
+                member = self.member_1.save_to_db()
+                login = self.login(c, member.email, TEST_MEMBER_1["password"])
+
                 results = c.get(
                     f"/keynotes/99",
-                    headers={"Content-Type": "application/json"},
+                    headers={
+                        "Content-Type": "application/json",
+                        "Authorization": f"Bearer {login['access_token']}",
+                    },
                 )
 
                 data = json.loads(results.data)
@@ -57,15 +69,19 @@ class TestKeynoteResource(BaseTest):
     def test_post_keynote_201(self):
         with self.client as c:
             with self.app_context:
-                self.role_1.save_to_db()
-                self.member_1.save_to_db()
+                self.add_permissions_to_admin()
+                member = self.member_1.save_to_db()
+                login = self.login(c, member.email, TEST_MEMBER_1["password"])
                 self.speaker_1.save_to_db()
                 self.meeting_1.save_to_db()
 
                 results = c.post(
                     "/keynotes",
                     data=json.dumps(TEST_KEYNOTE_1),
-                    headers={"Content-Type": "application/json"},
+                    headers={
+                        "Content-Type": "application/json",
+                        "Authorization": f"Bearer {login['access_token']}",
+                    },
                 )
 
                 data = json.loads(results.data)
@@ -86,15 +102,19 @@ class TestKeynoteResource(BaseTest):
     def test_post_keynote_400(self):
         with self.client as c:
             with self.app_context:
-                self.role_1.save_to_db()
-                self.member_1.save_to_db()
+                self.add_permissions_to_admin()
+                member = self.member_1.save_to_db()
+                login = self.login(c, member.email, TEST_MEMBER_1["password"])
                 self.speaker_1.save_to_db()
                 self.meeting_1.save_to_db()
 
                 results = c.post(
                     "/keynotes",
                     data=json.dumps(TEST_KEYNOTE_400),
-                    headers={"Content-Type": "application/json"},
+                    headers={
+                        "Content-Type": "application/json",
+                        "Authorization": f"Bearer {login['access_token']}",
+                    },
                 )
 
                 data = json.loads(results.data)
@@ -104,7 +124,10 @@ class TestKeynoteResource(BaseTest):
 
                 results = c.post(
                     "/keynotes",
-                    headers={"Content-Type": "application/json"},
+                    headers={
+                        "Content-Type": "application/json",
+                        "Authorization": f"Bearer {login['access_token']}",
+                    },
                 )
 
                 self.assertEqual(results.status, "400 BAD REQUEST")
@@ -112,8 +135,9 @@ class TestKeynoteResource(BaseTest):
     def test_put_keynote_200(self):
         with self.client as c:
             with self.app_context:
-                self.role_1.save_to_db()
-                self.member_1.save_to_db()
+                self.add_permissions_to_admin()
+                member = self.member_1.save_to_db()
+                login = self.login(c, member.email, TEST_MEMBER_1["password"])
                 self.speaker_1.save_to_db()
                 self.meeting_1.save_to_db()
                 keynote_id = self.keynote_1.save_to_db().id
@@ -121,7 +145,10 @@ class TestKeynoteResource(BaseTest):
                 results = c.put(
                     f"/keynotes/{keynote_id}",
                     data=json.dumps(TEST_KEYNOTE_2),
-                    headers={"Content-Type": "application/json"},
+                    headers={
+                        "Content-Type": "application/json",
+                        "Authorization": f"Bearer {login['access_token']}",
+                    },
                 )
 
                 data = json.loads(results.data)
@@ -142,15 +169,19 @@ class TestKeynoteResource(BaseTest):
     def test_put_keynote_400(self):
         with self.client as c:
             with self.app_context:
-                self.role_1.save_to_db()
-                self.member_1.save_to_db()
+                self.add_permissions_to_admin()
+                member = self.member_1.save_to_db()
+                login = self.login(c, member.email, TEST_MEMBER_1["password"])
                 self.speaker_1.save_to_db()
                 self.meeting_1.save_to_db()
                 keynote_id = self.keynote_1.save_to_db().id
 
                 results = c.put(
                     f"/keynotes/{keynote_id}",
-                    headers={"Content-Type": "application/json"},
+                    headers={
+                        "Content-Type": "application/json",
+                        "Authorization": f"Bearer {login['access_token']}",
+                    },
                 )
 
                 self.assertEqual(results.status, "400 BAD REQUEST")
@@ -158,10 +189,17 @@ class TestKeynoteResource(BaseTest):
     def test_put_keynote_404(self):
         with self.client as c:
             with self.app_context:
+                self.add_permissions_to_admin()
+                member = self.member_1.save_to_db()
+                login = self.login(c, member.email, TEST_MEMBER_1["password"])
+
                 results = c.put(
                     f"/keynotes/99",
                     data=json.dumps(TEST_KEYNOTE_2),
-                    headers={"Content-Type": "application/json"},
+                    headers={
+                        "Content-Type": "application/json",
+                        "Authorization": f"Bearer {login['access_token']}",
+                    },
                 )
 
                 data = json.loads(results.data)
@@ -174,15 +212,19 @@ class TestKeynoteResource(BaseTest):
     def test_delete_keynote_200(self):
         with self.client as c:
             with self.app_context:
-                self.role_1.save_to_db()
-                self.member_1.save_to_db()
+                self.add_permissions_to_admin()
+                member = self.member_1.save_to_db()
+                login = self.login(c, member.email, TEST_MEMBER_1["password"])
                 self.speaker_1.save_to_db()
                 self.meeting_1.save_to_db()
                 keynote_id = self.keynote_1.save_to_db().id
 
                 results = c.delete(
                     f"/keynotes/{keynote_id}",
-                    headers={"Content-Type": "application/json"},
+                    headers={
+                        "Content-Type": "application/json",
+                        "Authorization": f"Bearer {login['access_token']}",
+                    },
                 )
 
                 data = json.loads(results.data)
@@ -197,9 +239,16 @@ class TestKeynoteResource(BaseTest):
     def test_delete_keynote_404(self):
         with self.client as c:
             with self.app_context:
+                self.add_permissions_to_admin()
+                member = self.member_1.save_to_db()
+                login = self.login(c, member.email, TEST_MEMBER_1["password"])
+
                 results = c.delete(
                     f"/keynotes/99",
-                    headers={"Content-Type": "application/json"},
+                    headers={
+                        "Content-Type": "application/json",
+                        "Authorization": f"Bearer {login['access_token']}",
+                    },
                 )
 
                 data = json.loads(results.data)
@@ -212,8 +261,9 @@ class TestKeynoteResource(BaseTest):
     def test_get_keynotes_200(self):
         with self.client as c:
             with self.app_context:
-                self.role_1.save_to_db()
-                self.member_1.save_to_db()
+                self.add_permissions_to_admin()
+                member = self.member_1.save_to_db()
+                login = self.login(c, member.email, TEST_MEMBER_1["password"])
                 self.speaker_1.save_to_db()
                 self.meeting_1.save_to_db()
                 keynote_1_id = self.keynote_1.save_to_db().id
@@ -221,7 +271,10 @@ class TestKeynoteResource(BaseTest):
 
                 results = c.get(
                     f"/keynotes",
-                    headers={"Content-Type": "application/json"},
+                    headers={
+                        "Content-Type": "application/json",
+                        "Authorization": f"Bearer {login['access_token']}",
+                    },
                 )
 
                 data = json.loads(results.data)
@@ -233,9 +286,16 @@ class TestKeynoteResource(BaseTest):
     def test_get_keynotes_404(self):
         with self.client as c:
             with self.app_context:
+                self.add_permissions_to_admin()
+                member = self.member_1.save_to_db()
+                login = self.login(c, member.email, TEST_MEMBER_1["password"])
+                
                 results = c.get(
                     f"/keynotes",
-                    headers={"Content-Type": "application/json"},
+                    headers={
+                        "Content-Type": "application/json",
+                        "Authorization": f"Bearer {login['access_token']}",
+                    },
                 )
 
                 data = json.loads(results.data)

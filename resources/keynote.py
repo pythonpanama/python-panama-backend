@@ -1,5 +1,7 @@
 from flask import abort, Blueprint, jsonify, request
+from flask_jwt_extended import jwt_required
 
+from auth import requires_auth
 from custom_types import ApiResponse
 from models.keynote import KeynoteModel
 from resources.message import (
@@ -18,6 +20,8 @@ keynote_list_schema = KeynoteSchema(many=True)
 
 
 @keynotes.route("/<int:keynote_id>")
+@jwt_required()
+@requires_auth("get:member")
 def get_keynote(keynote_id: int) -> ApiResponse:
     keynote = KeynoteModel.find_by_id(keynote_id)
 
@@ -35,6 +39,8 @@ def get_keynote(keynote_id: int) -> ApiResponse:
 
 
 @keynotes.route("", methods=["POST"])
+@jwt_required()
+@requires_auth("post:keynote")
 def post_keynote() -> ApiResponse:
     keynote_json = request.get_json()
 
@@ -53,6 +59,8 @@ def post_keynote() -> ApiResponse:
 
 
 @keynotes.route("/<int:keynote_id>", methods=["PUT"])
+@jwt_required()
+@requires_auth("post:keynote")
 def put_keynote(keynote_id: int) -> ApiResponse:
     keynote = KeynoteModel.find_by_id(keynote_id)
 
@@ -79,6 +87,8 @@ def put_keynote(keynote_id: int) -> ApiResponse:
 
 
 @keynotes.route("/<int:keynote_id>", methods=["DELETE"])
+@jwt_required()
+@requires_auth("post:keynote")
 def delete_keynote(keynote_id: int) -> ApiResponse:
     keynote = KeynoteModel.find_by_id(keynote_id)
 
@@ -99,6 +109,8 @@ def delete_keynote(keynote_id: int) -> ApiResponse:
 
 
 @keynotes.route("")
+@jwt_required()
+@requires_auth("get:member")
 def get_keynotes() -> ApiResponse:
     keynote_list = KeynoteModel.find_all()
 

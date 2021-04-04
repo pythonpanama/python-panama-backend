@@ -10,11 +10,11 @@ class TestRole(BaseTest):
 
     def test_init(self):
         with self.app_context:
-            self.assertEqual(self.role.role_name, "admin")
+            self.assertEqual(self.role_1.role_name, "admin")
 
     def test_find_by_id(self):
         with self.app_context:
-            role_id = self.role.save_to_db().id
+            role_id = self.role_1.save_to_db().id
 
             role = RoleModel.find_by_id(role_id)
 
@@ -22,7 +22,7 @@ class TestRole(BaseTest):
 
     def test_find_by_name(self):
         with self.app_context:
-            role_id = self.role.save_to_db().id
+            role_id = self.role_1.save_to_db().id
 
             role = RoleModel.find_by_name("admin")
 
@@ -30,15 +30,15 @@ class TestRole(BaseTest):
 
     def test_role_permission_relation(self):
         with self.app_context:
-            role_id = self.role.save_to_db().id
-            permission_id = self.permission.save_to_db().id
+            role_id = self.role_1.save_to_db().id
+            permission_id = self.permission_1.save_to_db().id
 
             role = RoleModel.find_by_id(role_id)
             permission = PermissionModel.find_by_id(permission_id)
             role.permissions.append(permission)
 
             self.assertEqual(
-                role.permissions[0].permission_name, "post:project"
+                role.permissions[0].permission_name, "post:keynote"
             )
 
 

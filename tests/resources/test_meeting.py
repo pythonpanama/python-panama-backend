@@ -3,7 +3,7 @@ import unittest
 
 from tests.base_test import BaseTest
 from tests.model_test_data import (
-    TEST_MEETING,
+    TEST_MEETING_1,
     TEST_MEETING_2,
     TEST_MEETING_400,
 )
@@ -16,9 +16,9 @@ class TestMeetingResource(BaseTest):
     def test_get_meeting_200(self):
         with self.client as c:
             with self.app_context:
-                self.role.save_to_db()
-                self.member.save_to_db()
-                meeting_id = self.meeting.save_to_db().id
+                self.role_1.save_to_db()
+                self.member_1.save_to_db()
+                meeting_id = self.meeting_1.save_to_db().id
 
                 results = c.get(
                     f"/meetings/{meeting_id}",
@@ -59,12 +59,12 @@ class TestMeetingResource(BaseTest):
     def test_post_meeting_201(self):
         with self.client as c:
             with self.app_context:
-                self.role.save_to_db()
-                self.member.save_to_db()
+                self.role_1.save_to_db()
+                self.member_1.save_to_db()
 
                 results = c.post(
                     "/meetings",
-                    data=json.dumps(TEST_MEETING),
+                    data=json.dumps(TEST_MEETING_1),
                     headers={"Content-Type": "application/json"},
                 )
 
@@ -90,8 +90,8 @@ class TestMeetingResource(BaseTest):
     def test_post_meeting_400(self):
         with self.client as c:
             with self.app_context:
-                self.role.save_to_db()
-                self.member.save_to_db()
+                self.role_1.save_to_db()
+                self.member_1.save_to_db()
 
                 results = c.post(
                     "/meetings",
@@ -116,9 +116,9 @@ class TestMeetingResource(BaseTest):
     def test_put_meeting_200(self):
         with self.client as c:
             with self.app_context:
-                self.role.save_to_db()
-                self.member.save_to_db()
-                meeting_id = self.meeting.save_to_db().id
+                self.role_1.save_to_db()
+                self.member_1.save_to_db()
+                meeting_id = self.meeting_1.save_to_db().id
 
                 results = c.put(
                     f"/meetings/{meeting_id}",
@@ -148,9 +148,9 @@ class TestMeetingResource(BaseTest):
     def test_put_meeting_400(self):
         with self.client as c:
             with self.app_context:
-                self.role.save_to_db()
-                self.member.save_to_db()
-                meeting_id = self.meeting.save_to_db().id
+                self.role_1.save_to_db()
+                self.member_1.save_to_db()
+                meeting_id = self.meeting_1.save_to_db().id
 
                 results = c.put(
                     f"/meetings/{meeting_id}",
@@ -178,9 +178,9 @@ class TestMeetingResource(BaseTest):
     def test_delete_meeting_200(self):
         with self.client as c:
             with self.app_context:
-                self.role.save_to_db()
-                self.member.save_to_db()
-                meeting_id = self.meeting.save_to_db().id
+                self.role_1.save_to_db()
+                self.member_1.save_to_db()
+                meeting_id = self.meeting_1.save_to_db().id
 
                 results = c.delete(
                     f"/meetings/{meeting_id}",
@@ -214,9 +214,9 @@ class TestMeetingResource(BaseTest):
     def test_get_meetings_200(self):
         with self.client as c:
             with self.app_context:
-                self.role.save_to_db()
-                self.member.save_to_db()
-                meeting_1_id = self.meeting.save_to_db().id
+                self.role_1.save_to_db()
+                self.member_1.save_to_db()
+                meeting_1_id = self.meeting_1.save_to_db().id
                 meeting_2_id = self.meeting_2.save_to_db().id
 
                 results = c.get(

@@ -3,7 +3,7 @@ import unittest
 
 from tests.base_test import BaseTest
 from tests.model_test_data import (
-    TEST_PROJECT,
+    TEST_PROJECT_1,
     TEST_PROJECT_2,
     TEST_PROJECT_400,
 )
@@ -16,9 +16,9 @@ class TestProjectResource(BaseTest):
     def test_get_project_200(self):
         with self.client as c:
             with self.app_context:
-                self.role.save_to_db()
-                self.member.save_to_db()
-                project_id = self.project.save_to_db().id
+                self.role_1.save_to_db()
+                self.member_1.save_to_db()
+                project_id = self.project_1.save_to_db().id
 
                 results = c.get(
                     f"/projects/{project_id}",
@@ -63,12 +63,12 @@ class TestProjectResource(BaseTest):
     def test_post_project_201(self):
         with self.client as c:
             with self.app_context:
-                self.role.save_to_db()
-                self.member.save_to_db()
+                self.role_1.save_to_db()
+                self.member_1.save_to_db()
 
                 results = c.post(
                     "/projects",
-                    data=json.dumps(TEST_PROJECT),
+                    data=json.dumps(TEST_PROJECT_1),
                     headers={"Content-Type": "application/json"},
                 )
 
@@ -122,13 +122,13 @@ class TestProjectResource(BaseTest):
     def test_post_project_409(self):
         with self.client as c:
             with self.app_context:
-                self.role.save_to_db()
-                self.member.save_to_db()
-                self.project.save_to_db()
+                self.role_1.save_to_db()
+                self.member_1.save_to_db()
+                self.project_1.save_to_db()
 
                 results = c.post(
                     "/projects",
-                    data=json.dumps(TEST_PROJECT),
+                    data=json.dumps(TEST_PROJECT_1),
                     headers={"Content-Type": "application/json"},
                 )
 
@@ -143,9 +143,9 @@ class TestProjectResource(BaseTest):
     def test_put_project_200(self):
         with self.client as c:
             with self.app_context:
-                self.role.save_to_db()
-                self.member.save_to_db()
-                project_id = self.project.save_to_db().id
+                self.role_1.save_to_db()
+                self.member_1.save_to_db()
+                project_id = self.project_1.save_to_db().id
 
                 results = c.put(
                     f"/projects/{project_id}",
@@ -177,9 +177,9 @@ class TestProjectResource(BaseTest):
     def test_put_project_400(self):
         with self.client as c:
             with self.app_context:
-                self.role.save_to_db()
-                self.member.save_to_db()
-                project_id = self.project.save_to_db().id
+                self.role_1.save_to_db()
+                self.member_1.save_to_db()
+                project_id = self.project_1.save_to_db().id
 
                 results = c.put(
                     f"/projects/{project_id}",
@@ -207,14 +207,14 @@ class TestProjectResource(BaseTest):
     def test_put_project_409(self):
         with self.client as c:
             with self.app_context:
-                self.role.save_to_db()
-                self.member.save_to_db()
-                self.project.save_to_db()
+                self.role_1.save_to_db()
+                self.member_1.save_to_db()
+                self.project_1.save_to_db()
                 project_id = self.project_2.save_to_db().id
 
                 results = c.put(
                     f"/projects/{project_id}",
-                    data=json.dumps(TEST_PROJECT),
+                    data=json.dumps(TEST_PROJECT_1),
                     headers={"Content-Type": "application/json"},
                 )
 
@@ -229,9 +229,9 @@ class TestProjectResource(BaseTest):
     def test_delete_project_200(self):
         with self.client as c:
             with self.app_context:
-                self.role.save_to_db()
-                self.member.save_to_db()
-                project_id = self.project.save_to_db().id
+                self.role_1.save_to_db()
+                self.member_1.save_to_db()
+                project_id = self.project_1.save_to_db().id
 
                 results = c.delete(
                     f"/projects/{project_id}",
@@ -260,9 +260,9 @@ class TestProjectResource(BaseTest):
     def test_get_projects_200(self):
         with self.client as c:
             with self.app_context:
-                self.role.save_to_db()
-                self.member.save_to_db()
-                project_1_id = self.project.save_to_db().id
+                self.role_1.save_to_db()
+                self.member_1.save_to_db()
+                project_1_id = self.project_1.save_to_db().id
                 project_2_id = self.project_2.save_to_db().id
 
                 results = c.get(

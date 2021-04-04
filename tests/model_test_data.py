@@ -1,4 +1,4 @@
-TEST_KEYNOTE = {
+TEST_KEYNOTE_1 = {
     "title": "Uso de type hints en Python",
     "description": "Que son los type hints y por qué debemos usarlos",
     "speaker_id": 1,
@@ -17,7 +17,7 @@ TEST_KEYNOTE_400 = {
     "meeting_id": 1,
 }
 
-TEST_MEMBER = {
+TEST_MEMBER_1 = {
     "email": "jperez@ppty.com",
     "password": "pass",
     "mobile_phone": "+50769876543",
@@ -54,7 +54,7 @@ TEST_MEMBER_400 = {
     "is_active": True,
 }
 
-TEST_MEETING = {
+TEST_MEETING_1 = {
     "datetime": "2021-03-31 20:00:00",
     "type": "online",
     "location": "https://www.meetup.com/Python-Panama/events/276661559",
@@ -74,13 +74,25 @@ TEST_MEETING_400 = {
     "creator_id": 1,
 }
 
-TEST_PERMISSION = {"permission_name": "post:project"}
+TEST_PERMISSION_1 = {"permission_name": "post:keynote"}
 
 TEST_PERMISSION_2 = {"permission_name": "post:meeting"}
 
+TEST_PERMISSION_3 = {"permission_name": "get:member"}
+
+TEST_PERMISSION_4 = {"permission_name": "activate:member"}
+
+TEST_PERMISSION_5 = {"permission_name": "get:permission"}
+
+TEST_PERMISSION_6 = {"permission_name": "post:project"}
+
+TEST_PERMISSION_7 = {"permission_name": "get:role"}
+
+TEST_PERMISSION_8 = {"permission_name": "post:speaker"}
+
 TEST_PERMISSION_400 = {}
 
-TEST_PROJECT = {
+TEST_PROJECT_1 = {
     "start_date": "2021-03-16",
     "end_date": "2021-04-15",
     "title": "REST API para sitio web",
@@ -107,13 +119,19 @@ TEST_PROJECT_400 = {
     "admin_id": 1,
 }
 
-TEST_ROLE = {"role_name": "admin"}
+TEST_ROLE_1 = {"role_name": "admin"}
 
 TEST_ROLE_2 = {"role_name": "member"}
 
+TEST_ROLE_3 = {"role_name": "member-admin"}
+
+TEST_ROLE_4 = {"role_name": "meeting-admin"}
+
+TEST_ROLE_5 = {"role_name": "project-admin"}
+
 TEST_ROLE_400 = {}
 
-TEST_SPEAKER = {
+TEST_SPEAKER_1 = {
     "first_name": "Tomás",
     "last_name": "González",
     "email": "tgonz@python.org",

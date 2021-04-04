@@ -9,21 +9,21 @@ class TestPermission(BaseTest):
 
     def test_init(self):
         with self.app_context:
-            self.assertEqual(self.permission.permission_name, "post:project")
+            self.assertEqual(self.permission_1.permission_name, "post:keynote")
 
     def test_find_by_id(self):
         with self.app_context:
-            permission_id = self.permission.save_to_db().id
+            permission_id = self.permission_1.save_to_db().id
 
             permission = PermissionModel.find_by_id(permission_id)
 
-            self.assertEqual(permission.permission_name, "post:project")
+            self.assertEqual(permission.permission_name, "post:keynote")
 
     def test_find_by_name(self):
         with self.app_context:
-            permission_id = self.permission.save_to_db().id
+            permission_id = self.permission_1.save_to_db().id
 
-            permission = PermissionModel.find_by_name("post:project")
+            permission = PermissionModel.find_by_name("post:keynote")
 
             self.assertEqual(permission.id, permission_id)
 

@@ -7,7 +7,7 @@ from flask_jwt_extended import (
 )
 from werkzeug.security import generate_password_hash
 
-from auth import add_token_to_database
+from auth import add_token_to_database, requires_auth
 from custom_types import ApiResponse
 from models.member import MemberModel
 from models.token import TokenModel
@@ -15,6 +15,7 @@ from resources.message import (
     ACTIVATED,
     CREATED,
     DEACTIVATED,
+    ERROR_401,
     ERROR_404,
     ERROR_409,
     MEMBER_401,
@@ -41,14 +42,14 @@ def login() -> ApiResponse:
     if member and member.verify_password(password) and member.is_active:
         identity = member_schema.dump(member)
         access_token = create_access_token(identity=identity, fresh=True)
-        refresh_token = create_refresh_token(identity=identity)
-        add_token_to_database([access_token, refresh_token], member.id)
+        _refresh_token = create_refresh_token(identity=identity)
+        add_token_to_database([access_token, _refresh_token], member.id)
 
         return (
             jsonify(
                 {
                     "access_token": access_token,
-                    "refresh_token": refresh_token,
+                    "refresh_token": _refresh_token,
                     "member": identity,
                 },
             ),
@@ -87,6 +88,8 @@ def refresh_token():
 
 
 @members.route("/<int:member_id>")
+@jwt_required()
+@requires_auth("get:member")
 def get_member(member_id: int) -> ApiResponse:
     member = MemberModel.find_by_id(member_id)
 
@@ -132,8 +135,17 @@ def post_member() -> ApiResponse:
 
 
 @members.route("/<int:member_id>", methods=["PUT"])
+@jwt_required(fresh=True)
+@requires_auth("get:member")
 def put_member(member_id: int) -> ApiResponse:
     member = MemberModel.find_by_id(member_id)
+    identity = get_jwt_identity()
+
+    if member and identity["id"] != member.id:
+        abort(
+            401,
+            description=ERROR_401,
+        )
 
     if not member:
         abort(
@@ -177,6 +189,8 @@ def put_member(member_id: int) -> ApiResponse:
 
 
 @members.route("/<int:member_id>/activate", methods=["PUT"])
+@jwt_required(fresh=True)
+@requires_auth("activate:member")
 def activate_member(member_id: int) -> ApiResponse:
     member = MemberModel.find_by_id(member_id)
 
@@ -198,6 +212,8 @@ def activate_member(member_id: int) -> ApiResponse:
 
 
 @members.route("/<int:member_id>/deactivate", methods=["PUT"])
+@jwt_required(fresh=True)
+@requires_auth("activate:member")
 def deactivate_member(member_id: int) -> ApiResponse:
     member = MemberModel.find_by_id(member_id)
 
@@ -219,8 +235,17 @@ def deactivate_member(member_id: int) -> ApiResponse:
 
 
 @members.route("/<int:member_id>/change_password", methods=["PUT"])
+@jwt_required(fresh=True)
+@requires_auth("get:member")
 def change_member_password(member_id: int) -> ApiResponse:
     member = MemberModel.find_by_id(member_id)
+    identity = get_jwt_identity()
+
+    if member and identity["id"] != member.id:
+        abort(
+            401,
+            description=ERROR_401,
+        )
 
     if not member:
         abort(404, description=ERROR_404.format("Member", "id", member_id))

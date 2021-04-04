@@ -3,7 +3,7 @@ import unittest
 
 from tests.base_test import BaseTest
 from tests.model_test_data import (
-    TEST_ROLE,
+    TEST_ROLE_1,
     TEST_ROLE_2,
     TEST_ROLE_400,
 )
@@ -16,7 +16,7 @@ class TestRoleResource(BaseTest):
     def test_get_role_200(self):
         with self.client as c:
             with self.app_context:
-                role_id = self.role.save_to_db().id
+                role_id = self.role_1.save_to_db().id
 
                 results = c.get(
                     f"/roles/{role_id}",
@@ -47,7 +47,7 @@ class TestRoleResource(BaseTest):
             with self.app_context:
                 results = c.post(
                     "/roles",
-                    data=json.dumps(TEST_ROLE),
+                    data=json.dumps(TEST_ROLE_1),
                     headers={"Content-Type": "application/json"},
                 )
 
@@ -79,11 +79,11 @@ class TestRoleResource(BaseTest):
     def test_post_role_409(self):
         with self.client as c:
             with self.app_context:
-                self.role.save_to_db()
+                self.role_1.save_to_db()
 
                 results = c.post(
                     "/roles",
-                    data=json.dumps(TEST_ROLE),
+                    data=json.dumps(TEST_ROLE_1),
                     headers={"Content-Type": "application/json"},
                 )
 
@@ -98,7 +98,7 @@ class TestRoleResource(BaseTest):
     def test_put_role_200(self):
         with self.client as c:
             with self.app_context:
-                role_id = self.role.save_to_db().id
+                role_id = self.role_1.save_to_db().id
 
                 results = c.put(
                     f"/roles/{role_id}",
@@ -116,7 +116,7 @@ class TestRoleResource(BaseTest):
     def test_put_role_400(self):
         with self.client as c:
             with self.app_context:
-                role_id = self.role.save_to_db().id
+                role_id = self.role_1.save_to_db().id
 
                 results = c.put(
                     f"/roles/{role_id}",
@@ -144,12 +144,12 @@ class TestRoleResource(BaseTest):
     def test_put_role_409(self):
         with self.client as c:
             with self.app_context:
-                self.role.save_to_db()
+                self.role_1.save_to_db()
                 role_id = self.role_2.save_to_db().id
 
                 results = c.put(
                     f"/roles/{role_id}",
-                    data=json.dumps(TEST_ROLE),
+                    data=json.dumps(TEST_ROLE_1),
                     headers={"Content-Type": "application/json"},
                 )
 
@@ -164,7 +164,7 @@ class TestRoleResource(BaseTest):
     def test_delete_role_200(self):
         with self.client as c:
             with self.app_context:
-                role_id = self.role.save_to_db().id
+                role_id = self.role_1.save_to_db().id
 
                 results = c.delete(
                     f"/roles/{role_id}",
@@ -193,7 +193,7 @@ class TestRoleResource(BaseTest):
     def test_get_roles_200(self):
         with self.client as c:
             with self.app_context:
-                role_1_id = self.role.save_to_db().id
+                role_1_id = self.role_1.save_to_db().id
                 role_2_id = self.role_2.save_to_db().id
 
                 results = c.get(

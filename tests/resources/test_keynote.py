@@ -3,7 +3,7 @@ import unittest
 
 from tests.base_test import BaseTest
 from tests.model_test_data import (
-    TEST_KEYNOTE,
+    TEST_KEYNOTE_1,
     TEST_KEYNOTE_2,
     TEST_KEYNOTE_400,
 )
@@ -16,11 +16,11 @@ class TestKeynoteResource(BaseTest):
     def test_get_keynote_200(self):
         with self.client as c:
             with self.app_context:
-                self.role.save_to_db()
-                self.member.save_to_db()
-                self.speaker.save_to_db()
-                self.meeting.save_to_db()
-                keynote_id = self.keynote.save_to_db().id
+                self.role_1.save_to_db()
+                self.member_1.save_to_db()
+                self.speaker_1.save_to_db()
+                self.meeting_1.save_to_db()
+                keynote_id = self.keynote_1.save_to_db().id
 
                 results = c.get(
                     f"/keynotes/{keynote_id}",
@@ -57,14 +57,14 @@ class TestKeynoteResource(BaseTest):
     def test_post_keynote_201(self):
         with self.client as c:
             with self.app_context:
-                self.role.save_to_db()
-                self.member.save_to_db()
-                self.speaker.save_to_db()
-                self.meeting.save_to_db()
+                self.role_1.save_to_db()
+                self.member_1.save_to_db()
+                self.speaker_1.save_to_db()
+                self.meeting_1.save_to_db()
 
                 results = c.post(
                     "/keynotes",
-                    data=json.dumps(TEST_KEYNOTE),
+                    data=json.dumps(TEST_KEYNOTE_1),
                     headers={"Content-Type": "application/json"},
                 )
 
@@ -86,10 +86,10 @@ class TestKeynoteResource(BaseTest):
     def test_post_keynote_400(self):
         with self.client as c:
             with self.app_context:
-                self.role.save_to_db()
-                self.member.save_to_db()
-                self.speaker.save_to_db()
-                self.meeting.save_to_db()
+                self.role_1.save_to_db()
+                self.member_1.save_to_db()
+                self.speaker_1.save_to_db()
+                self.meeting_1.save_to_db()
 
                 results = c.post(
                     "/keynotes",
@@ -112,11 +112,11 @@ class TestKeynoteResource(BaseTest):
     def test_put_keynote_200(self):
         with self.client as c:
             with self.app_context:
-                self.role.save_to_db()
-                self.member.save_to_db()
-                self.speaker.save_to_db()
-                self.meeting.save_to_db()
-                keynote_id = self.keynote.save_to_db().id
+                self.role_1.save_to_db()
+                self.member_1.save_to_db()
+                self.speaker_1.save_to_db()
+                self.meeting_1.save_to_db()
+                keynote_id = self.keynote_1.save_to_db().id
 
                 results = c.put(
                     f"/keynotes/{keynote_id}",
@@ -142,11 +142,11 @@ class TestKeynoteResource(BaseTest):
     def test_put_keynote_400(self):
         with self.client as c:
             with self.app_context:
-                self.role.save_to_db()
-                self.member.save_to_db()
-                self.speaker.save_to_db()
-                self.meeting.save_to_db()
-                keynote_id = self.keynote.save_to_db().id
+                self.role_1.save_to_db()
+                self.member_1.save_to_db()
+                self.speaker_1.save_to_db()
+                self.meeting_1.save_to_db()
+                keynote_id = self.keynote_1.save_to_db().id
 
                 results = c.put(
                     f"/keynotes/{keynote_id}",
@@ -174,11 +174,11 @@ class TestKeynoteResource(BaseTest):
     def test_delete_keynote_200(self):
         with self.client as c:
             with self.app_context:
-                self.role.save_to_db()
-                self.member.save_to_db()
-                self.speaker.save_to_db()
-                self.meeting.save_to_db()
-                keynote_id = self.keynote.save_to_db().id
+                self.role_1.save_to_db()
+                self.member_1.save_to_db()
+                self.speaker_1.save_to_db()
+                self.meeting_1.save_to_db()
+                keynote_id = self.keynote_1.save_to_db().id
 
                 results = c.delete(
                     f"/keynotes/{keynote_id}",
@@ -212,11 +212,11 @@ class TestKeynoteResource(BaseTest):
     def test_get_keynotes_200(self):
         with self.client as c:
             with self.app_context:
-                self.role.save_to_db()
-                self.member.save_to_db()
-                self.speaker.save_to_db()
-                self.meeting.save_to_db()
-                keynote_1_id = self.keynote.save_to_db().id
+                self.role_1.save_to_db()
+                self.member_1.save_to_db()
+                self.speaker_1.save_to_db()
+                self.meeting_1.save_to_db()
+                keynote_1_id = self.keynote_1.save_to_db().id
                 keynote_2_id = self.keynote_2.save_to_db().id
 
                 results = c.get(

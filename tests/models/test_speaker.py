@@ -9,32 +9,32 @@ class TestSpeaker(BaseTest):
 
     def test_init(self):
         with self.app_context:
-            self.assertEqual(self.speaker.first_name, "Tomás")
-            self.assertEqual(self.speaker.last_name, "González")
-            self.assertEqual(self.speaker.email, "tgonz@python.org")
+            self.assertEqual(self.speaker_1.first_name, "Tomás")
+            self.assertEqual(self.speaker_1.last_name, "González")
+            self.assertEqual(self.speaker_1.email, "tgonz@python.org")
             self.assertEqual(
-                self.speaker.linkedin_profile,
+                self.speaker_1.linkedin_profile,
                 "https://linkedin.com/in/tomas_gonzalez",
             )
             self.assertEqual(
-                self.speaker.github_profile,
+                self.speaker_1.github_profile,
                 "https://github.com/tomas_gonzalez",
             )
             self.assertEqual(
-                self.speaker.twitter_profile,
+                self.speaker_1.twitter_profile,
                 "https://twitter.com/tomas_gonzalez",
             )
             self.assertEqual(
-                self.speaker.bio, "Experto en Python y el uso de type hints"
+                self.speaker_1.bio, "Experto en Python y el uso de type hints"
             )
             self.assertEqual(
-                self.speaker.profile_picture,
+                self.speaker_1.profile_picture,
                 "https://ppty.com/img/hA4oCfR&o17mqsXm.png",
             )
 
     def test_find_all(self):
         with self.app_context:
-            speaker_id = self.speaker.save_to_db().id
+            speaker_id = self.speaker_1.save_to_db().id
 
             speakers = SpeakerModel.find_all()
 
@@ -42,7 +42,7 @@ class TestSpeaker(BaseTest):
 
     def test_find_by_email(self):
         with self.app_context:
-            speaker_email = self.speaker.save_to_db().email
+            speaker_email = self.speaker_1.save_to_db().email
 
             speaker = SpeakerModel.find_by_email(speaker_email)
 
@@ -50,7 +50,7 @@ class TestSpeaker(BaseTest):
 
     def test_find_by_id(self):
         with self.app_context:
-            speaker_id = self.speaker.save_to_db().id
+            speaker_id = self.speaker_1.save_to_db().id
 
             speaker = SpeakerModel.find_by_id(speaker_id)
 

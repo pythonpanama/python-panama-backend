@@ -11,19 +11,28 @@ from models.project import ProjectModel
 from models.role import RoleModel
 from models.speaker import SpeakerModel
 from tests.model_test_data import (
-    TEST_KEYNOTE,
+    TEST_KEYNOTE_1,
     TEST_KEYNOTE_2,
-    TEST_MEMBER,
+    TEST_MEMBER_1,
     TEST_MEMBER_2,
-    TEST_MEETING,
+    TEST_MEETING_1,
     TEST_MEETING_2,
-    TEST_PERMISSION,
+    TEST_PERMISSION_1,
     TEST_PERMISSION_2,
-    TEST_PROJECT,
+    TEST_PERMISSION_3,
+    TEST_PERMISSION_4,
+    TEST_PERMISSION_5,
+    TEST_PERMISSION_6,
+    TEST_PERMISSION_7,
+    TEST_PERMISSION_8,
+    TEST_PROJECT_1,
     TEST_PROJECT_2,
-    TEST_ROLE,
+    TEST_ROLE_1,
     TEST_ROLE_2,
-    TEST_SPEAKER,
+    TEST_ROLE_3,
+    TEST_ROLE_4,
+    TEST_ROLE_5,
+    TEST_SPEAKER_1,
     TEST_SPEAKER_2,
 )
 
@@ -46,19 +55,28 @@ class BaseTest(TestCase):
         with self.app_context:
             db.create_all()
 
-            self.keynote = KeynoteModel(**TEST_KEYNOTE)
+            self.keynote_1 = KeynoteModel(**TEST_KEYNOTE_1)
             self.keynote_2 = KeynoteModel(**TEST_KEYNOTE_2)
-            self.member = MemberModel(**TEST_MEMBER)
+            self.member_1 = MemberModel(**TEST_MEMBER_1)
             self.member_2 = MemberModel(**TEST_MEMBER_2)
-            self.meeting = MeetingModel(**TEST_MEETING)
+            self.meeting_1 = MeetingModel(**TEST_MEETING_1)
             self.meeting_2 = MeetingModel(**TEST_MEETING_2)
-            self.permission = PermissionModel(**TEST_PERMISSION)
+            self.permission_1 = PermissionModel(**TEST_PERMISSION_1)
             self.permission_2 = PermissionModel(**TEST_PERMISSION_2)
-            self.project = ProjectModel(**TEST_PROJECT)
+            self.permission_3 = PermissionModel(**TEST_PERMISSION_3)
+            self.permission_4 = PermissionModel(**TEST_PERMISSION_4)
+            self.permission_5 = PermissionModel(**TEST_PERMISSION_5)
+            self.permission_6 = PermissionModel(**TEST_PERMISSION_6)
+            self.permission_7 = PermissionModel(**TEST_PERMISSION_7)
+            self.permission_8 = PermissionModel(**TEST_PERMISSION_8)
+            self.project_1 = ProjectModel(**TEST_PROJECT_1)
             self.project_2 = ProjectModel(**TEST_PROJECT_2)
-            self.role = RoleModel(**TEST_ROLE)
+            self.role_1 = RoleModel(**TEST_ROLE_1)
             self.role_2 = RoleModel(**TEST_ROLE_2)
-            self.speaker = SpeakerModel(**TEST_SPEAKER)
+            self.role_3 = RoleModel(**TEST_ROLE_3)
+            self.role_4 = RoleModel(**TEST_ROLE_4)
+            self.role_5 = RoleModel(**TEST_ROLE_5)
+            self.speaker_1 = SpeakerModel(**TEST_SPEAKER_1)
             self.speaker_2 = SpeakerModel(**TEST_SPEAKER_2)
 
     def tearDown(self) -> None:
@@ -81,3 +99,24 @@ class BaseTest(TestCase):
         )
 
         return json.loads(results.data)
+
+    def add_permissions_to_admin(self):
+        role_1 = self.role_1.save_to_db()
+        permission_1 = self.permission_1.save_to_db()
+        permission_2 = self.permission_2.save_to_db()
+        permission_3 = self.permission_3.save_to_db()
+        permission_4 = self.permission_4.save_to_db()
+        permission_5 = self.permission_5.save_to_db()
+        permission_6 = self.permission_6.save_to_db()
+        permission_7 = self.permission_7.save_to_db()
+        permission_8 = self.permission_8.save_to_db()
+        role_1.permissions.append(permission_1)
+        role_1.permissions.append(permission_2)
+        role_1.permissions.append(permission_3)
+        role_1.permissions.append(permission_4)
+        role_1.permissions.append(permission_5)
+        role_1.permissions.append(permission_6)
+        role_1.permissions.append(permission_7)
+        role_1.permissions.append(permission_8)
+
+        return role_1

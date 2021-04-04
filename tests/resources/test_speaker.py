@@ -3,7 +3,7 @@ import unittest
 
 from tests.base_test import BaseTest
 from tests.model_test_data import (
-    TEST_SPEAKER,
+    TEST_SPEAKER_1,
     TEST_SPEAKER_2,
     TEST_SPEAKER_400,
 )
@@ -16,7 +16,7 @@ class TestSpeakerResource(BaseTest):
     def test_get_speaker_200(self):
         with self.client as c:
             with self.app_context:
-                speaker_id = self.speaker.save_to_db().id
+                speaker_id = self.speaker_1.save_to_db().id
 
                 results = c.get(
                     f"/speakers/{speaker_id}",
@@ -69,7 +69,7 @@ class TestSpeakerResource(BaseTest):
             with self.app_context:
                 results = c.post(
                     "/speakers",
-                    data=json.dumps(TEST_SPEAKER),
+                    data=json.dumps(TEST_SPEAKER_1),
                     headers={"Content-Type": "application/json"},
                 )
 
@@ -127,7 +127,7 @@ class TestSpeakerResource(BaseTest):
     def test_put_speaker_200(self):
         with self.client as c:
             with self.app_context:
-                speaker_id = self.speaker.save_to_db().id
+                speaker_id = self.speaker_1.save_to_db().id
 
                 results = c.put(
                     f"/speakers/{speaker_id}",
@@ -167,7 +167,7 @@ class TestSpeakerResource(BaseTest):
     def test_put_speaker_400(self):
         with self.client as c:
             with self.app_context:
-                speaker_id = self.speaker.save_to_db().id
+                speaker_id = self.speaker_1.save_to_db().id
 
                 results = c.put(
                     f"/speakers/{speaker_id}",
@@ -195,7 +195,7 @@ class TestSpeakerResource(BaseTest):
     def test_delete_speaker_200(self):
         with self.client as c:
             with self.app_context:
-                speaker_id = self.speaker.save_to_db().id
+                speaker_id = self.speaker_1.save_to_db().id
 
                 results = c.delete(
                     f"/speakers/{speaker_id}",
@@ -227,7 +227,7 @@ class TestSpeakerResource(BaseTest):
     def test_get_speakers_200(self):
         with self.client as c:
             with self.app_context:
-                speaker_1_id = self.speaker.save_to_db().id
+                speaker_1_id = self.speaker_1.save_to_db().id
                 speaker_2_id = self.speaker_2.save_to_db().id
 
                 results = c.get(

@@ -34,6 +34,10 @@ def create_app(config_name: str = "development") -> Flask:
     def handle_marshmallow_validation_error(err):
         return jsonify(error=str(err)), 400
 
+    @app.errorhandler(401)
+    def resource_not_found(err):
+        return jsonify(error=str(err)), 401
+
     @app.errorhandler(404)
     def resource_not_found(err):
         return jsonify(error=str(err)), 404

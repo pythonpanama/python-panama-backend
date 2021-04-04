@@ -10,20 +10,22 @@ class TestMeeting(BaseTest):
 
     def test_init(self):
         with self.app_context:
-            self.assertEqual(self.meeting.datetime, "2021-03-31 20:00:00")
-            self.assertEqual(self.meeting.type, "online")
+            self.assertEqual(self.meeting_1.datetime, "2021-03-31 20:00:00")
+            self.assertEqual(self.meeting_1.type, "online")
             self.assertEqual(
-                self.meeting.location,
+                self.meeting_1.location,
                 "https://www.meetup.com/Python-Panama/events/276661559",
             )
-            self.assertEqual(self.meeting.description, "Python Meetup Vol. 25")
-            self.assertEqual(self.meeting.creator_id, 1)
+            self.assertEqual(
+                self.meeting_1.description, "Python Meetup Vol. 25"
+            )
+            self.assertEqual(self.meeting_1.creator_id, 1)
 
     def test_find_all(self):
         with self.app_context:
-            self.role.save_to_db()
-            self.member.save_to_db()
-            meeting_id = self.meeting.save_to_db().id
+            self.role_1.save_to_db()
+            self.member_1.save_to_db()
+            meeting_id = self.meeting_1.save_to_db().id
 
             meetings = MeetingModel.find_all()
 
@@ -31,9 +33,9 @@ class TestMeeting(BaseTest):
 
     def test_find_by_creator_id(self):
         with self.app_context:
-            self.role.save_to_db()
-            creator_id = self.member.save_to_db().id
-            meeting_id = self.meeting.save_to_db().id
+            self.role_1.save_to_db()
+            creator_id = self.member_1.save_to_db().id
+            meeting_id = self.meeting_1.save_to_db().id
 
             meetings = MeetingModel.find_by_creator_id(creator_id)
 
@@ -41,9 +43,9 @@ class TestMeeting(BaseTest):
 
     def test_find_by_id(self):
         with self.app_context:
-            self.role.save_to_db()
-            self.member.save_to_db()
-            meeting_id = self.meeting.save_to_db().id
+            self.role_1.save_to_db()
+            self.member_1.save_to_db()
+            meeting_id = self.meeting_1.save_to_db().id
 
             meeting = MeetingModel.find_by_id(meeting_id)
 
@@ -51,10 +53,10 @@ class TestMeeting(BaseTest):
 
     def test_meetings_members_relation(self):
         with self.app_context:
-            self.role.save_to_db()
-            self.member.save_to_db()
-            meeting_id = self.meeting.save_to_db().id
-            member_id = self.member.save_to_db().id
+            self.role_1.save_to_db()
+            self.member_1.save_to_db()
+            meeting_id = self.meeting_1.save_to_db().id
+            member_id = self.member_1.save_to_db().id
 
             meeting = MeetingModel.find_by_id(meeting_id)
             member = MemberModel.find_by_id(member_id)

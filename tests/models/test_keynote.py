@@ -9,21 +9,23 @@ class TestKeynote(BaseTest):
 
     def test_init(self):
         with self.app_context:
-            self.assertEqual(self.keynote.title, "Uso de type hints en Python")
             self.assertEqual(
-                self.keynote.description,
+                self.keynote_1.title, "Uso de type hints en Python"
+            )
+            self.assertEqual(
+                self.keynote_1.description,
                 "Que son los type hints y por qué debemos usarlos",
             )
-            self.assertEqual(self.keynote.speaker_id, 1)
-            self.assertEqual(self.keynote.meeting_id, 1)
+            self.assertEqual(self.keynote_1.speaker_id, 1)
+            self.assertEqual(self.keynote_1.meeting_id, 1)
 
     def test_find_all(self):
         with self.app_context:
-            self.role.save_to_db()
-            self.member.save_to_db()
-            self.speaker.save_to_db()
-            self.meeting.save_to_db()
-            keynote_id = self.keynote.save_to_db().id
+            self.role_1.save_to_db()
+            self.member_1.save_to_db()
+            self.speaker_1.save_to_db()
+            self.meeting_1.save_to_db()
+            keynote_id = self.keynote_1.save_to_db().id
 
             keynotes = KeynoteModel.find_all()
 
@@ -31,11 +33,11 @@ class TestKeynote(BaseTest):
 
     def test_find_by_id(self):
         with self.app_context:
-            self.role.save_to_db()
-            self.member.save_to_db()
-            self.speaker.save_to_db()
-            self.meeting.save_to_db()
-            keynote_id = self.keynote.save_to_db().id
+            self.role_1.save_to_db()
+            self.member_1.save_to_db()
+            self.speaker_1.save_to_db()
+            self.meeting_1.save_to_db()
+            keynote_id = self.keynote_1.save_to_db().id
 
             keynote = KeynoteModel.find_by_id(keynote_id)
 
@@ -43,11 +45,11 @@ class TestKeynote(BaseTest):
 
     def test_find_by_meeting_id(self):
         with self.app_context:
-            self.role.save_to_db()
-            self.member.save_to_db()
-            self.speaker.save_to_db()
-            meeting_id = self.meeting.save_to_db().id
-            keynote_id = self.keynote.save_to_db().id
+            self.role_1.save_to_db()
+            self.member_1.save_to_db()
+            self.speaker_1.save_to_db()
+            meeting_id = self.meeting_1.save_to_db().id
+            keynote_id = self.keynote_1.save_to_db().id
 
             keynotes = KeynoteModel.find_by_meeting_id(meeting_id)
 
@@ -55,11 +57,11 @@ class TestKeynote(BaseTest):
 
     def test_find_by_speaker_id(self):
         with self.app_context:
-            self.role.save_to_db()
-            self.member.save_to_db()
-            self.meeting.save_to_db()
-            speaker_id = self.speaker.save_to_db().id
-            keynote_id = self.keynote.save_to_db().id
+            self.role_1.save_to_db()
+            self.member_1.save_to_db()
+            self.meeting_1.save_to_db()
+            speaker_id = self.speaker_1.save_to_db().id
+            keynote_id = self.keynote_1.save_to_db().id
 
             keynotes = KeynoteModel.find_by_speaker_id(speaker_id)
 

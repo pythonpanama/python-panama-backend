@@ -7,30 +7,28 @@ from models.member import MemberModel
 from models.token import TokenModel
 from tests.base_test import BaseTest
 from tests.model_test_data import (
-    TEST_MEMBER,
+    TEST_MEMBER_1,
     TEST_MEMBER_2,
     TEST_MEMBER_400,
 )
 
 
-# noinspection PyArgumentList
+# noinspection PyArgumentList,DuplicatedCode
 class TestMemberResource(BaseTest):
     """Test all endpoints for the member resource"""
 
     def test_login_200(self):
         with self.client as c:
             with self.app_context:
-                role = self.role.save_to_db()
-                permission = self.permission.save_to_db()
-                role.permissions.append(permission)
-                member_id = self.member.save_to_db().id
+                self.add_permissions_to_admin()
+                member_id = self.member_1.save_to_db().id
 
                 results = c.post(
                     f"/members/login",
                     data=json.dumps(
                         {
-                            "email": TEST_MEMBER["email"],
-                            "password": TEST_MEMBER["password"],
+                            "email": TEST_MEMBER_1["email"],
+                            "password": TEST_MEMBER_1["password"],
                         }
                     ),
                     headers={"Content-Type": "application/json"},
@@ -38,7 +36,7 @@ class TestMemberResource(BaseTest):
 
                 data = json.loads(results.data)
 
-                member = TEST_MEMBER.copy()
+                member = TEST_MEMBER_1.copy()
                 member["id"] = member_id
                 member.pop("password")
                 tokens = TokenModel.find_by_member_id(member_id)
@@ -64,12 +62,10 @@ class TestMemberResource(BaseTest):
     def test_refresh_200(self):
         with self.client as c:
             with self.app_context:
-                role = self.role.save_to_db()
-                permission = self.permission.save_to_db()
-                role.permissions.append(permission)
-                member = self.member.save_to_db()
+                self.add_permissions_to_admin()
+                member = self.member_1.save_to_db()
                 member_id = member.id
-                login = self.login(c, member.email, TEST_MEMBER["password"])
+                login = self.login(c, member.email, TEST_MEMBER_1["password"])
 
                 results = c.post(
                     f"/members/refresh",
@@ -95,8 +91,8 @@ class TestMemberResource(BaseTest):
                     f"/members/login",
                     data=json.dumps(
                         {
-                            "email": TEST_MEMBER["email"],
-                            "password": TEST_MEMBER["password"],
+                            "email": TEST_MEMBER_1["email"],
+                            "password": TEST_MEMBER_1["password"],
                         }
                     ),
                     headers={"Content-Type": "application/json"},
@@ -107,14 +103,12 @@ class TestMemberResource(BaseTest):
     def test_logout_200(self):
         with self.client as c:
             with self.app_context:
-                role = self.role.save_to_db()
-                permission = self.permission.save_to_db()
-                role.permissions.append(permission)
-                member = self.member.save_to_db()
+                self.add_permissions_to_admin()
+                member = self.member_1.save_to_db()
                 member_id = member.id
-                login = self.login(c, member.email, TEST_MEMBER["password"])
+                login = self.login(c, member.email, TEST_MEMBER_1["password"])
 
-                results = c.get(
+                c.get(
                     f"/members/logout",
                     headers={
                         "Content-Type": "application/json",
@@ -122,7 +116,6 @@ class TestMemberResource(BaseTest):
                     },
                 )
 
-                data = json.loads(results.data)
                 tokens = TokenModel.find_by_member_id(member_id)
 
                 self.assertTrue(tokens[0].revoke)
@@ -144,14 +137,17 @@ class TestMemberResource(BaseTest):
     def test_get_member_200(self):
         with self.client as c:
             with self.app_context:
-                role = self.role.save_to_db()
-                permission = self.permission.save_to_db()
-                role.permissions.append(permission)
-                member_id = self.member.save_to_db().id
+                self.add_permissions_to_admin()
+                member = self.member_1.save_to_db()
+                member_id = member.id
+                login = self.login(c, member.email, TEST_MEMBER_1["password"])
 
                 results = c.get(
                     f"/members/{member_id}",
-                    headers={"Content-Type": "application/json"},
+                    headers={
+                        "Content-Type": "application/json",
+                        "Authorization": f"Bearer {login['access_token']}",
+                    },
                 )
 
                 data = json.loads(results.data)
@@ -186,9 +182,16 @@ class TestMemberResource(BaseTest):
     def test_get_member_404(self):
         with self.client as c:
             with self.app_context:
+                self.add_permissions_to_admin()
+                member = self.member_1.save_to_db()
+                login = self.login(c, member.email, TEST_MEMBER_1["password"])
+
                 results = c.get(
                     f"/members/99",
-                    headers={"Content-Type": "application/json"},
+                    headers={
+                        "Content-Type": "application/json",
+                        "Authorization": f"Bearer {login['access_token']}",
+                    },
                 )
 
                 data = json.loads(results.data)
@@ -201,13 +204,11 @@ class TestMemberResource(BaseTest):
     def test_post_member_201(self):
         with self.client as c:
             with self.app_context:
-                role = self.role.save_to_db()
-                permission = self.permission.save_to_db()
-                role.permissions.append(permission)
+                self.add_permissions_to_admin()
 
                 results = c.post(
                     "/members",
-                    data=json.dumps(TEST_MEMBER),
+                    data=json.dumps(TEST_MEMBER_1),
                     headers={"Content-Type": "application/json"},
                 )
 
@@ -271,15 +272,12 @@ class TestMemberResource(BaseTest):
     def test_post_member_409(self):
         with self.client as c:
             with self.app_context:
-                role = self.role.save_to_db()
-                permission = self.permission.save_to_db()
-                role.permissions.append(permission)
-
-                self.member.save_to_db()
+                self.add_permissions_to_admin()
+                self.member_1.save_to_db()
 
                 results = c.post(
                     "/members",
-                    data=json.dumps(TEST_MEMBER),
+                    data=json.dumps(TEST_MEMBER_1),
                     headers={"Content-Type": "application/json"},
                 )
 
@@ -294,16 +292,18 @@ class TestMemberResource(BaseTest):
     def test_put_member_200(self):
         with self.client as c:
             with self.app_context:
-                role = self.role.save_to_db()
-                permission = self.permission.save_to_db()
-                role.permissions.append(permission)
-
-                member_id = self.member.save_to_db().id
+                self.add_permissions_to_admin()
+                member = self.member_1.save_to_db()
+                member_id = member.id
+                login = self.login(c, member.email, TEST_MEMBER_1["password"])
 
                 results = c.put(
                     f"/members/{member_id}",
                     data=json.dumps(TEST_MEMBER_2),
-                    headers={"Content-Type": "application/json"},
+                    headers={
+                        "Content-Type": "application/json",
+                        "Authorization": f"Bearer {login['access_token']}",
+                    },
                 )
 
                 data = json.loads(results.data)
@@ -342,25 +342,62 @@ class TestMemberResource(BaseTest):
     def test_put_member_400(self):
         with self.client as c:
             with self.app_context:
-                role = self.role.save_to_db()
-                permission = self.permission.save_to_db()
-                role.permissions.append(permission)
-                member_id = self.member.save_to_db().id
+                self.add_permissions_to_admin()
+                member = self.member_1.save_to_db()
+                member_id = member.id
+                login = self.login(c, member.email, TEST_MEMBER_1["password"])
 
                 results = c.put(
                     f"/members/{member_id}",
-                    headers={"Content-Type": "application/json"},
+                    headers={
+                        "Content-Type": "application/json",
+                        "Authorization": f"Bearer {login['access_token']}",
+                    },
                 )
 
                 self.assertEqual(results.status, "400 BAD REQUEST")
 
+    def test_put_member_401(self):
+        with self.client as c:
+            with self.app_context:
+                self.add_permissions_to_admin()
+                member_1 = self.member_1.save_to_db()
+                member_2 = self.member_2.save_to_db()
+                member_1_id = member_1.id
+                login = self.login(
+                    c, member_2.email, TEST_MEMBER_2["password"]
+                )
+
+                results = c.put(
+                    f"/members/{member_1_id}",
+                    data=json.dumps(TEST_MEMBER_2),
+                    headers={
+                        "Content-Type": "application/json",
+                        "Authorization": f"Bearer {login['access_token']}",
+                    },
+                )
+
+                data = json.loads(results.data)
+
+                self.assertEqual(
+                    data["error"],
+                    "401 Unauthorized: You can only modify your own data.",
+                )
+
     def test_put_member_404(self):
         with self.client as c:
             with self.app_context:
+                self.add_permissions_to_admin()
+                member = self.member_1.save_to_db()
+                login = self.login(c, member.email, TEST_MEMBER_1["password"])
+
                 results = c.put(
                     f"/members/99",
                     data=json.dumps(TEST_MEMBER_2),
-                    headers={"Content-Type": "application/json"},
+                    headers={
+                        "Content-Type": "application/json",
+                        "Authorization": f"Bearer {login['access_token']}",
+                    },
                 )
 
                 data = json.loads(results.data)
@@ -373,17 +410,21 @@ class TestMemberResource(BaseTest):
     def test_put_member_409(self):
         with self.client as c:
             with self.app_context:
-                self.permission.save_to_db()
-                role = self.role.save_to_db()
-                permission = self.permission.save_to_db()
-                role.permissions.append(permission)
-                self.member.save_to_db()
-                member_id = self.member_2.save_to_db().id
+                self.add_permissions_to_admin()
+                member_1 = self.member_1.save_to_db()
+                member_1_id = member_1.id
+                self.member_2.save_to_db()
+                login = self.login(
+                    c, member_1.email, TEST_MEMBER_1["password"]
+                )
 
                 results = c.put(
-                    f"/members/{member_id}",
-                    data=json.dumps(TEST_MEMBER),
-                    headers={"Content-Type": "application/json"},
+                    f"/members/{member_1_id}",
+                    data=json.dumps(TEST_MEMBER_2),
+                    headers={
+                        "Content-Type": "application/json",
+                        "Authorization": f"Bearer {login['access_token']}",
+                    },
                 )
 
                 data = json.loads(results.data)
@@ -391,21 +432,23 @@ class TestMemberResource(BaseTest):
                 self.assertEqual(
                     data["error"],
                     "409 Conflict: Member with email "
-                    "'jperez@ppty.com' already exists.",
+                    "'lcohen@ppty.com' already exists.",
                 )
 
     def test_activate_member_200(self):
         with self.client as c:
             with self.app_context:
-                role = self.role.save_to_db()
-                permission = self.permission.save_to_db()
-                role.permissions.append(permission)
-
-                member_id = self.member.save_to_db().id
+                self.add_permissions_to_admin()
+                member = self.member_1.save_to_db()
+                member_id = member.id
+                login = self.login(c, member.email, TEST_MEMBER_1["password"])
 
                 results = c.put(
                     f"/members/{member_id}/activate",
-                    headers={"Content-Type": "application/json"},
+                    headers={
+                        "Content-Type": "application/json",
+                        "Authorization": f"Bearer {login['access_token']}",
+                    },
                 )
 
                 data = json.loads(results.data)
@@ -420,9 +463,16 @@ class TestMemberResource(BaseTest):
     def test_activate_member_404(self):
         with self.client as c:
             with self.app_context:
+                self.add_permissions_to_admin()
+                member = self.member_1.save_to_db()
+                login = self.login(c, member.email, TEST_MEMBER_1["password"])
+
                 results = c.put(
                     f"/members/99/activate",
-                    headers={"Content-Type": "application/json"},
+                    headers={
+                        "Content-Type": "application/json",
+                        "Authorization": f"Bearer {login['access_token']}",
+                    },
                 )
 
                 data = json.loads(results.data)
@@ -435,15 +485,17 @@ class TestMemberResource(BaseTest):
     def test_deactivate_member_200(self):
         with self.client as c:
             with self.app_context:
-                role = self.role.save_to_db()
-                permission = self.permission.save_to_db()
-                role.permissions.append(permission)
-
-                member_id = self.member.save_to_db().id
+                self.add_permissions_to_admin()
+                member = self.member_1.save_to_db()
+                member_id = member.id
+                login = self.login(c, member.email, TEST_MEMBER_1["password"])
 
                 results = c.put(
                     f"/members/{member_id}/deactivate",
-                    headers={"Content-Type": "application/json"},
+                    headers={
+                        "Content-Type": "application/json",
+                        "Authorization": f"Bearer {login['access_token']}",
+                    },
                 )
 
                 data = json.loads(results.data)
@@ -458,9 +510,16 @@ class TestMemberResource(BaseTest):
     def test_deactivate_member_404(self):
         with self.client as c:
             with self.app_context:
+                self.add_permissions_to_admin()
+                member = self.member_1.save_to_db()
+                login = self.login(c, member.email, TEST_MEMBER_1["password"])
+
                 results = c.put(
                     f"/members/99/deactivate",
-                    headers={"Content-Type": "application/json"},
+                    headers={
+                        "Content-Type": "application/json",
+                        "Authorization": f"Bearer {login['access_token']}",
+                    },
                 )
 
                 data = json.loads(results.data)
@@ -473,16 +532,18 @@ class TestMemberResource(BaseTest):
     def test_change_member_password_200(self):
         with self.client as c:
             with self.app_context:
-                role = self.role.save_to_db()
-                permission = self.permission.save_to_db()
-                role.permissions.append(permission)
-
-                member_id = self.member.save_to_db().id
+                self.add_permissions_to_admin()
+                member = self.member_1.save_to_db()
+                member_id = member.id
+                login = self.login(c, member.email, TEST_MEMBER_1["password"])
 
                 results = c.put(
                     f"/members/{member_id}/change_password",
                     data=json.dumps({"password": "new_pass"}),
-                    headers={"Content-Type": "application/json"},
+                    headers={
+                        "Content-Type": "application/json",
+                        "Authorization": f"Bearer {login['access_token']}",
+                    },
                 )
 
                 data = json.loads(results.data)
@@ -496,6 +557,74 @@ class TestMemberResource(BaseTest):
 
                 member = MemberModel.find_by_id(member_id)
                 self.assertTrue(member.verify_password("new_pass"))
+
+    def test_change_member_password_400(self):
+        with self.client as c:
+            with self.app_context:
+                self.add_permissions_to_admin()
+                member = self.member_1.save_to_db()
+                member_id = member.id
+                login = self.login(c, member.email, TEST_MEMBER_1["password"])
+
+                results = c.put(
+                    f"/members/{member_id}/change_password",
+                    headers={
+                        "Content-Type": "application/json",
+                        "Authorization": f"Bearer {login['access_token']}",
+                    },
+                )
+
+                self.assertEqual(results.status, "400 BAD REQUEST")
+
+    def test_change_member_password_401(self):
+        with self.client as c:
+            with self.app_context:
+                self.add_permissions_to_admin()
+                member_1 = self.member_1.save_to_db()
+                member_2 = self.member_2.save_to_db()
+                member_1_id = member_1.id
+                login = self.login(
+                    c, member_2.email, TEST_MEMBER_2["password"]
+                )
+
+                results = c.put(
+                    f"/members/{member_1_id}/change_password",
+                    data=json.dumps({"password": "new_pass"}),
+                    headers={
+                        "Content-Type": "application/json",
+                        "Authorization": f"Bearer {login['access_token']}",
+                    },
+                )
+
+                data = json.loads(results.data)
+
+                self.assertEqual(
+                    data["error"],
+                    "401 Unauthorized: You can only modify your own data.",
+                )
+
+    def test_change_member_password_404(self):
+        with self.client as c:
+            with self.app_context:
+                self.add_permissions_to_admin()
+                member = self.member_1.save_to_db()
+                login = self.login(c, member.email, TEST_MEMBER_1["password"])
+
+                results = c.put(
+                    f"/members/99/change_password",
+                    data=json.dumps({"password": "new_pass"}),
+                    headers={
+                        "Content-Type": "application/json",
+                        "Authorization": f"Bearer {login['access_token']}",
+                    },
+                )
+
+                data = json.loads(results.data)
+
+                self.assertEqual(
+                    data["error"],
+                    "404 Not Found: Member with id '99' was not found.",
+                )
 
 
 if __name__ == "__main__":  # pragma: no cover

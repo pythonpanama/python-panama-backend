@@ -289,7 +289,7 @@ class TestKeynoteResource(BaseTest):
                 self.add_permissions_to_admin()
                 member = self.member_1.save_to_db()
                 login = self.login(c, member.email, TEST_MEMBER_1["password"])
-                
+
                 results = c.get(
                     f"/keynotes",
                     headers={

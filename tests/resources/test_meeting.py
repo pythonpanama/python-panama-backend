@@ -6,6 +6,7 @@ from tests.model_test_data import (
     TEST_MEETING_1,
     TEST_MEETING_2,
     TEST_MEETING_400,
+    TEST_MEMBER_1,
 )
 
 
@@ -16,13 +17,17 @@ class TestMeetingResource(BaseTest):
     def test_get_meeting_200(self):
         with self.client as c:
             with self.app_context:
-                self.role_1.save_to_db()
-                self.member_1.save_to_db()
+                self.add_permissions_to_admin()
+                member = self.member_1.save_to_db()
+                login = self.login(c, member.email, TEST_MEMBER_1["password"])
                 meeting_id = self.meeting_1.save_to_db().id
 
                 results = c.get(
                     f"/meetings/{meeting_id}",
-                    headers={"Content-Type": "application/json"},
+                    headers={
+                        "Content-Type": "application/json",
+                        "Authorization": f"Bearer {login['access_token']}",
+                    },
                 )
 
                 data = json.loads(results.data)
@@ -44,9 +49,15 @@ class TestMeetingResource(BaseTest):
     def test_get_meeting_404(self):
         with self.client as c:
             with self.app_context:
+                self.add_permissions_to_admin()
+                member = self.member_1.save_to_db()
+                login = self.login(c, member.email, TEST_MEMBER_1["password"])
                 results = c.get(
                     f"/meetings/99",
-                    headers={"Content-Type": "application/json"},
+                    headers={
+                        "Content-Type": "application/json",
+                        "Authorization": f"Bearer {login['access_token']}",
+                    },
                 )
 
                 data = json.loads(results.data)
@@ -59,13 +70,17 @@ class TestMeetingResource(BaseTest):
     def test_post_meeting_201(self):
         with self.client as c:
             with self.app_context:
-                self.role_1.save_to_db()
-                self.member_1.save_to_db()
+                self.add_permissions_to_admin()
+                member = self.member_1.save_to_db()
+                login = self.login(c, member.email, TEST_MEMBER_1["password"])
 
                 results = c.post(
                     "/meetings",
                     data=json.dumps(TEST_MEETING_1),
-                    headers={"Content-Type": "application/json"},
+                    headers={
+                        "Content-Type": "application/json",
+                        "Authorization": f"Bearer {login['access_token']}",
+                    },
                 )
 
                 data = json.loads(results.data)
@@ -90,13 +105,17 @@ class TestMeetingResource(BaseTest):
     def test_post_meeting_400(self):
         with self.client as c:
             with self.app_context:
-                self.role_1.save_to_db()
-                self.member_1.save_to_db()
+                self.add_permissions_to_admin()
+                member = self.member_1.save_to_db()
+                login = self.login(c, member.email, TEST_MEMBER_1["password"])
 
                 results = c.post(
                     "/meetings",
                     data=json.dumps(TEST_MEETING_400),
-                    headers={"Content-Type": "application/json"},
+                    headers={
+                        "Content-Type": "application/json",
+                        "Authorization": f"Bearer {login['access_token']}",
+                    },
                 )
 
                 data = json.loads(results.data)
@@ -108,7 +127,10 @@ class TestMeetingResource(BaseTest):
 
                 results = c.post(
                     "/meetings",
-                    headers={"Content-Type": "application/json"},
+                    headers={
+                        "Content-Type": "application/json",
+                        "Authorization": f"Bearer {login['access_token']}",
+                    },
                 )
 
                 self.assertEqual(results.status, "400 BAD REQUEST")
@@ -116,14 +138,18 @@ class TestMeetingResource(BaseTest):
     def test_put_meeting_200(self):
         with self.client as c:
             with self.app_context:
-                self.role_1.save_to_db()
-                self.member_1.save_to_db()
+                self.add_permissions_to_admin()
+                member = self.member_1.save_to_db()
+                login = self.login(c, member.email, TEST_MEMBER_1["password"])
                 meeting_id = self.meeting_1.save_to_db().id
 
                 results = c.put(
                     f"/meetings/{meeting_id}",
                     data=json.dumps(TEST_MEETING_2),
-                    headers={"Content-Type": "application/json"},
+                    headers={
+                        "Content-Type": "application/json",
+                        "Authorization": f"Bearer {login['access_token']}",
+                    },
                 )
 
                 data = json.loads(results.data)
@@ -148,13 +174,17 @@ class TestMeetingResource(BaseTest):
     def test_put_meeting_400(self):
         with self.client as c:
             with self.app_context:
-                self.role_1.save_to_db()
-                self.member_1.save_to_db()
+                self.add_permissions_to_admin()
+                member = self.member_1.save_to_db()
+                login = self.login(c, member.email, TEST_MEMBER_1["password"])
                 meeting_id = self.meeting_1.save_to_db().id
 
                 results = c.put(
                     f"/meetings/{meeting_id}",
-                    headers={"Content-Type": "application/json"},
+                    headers={
+                        "Content-Type": "application/json",
+                        "Authorization": f"Bearer {login['access_token']}",
+                    },
                 )
 
                 self.assertEqual(results.status, "400 BAD REQUEST")
@@ -162,10 +192,17 @@ class TestMeetingResource(BaseTest):
     def test_put_meeting_404(self):
         with self.client as c:
             with self.app_context:
+                self.add_permissions_to_admin()
+                member = self.member_1.save_to_db()
+                login = self.login(c, member.email, TEST_MEMBER_1["password"])
+
                 results = c.put(
                     f"/meetings/99",
                     data=json.dumps(TEST_MEETING_2),
-                    headers={"Content-Type": "application/json"},
+                    headers={
+                        "Content-Type": "application/json",
+                        "Authorization": f"Bearer {login['access_token']}",
+                    },
                 )
 
                 data = json.loads(results.data)
@@ -178,13 +215,17 @@ class TestMeetingResource(BaseTest):
     def test_delete_meeting_200(self):
         with self.client as c:
             with self.app_context:
-                self.role_1.save_to_db()
-                self.member_1.save_to_db()
+                self.add_permissions_to_admin()
+                member = self.member_1.save_to_db()
+                login = self.login(c, member.email, TEST_MEMBER_1["password"])
                 meeting_id = self.meeting_1.save_to_db().id
 
                 results = c.delete(
                     f"/meetings/{meeting_id}",
-                    headers={"Content-Type": "application/json"},
+                    headers={
+                        "Content-Type": "application/json",
+                        "Authorization": f"Bearer {login['access_token']}",
+                    },
                 )
 
                 data = json.loads(results.data)
@@ -199,9 +240,16 @@ class TestMeetingResource(BaseTest):
     def test_delete_meeting_404(self):
         with self.client as c:
             with self.app_context:
+                self.add_permissions_to_admin()
+                member = self.member_1.save_to_db()
+                login = self.login(c, member.email, TEST_MEMBER_1["password"])
+
                 results = c.delete(
                     f"/meetings/99",
-                    headers={"Content-Type": "application/json"},
+                    headers={
+                        "Content-Type": "application/json",
+                        "Authorization": f"Bearer {login['access_token']}",
+                    },
                 )
 
                 data = json.loads(results.data)
@@ -214,6 +262,10 @@ class TestMeetingResource(BaseTest):
     def test_get_meetings_200(self):
         with self.client as c:
             with self.app_context:
+                self.add_permissions_to_admin()
+                member = self.member_1.save_to_db()
+                login = self.login(c, member.email, TEST_MEMBER_1["password"])
+
                 self.role_1.save_to_db()
                 self.member_1.save_to_db()
                 meeting_1_id = self.meeting_1.save_to_db().id
@@ -221,7 +273,10 @@ class TestMeetingResource(BaseTest):
 
                 results = c.get(
                     f"/meetings",
-                    headers={"Content-Type": "application/json"},
+                    headers={
+                        "Content-Type": "application/json",
+                        "Authorization": f"Bearer {login['access_token']}",
+                    },
                 )
 
                 data = json.loads(results.data)
@@ -233,9 +288,16 @@ class TestMeetingResource(BaseTest):
     def test_get_meetings_404(self):
         with self.client as c:
             with self.app_context:
+                self.add_permissions_to_admin()
+                member = self.member_1.save_to_db()
+                login = self.login(c, member.email, TEST_MEMBER_1["password"])
+
                 results = c.get(
                     f"/meetings",
-                    headers={"Content-Type": "application/json"},
+                    headers={
+                        "Content-Type": "application/json",
+                        "Authorization": f"Bearer {login['access_token']}",
+                    },
                 )
 
                 data = json.loads(results.data)

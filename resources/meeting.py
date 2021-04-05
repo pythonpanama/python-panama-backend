@@ -1,5 +1,7 @@
 from flask import abort, Blueprint, jsonify, request
+from flask_jwt_extended import jwt_required
 
+from auth import requires_auth
 from custom_types import ApiResponse
 from models.meeting import MeetingModel
 from resources.message import (
@@ -18,6 +20,8 @@ meeting_list_schema = MeetingSchema(many=True)
 
 
 @meetings.route("/<int:meeting_id>")
+@jwt_required()
+@requires_auth("get:member")
 def get_meeting(meeting_id: int) -> ApiResponse:
     meeting = MeetingModel.find_by_id(meeting_id)
 
@@ -35,6 +39,8 @@ def get_meeting(meeting_id: int) -> ApiResponse:
 
 
 @meetings.route("", methods=["POST"])
+@jwt_required()
+@requires_auth("post:meeting")
 def post_meeting() -> ApiResponse:
     meeting_json = request.get_json()
 
@@ -53,6 +59,8 @@ def post_meeting() -> ApiResponse:
 
 
 @meetings.route("/<int:meeting_id>", methods=["PUT"])
+@jwt_required()
+@requires_auth("post:meeting")
 def put_meeting(meeting_id: int) -> ApiResponse:
     meeting = MeetingModel.find_by_id(meeting_id)
 
@@ -80,6 +88,8 @@ def put_meeting(meeting_id: int) -> ApiResponse:
 
 
 @meetings.route("/<int:meeting_id>", methods=["DELETE"])
+@jwt_required()
+@requires_auth("post:meeting")
 def delete_meeting(meeting_id: int) -> ApiResponse:
     meeting = MeetingModel.find_by_id(meeting_id)
 
@@ -100,6 +110,8 @@ def delete_meeting(meeting_id: int) -> ApiResponse:
 
 
 @meetings.route("")
+@jwt_required()
+@requires_auth("post:keynote")
 def get_meetings() -> ApiResponse:
     meeting_list = MeetingModel.find_all()
 

@@ -86,7 +86,7 @@ TEST_PERMISSION_5 = {"permission_name": "post:permission"}
 
 TEST_PERMISSION_6 = {"permission_name": "post:project"}
 
-TEST_PERMISSION_7 = {"permission_name": "get:role"}
+TEST_PERMISSION_7 = {"permission_name": "post:role"}
 
 TEST_PERMISSION_8 = {"permission_name": "post:speaker"}
 

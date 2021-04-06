@@ -82,13 +82,15 @@ TEST_PERMISSION_3 = {"permission_name": "get:member"}
 
 TEST_PERMISSION_4 = {"permission_name": "activate:member"}
 
-TEST_PERMISSION_5 = {"permission_name": "get:permission"}
+TEST_PERMISSION_5 = {"permission_name": "post:permission"}
 
 TEST_PERMISSION_6 = {"permission_name": "post:project"}
 
 TEST_PERMISSION_7 = {"permission_name": "get:role"}
 
 TEST_PERMISSION_8 = {"permission_name": "post:speaker"}
+
+TEST_PERMISSION_9 = {"permission_name": "post:token"}
 
 TEST_PERMISSION_400 = {}
 

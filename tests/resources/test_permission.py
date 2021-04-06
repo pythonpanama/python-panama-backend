@@ -3,8 +3,10 @@ import unittest
 
 from tests.base_test import BaseTest
 from tests.model_test_data import (
+    TEST_MEMBER_1,
     TEST_PERMISSION_1,
     TEST_PERMISSION_2,
+    TEST_PERMISSION_9,
     TEST_PERMISSION_400,
 )
 
@@ -16,11 +18,16 @@ class TestPermissionResource(BaseTest):
     def test_get_permission_200(self):
         with self.client as c:
             with self.app_context:
-                permission_id = self.permission_1.save_to_db().id
+                self.add_permissions_to_admin()
+                member = self.member_1.save_to_db()
+                login = self.login(c, member.email, TEST_MEMBER_1["password"])
 
                 results = c.get(
-                    f"/permissions/{permission_id}",
-                    headers={"Content-Type": "application/json"},
+                    f"/permissions/1",
+                    headers={
+                        "Content-Type": "application/json",
+                        "Authorization": f"Bearer {login['access_token']}",
+                    },
                 )
 
                 data = json.loads(results.data)
@@ -32,9 +39,16 @@ class TestPermissionResource(BaseTest):
     def test_get_permission_404(self):
         with self.client as c:
             with self.app_context:
+                self.add_permissions_to_admin()
+                member = self.member_1.save_to_db()
+                login = self.login(c, member.email, TEST_MEMBER_1["password"])
+
                 results = c.get(
                     f"/permissions/99",
-                    headers={"Content-Type": "application/json"},
+                    headers={
+                        "Content-Type": "application/json",
+                        "Authorization": f"Bearer {login['access_token']}",
+                    },
                 )
 
                 data = json.loads(results.data)
@@ -47,10 +61,17 @@ class TestPermissionResource(BaseTest):
     def test_post_permission_201(self):
         with self.client as c:
             with self.app_context:
+                self.add_permissions_to_admin()
+                member = self.member_1.save_to_db()
+                login = self.login(c, member.email, TEST_MEMBER_1["password"])
+
                 results = c.post(
                     "/permissions",
-                    data=json.dumps(TEST_PERMISSION_1),
-                    headers={"Content-Type": "application/json"},
+                    data=json.dumps(TEST_PERMISSION_9),
+                    headers={
+                        "Content-Type": "application/json",
+                        "Authorization": f"Bearer {login['access_token']}",
+                    },
                 )
 
                 data = json.loads(results.data)
@@ -59,16 +80,23 @@ class TestPermissionResource(BaseTest):
                     data["message"], "Permission created successfully."
                 )
                 self.assertEqual(
-                    data["permission"]["permission_name"], "post:keynote"
+                    data["permission"]["permission_name"], "post:token"
                 )
 
     def test_post_permission_400(self):
         with self.client as c:
             with self.app_context:
+                self.add_permissions_to_admin()
+                member = self.member_1.save_to_db()
+                login = self.login(c, member.email, TEST_MEMBER_1["password"])
+
                 results = c.post(
                     "/permissions",
                     data=json.dumps(TEST_PERMISSION_400),
-                    headers={"Content-Type": "application/json"},
+                    headers={
+                        "Content-Type": "application/json",
+                        "Authorization": f"Bearer {login['access_token']}",
+                    },
                 )
 
                 data = json.loads(results.data)
@@ -77,7 +105,10 @@ class TestPermissionResource(BaseTest):
 
                 results = c.post(
                     "/permissions",
-                    headers={"Content-Type": "application/json"},
+                    headers={
+                        "Content-Type": "application/json",
+                        "Authorization": f"Bearer {login['access_token']}",
+                    },
                 )
 
                 self.assertEqual(results.status, "400 BAD REQUEST")
@@ -85,12 +116,17 @@ class TestPermissionResource(BaseTest):
     def test_post_permission_409(self):
         with self.client as c:
             with self.app_context:
-                self.permission_1.save_to_db()
+                self.add_permissions_to_admin()
+                member = self.member_1.save_to_db()
+                login = self.login(c, member.email, TEST_MEMBER_1["password"])
 
                 results = c.post(
                     "/permissions",
                     data=json.dumps(TEST_PERMISSION_1),
-                    headers={"Content-Type": "application/json"},
+                    headers={
+                        "Content-Type": "application/json",
+                        "Authorization": f"Bearer {login['access_token']}",
+                    },
                 )
 
                 data = json.loads(results.data)
@@ -104,12 +140,17 @@ class TestPermissionResource(BaseTest):
     def test_put_permission_200(self):
         with self.client as c:
             with self.app_context:
-                permission_id = self.permission_1.save_to_db().id
+                self.add_permissions_to_admin()
+                member = self.member_1.save_to_db()
+                login = self.login(c, member.email, TEST_MEMBER_1["password"])
 
                 results = c.put(
-                    f"/permissions/{permission_id}",
-                    data=json.dumps(TEST_PERMISSION_2),
-                    headers={"Content-Type": "application/json"},
+                    f"/permissions/1",
+                    data=json.dumps(TEST_PERMISSION_9),
+                    headers={
+                        "Content-Type": "application/json",
+                        "Authorization": f"Bearer {login['access_token']}",
+                    },
                 )
 
                 data = json.loads(results.data)
@@ -118,17 +159,22 @@ class TestPermissionResource(BaseTest):
                     data["message"], "Permission modified successfully."
                 )
                 self.assertEqual(
-                    data["permission"]["permission_name"], "post:meeting"
+                    data["permission"]["permission_name"], "post:token"
                 )
 
     def test_put_permission_400(self):
         with self.client as c:
             with self.app_context:
-                permission_id = self.permission_1.save_to_db().id
+                self.add_permissions_to_admin()
+                member = self.member_1.save_to_db()
+                login = self.login(c, member.email, TEST_MEMBER_1["password"])
 
                 results = c.put(
-                    f"/permissions/{permission_id}",
-                    headers={"Content-Type": "application/json"},
+                    f"/permissions/1",
+                    headers={
+                        "Content-Type": "application/json",
+                        "Authorization": f"Bearer {login['access_token']}",
+                    },
                 )
 
                 self.assertEqual(results.status, "400 BAD REQUEST")
@@ -136,10 +182,17 @@ class TestPermissionResource(BaseTest):
     def test_put_permission_404(self):
         with self.client as c:
             with self.app_context:
+                self.add_permissions_to_admin()
+                member = self.member_1.save_to_db()
+                login = self.login(c, member.email, TEST_MEMBER_1["password"])
+
                 results = c.put(
                     f"/permissions/99",
                     data=json.dumps(TEST_PERMISSION_2),
-                    headers={"Content-Type": "application/json"},
+                    headers={
+                        "Content-Type": "application/json",
+                        "Authorization": f"Bearer {login['access_token']}",
+                    },
                 )
 
                 data = json.loads(results.data)
@@ -152,13 +205,17 @@ class TestPermissionResource(BaseTest):
     def test_put_permission_409(self):
         with self.client as c:
             with self.app_context:
-                self.permission_1.save_to_db()
-                permission_id = self.permission_2.save_to_db().id
+                self.add_permissions_to_admin()
+                member = self.member_1.save_to_db()
+                login = self.login(c, member.email, TEST_MEMBER_1["password"])
 
                 results = c.put(
-                    f"/permissions/{permission_id}",
+                    f"/permissions/2",
                     data=json.dumps(TEST_PERMISSION_1),
-                    headers={"Content-Type": "application/json"},
+                    headers={
+                        "Content-Type": "application/json",
+                        "Authorization": f"Bearer {login['access_token']}",
+                    },
                 )
 
                 data = json.loads(results.data)
@@ -172,11 +229,16 @@ class TestPermissionResource(BaseTest):
     def test_delete_permission_200(self):
         with self.client as c:
             with self.app_context:
-                permission_id = self.permission_1.save_to_db().id
+                self.add_permissions_to_admin()
+                member = self.member_1.save_to_db()
+                login = self.login(c, member.email, TEST_MEMBER_1["password"])
 
                 results = c.delete(
-                    f"/permissions/{permission_id}",
-                    headers={"Content-Type": "application/json"},
+                    f"/permissions/1",
+                    headers={
+                        "Content-Type": "application/json",
+                        "Authorization": f"Bearer {login['access_token']}",
+                    },
                 )
 
                 data = json.loads(results.data)
@@ -188,9 +250,16 @@ class TestPermissionResource(BaseTest):
     def test_delete_permission_404(self):
         with self.client as c:
             with self.app_context:
+                self.add_permissions_to_admin()
+                member = self.member_1.save_to_db()
+                login = self.login(c, member.email, TEST_MEMBER_1["password"])
+
                 results = c.delete(
                     f"/permissions/99",
-                    headers={"Content-Type": "application/json"},
+                    headers={
+                        "Content-Type": "application/json",
+                        "Authorization": f"Bearer {login['access_token']}",
+                    },
                 )
 
                 data = json.loads(results.data)
@@ -203,34 +272,23 @@ class TestPermissionResource(BaseTest):
     def test_get_permissions_200(self):
         with self.client as c:
             with self.app_context:
-                permission_1_id = self.permission_1.save_to_db().id
-                permission_2_id = self.permission_2.save_to_db().id
+                self.add_permissions_to_admin()
+                member = self.member_1.save_to_db()
+                login = self.login(c, member.email, TEST_MEMBER_1["password"])
 
                 results = c.get(
                     f"/permissions",
-                    headers={"Content-Type": "application/json"},
+                    headers={
+                        "Content-Type": "application/json",
+                        "Authorization": f"Bearer {login['access_token']}",
+                    },
                 )
 
                 data = json.loads(results.data)
 
-                self.assertEqual(len(data["permissions"]), 2)
-                self.assertEqual(data["permissions"][1]["id"], permission_2_id)
-                self.assertEqual(data["permissions"][0]["id"], permission_1_id)
-
-    def test_get_permissions_404(self):
-        with self.client as c:
-            with self.app_context:
-                results = c.get(
-                    f"/permissions",
-                    headers={"Content-Type": "application/json"},
-                )
-
-                data = json.loads(results.data)
-
-                self.assertEqual(
-                    data["error"],
-                    "404 Not Found: No permissions found.",
-                )
+                self.assertEqual(len(data["permissions"]), 8)
+                self.assertEqual(data["permissions"][1]["id"], 3)
+                self.assertEqual(data["permissions"][0]["id"], 4)
 
 
 if __name__ == "__main__":  # pragma: no cover

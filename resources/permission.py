@@ -8,7 +8,6 @@ from resources.message import (
     CREATED,
     DELETED,
     ERROR_404,
-    ERROR_404_LIST,
     ERROR_409,
     MODIFIED,
 )

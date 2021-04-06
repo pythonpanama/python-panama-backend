@@ -41,6 +41,8 @@ def get_project(project_id: int) -> ApiResponse:
 
 
 @projects.route("", methods=["POST"])
+@jwt_required()
+@requires_auth("post:project")
 def post_project() -> ApiResponse:
     project_json = request.get_json()
 
@@ -69,6 +71,8 @@ def post_project() -> ApiResponse:
 
 
 @projects.route("/<int:project_id>", methods=["PUT"])
+@jwt_required()
+@requires_auth("post:project")
 def put_project(project_id: int) -> ApiResponse:
     project = ProjectModel.find_by_id(project_id)
 
@@ -113,6 +117,8 @@ def put_project(project_id: int) -> ApiResponse:
 
 
 @projects.route("/<int:project_id>", methods=["DELETE"])
+@jwt_required()
+@requires_auth("post:project")
 def delete_project(project_id: int) -> ApiResponse:
     project = ProjectModel.find_by_id(project_id)
 

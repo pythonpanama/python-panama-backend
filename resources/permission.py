@@ -1,12 +1,13 @@
 from flask import abort, Blueprint, jsonify, request
+from flask_jwt_extended import jwt_required
 
+from auth import requires_auth
 from custom_types import ApiResponse
 from models.permission import PermissionModel
 from resources.message import (
     CREATED,
     DELETED,
     ERROR_404,
-    ERROR_404_LIST,
     ERROR_409,
     MODIFIED,
 )
@@ -19,6 +20,8 @@ permission_list_schema = PermissionSchema(many=True)
 
 
 @permissions.route("/<int:permission_id>")
+@jwt_required()
+@requires_auth("post:permission")
 def get_permission(permission_id: int) -> ApiResponse:
     permission = PermissionModel.find_by_id(permission_id)
 
@@ -39,6 +42,8 @@ def get_permission(permission_id: int) -> ApiResponse:
 
 
 @permissions.route("", methods=["POST"])
+@jwt_required()
+@requires_auth("post:permission")
 def post_permission() -> ApiResponse:
     permission_json = request.get_json()
 
@@ -67,6 +72,8 @@ def post_permission() -> ApiResponse:
 
 
 @permissions.route("/<int:permission_id>", methods=["PUT"])
+@jwt_required()
+@requires_auth("post:permission")
 def put_permission(permission_id: int) -> ApiResponse:
     permission = PermissionModel.find_by_id(permission_id)
 
@@ -107,6 +114,8 @@ def put_permission(permission_id: int) -> ApiResponse:
 
 
 @permissions.route("/<int:permission_id>", methods=["DELETE"])
+@jwt_required()
+@requires_auth("post:permission")
 def delete_permission(permission_id: int) -> ApiResponse:
     permission = PermissionModel.find_by_id(permission_id)
 
@@ -130,11 +139,10 @@ def delete_permission(permission_id: int) -> ApiResponse:
 
 
 @permissions.route("")
+@jwt_required()
+@requires_auth("post:permission")
 def get_permissions() -> ApiResponse:
     permission_list = PermissionModel.find_all()
-
-    if not permission_list:
-        abort(404, description=ERROR_404_LIST.format("permissions"))
 
     return (
         jsonify({"permissions": permission_list_schema.dump(permission_list)}),

@@ -3,6 +3,7 @@ import unittest
 
 from tests.base_test import BaseTest
 from tests.model_test_data import (
+    TEST_MEMBER_1,
     TEST_PROJECT_1,
     TEST_PROJECT_2,
     TEST_PROJECT_400,
@@ -63,13 +64,17 @@ class TestProjectResource(BaseTest):
     def test_post_project_201(self):
         with self.client as c:
             with self.app_context:
-                self.role_1.save_to_db()
-                self.member_1.save_to_db()
+                self.add_permissions_to_admin()
+                member = self.member_1.save_to_db()
+                login = self.login(c, member.email, TEST_MEMBER_1["password"])
 
                 results = c.post(
                     "/projects",
                     data=json.dumps(TEST_PROJECT_1),
-                    headers={"Content-Type": "application/json"},
+                    headers={
+                        "Content-Type": "application/json",
+                        "Authorization": f"Bearer {login['access_token']}",
+                    },
                 )
 
                 data = json.loads(results.data)
@@ -98,10 +103,17 @@ class TestProjectResource(BaseTest):
     def test_post_project_400(self):
         with self.client as c:
             with self.app_context:
+                self.add_permissions_to_admin()
+                member = self.member_1.save_to_db()
+                login = self.login(c, member.email, TEST_MEMBER_1["password"])
+
                 results = c.post(
                     "/projects",
                     data=json.dumps(TEST_PROJECT_400),
-                    headers={"Content-Type": "application/json"},
+                    headers={
+                        "Content-Type": "application/json",
+                        "Authorization": f"Bearer {login['access_token']}",
+                    },
                 )
 
                 data = json.loads(results.data)
@@ -114,7 +126,10 @@ class TestProjectResource(BaseTest):
 
                 results = c.post(
                     "/projects",
-                    headers={"Content-Type": "application/json"},
+                    headers={
+                        "Content-Type": "application/json",
+                        "Authorization": f"Bearer {login['access_token']}",
+                    },
                 )
 
                 self.assertEqual(results.status, "400 BAD REQUEST")
@@ -122,14 +137,18 @@ class TestProjectResource(BaseTest):
     def test_post_project_409(self):
         with self.client as c:
             with self.app_context:
-                self.role_1.save_to_db()
-                self.member_1.save_to_db()
+                self.add_permissions_to_admin()
+                member = self.member_1.save_to_db()
+                login = self.login(c, member.email, TEST_MEMBER_1["password"])
                 self.project_1.save_to_db()
 
                 results = c.post(
                     "/projects",
                     data=json.dumps(TEST_PROJECT_1),
-                    headers={"Content-Type": "application/json"},
+                    headers={
+                        "Content-Type": "application/json",
+                        "Authorization": f"Bearer {login['access_token']}",
+                    },
                 )
 
                 data = json.loads(results.data)
@@ -143,14 +162,18 @@ class TestProjectResource(BaseTest):
     def test_put_project_200(self):
         with self.client as c:
             with self.app_context:
-                self.role_1.save_to_db()
-                self.member_1.save_to_db()
+                self.add_permissions_to_admin()
+                member = self.member_1.save_to_db()
+                login = self.login(c, member.email, TEST_MEMBER_1["password"])
                 project_id = self.project_1.save_to_db().id
 
                 results = c.put(
                     f"/projects/{project_id}",
                     data=json.dumps(TEST_PROJECT_2),
-                    headers={"Content-Type": "application/json"},
+                    headers={
+                        "Content-Type": "application/json",
+                        "Authorization": f"Bearer {login['access_token']}",
+                    },
                 )
 
                 data = json.loads(results.data)
@@ -177,13 +200,17 @@ class TestProjectResource(BaseTest):
     def test_put_project_400(self):
         with self.client as c:
             with self.app_context:
-                self.role_1.save_to_db()
-                self.member_1.save_to_db()
+                self.add_permissions_to_admin()
+                member = self.member_1.save_to_db()
+                login = self.login(c, member.email, TEST_MEMBER_1["password"])
                 project_id = self.project_1.save_to_db().id
 
                 results = c.put(
                     f"/projects/{project_id}",
-                    headers={"Content-Type": "application/json"},
+                    headers={
+                        "Content-Type": "application/json",
+                        "Authorization": f"Bearer {login['access_token']}",
+                    },
                 )
 
                 self.assertEqual(results.status, "400 BAD REQUEST")
@@ -191,10 +218,17 @@ class TestProjectResource(BaseTest):
     def test_put_project_404(self):
         with self.client as c:
             with self.app_context:
+                self.add_permissions_to_admin()
+                member = self.member_1.save_to_db()
+                login = self.login(c, member.email, TEST_MEMBER_1["password"])
+
                 results = c.put(
                     f"/projects/99",
                     data=json.dumps(TEST_PROJECT_2),
-                    headers={"Content-Type": "application/json"},
+                    headers={
+                        "Content-Type": "application/json",
+                        "Authorization": f"Bearer {login['access_token']}",
+                    },
                 )
 
                 data = json.loads(results.data)
@@ -207,15 +241,19 @@ class TestProjectResource(BaseTest):
     def test_put_project_409(self):
         with self.client as c:
             with self.app_context:
-                self.role_1.save_to_db()
-                self.member_1.save_to_db()
+                self.add_permissions_to_admin()
+                member = self.member_1.save_to_db()
+                login = self.login(c, member.email, TEST_MEMBER_1["password"])
                 self.project_1.save_to_db()
                 project_id = self.project_2.save_to_db().id
 
                 results = c.put(
                     f"/projects/{project_id}",
                     data=json.dumps(TEST_PROJECT_1),
-                    headers={"Content-Type": "application/json"},
+                    headers={
+                        "Content-Type": "application/json",
+                        "Authorization": f"Bearer {login['access_token']}",
+                    },
                 )
 
                 data = json.loads(results.data)
@@ -229,13 +267,17 @@ class TestProjectResource(BaseTest):
     def test_delete_project_200(self):
         with self.client as c:
             with self.app_context:
-                self.role_1.save_to_db()
-                self.member_1.save_to_db()
+                self.add_permissions_to_admin()
+                member = self.member_1.save_to_db()
+                login = self.login(c, member.email, TEST_MEMBER_1["password"])
                 project_id = self.project_1.save_to_db().id
 
                 results = c.delete(
                     f"/projects/{project_id}",
-                    headers={"Content-Type": "application/json"},
+                    headers={
+                        "Content-Type": "application/json",
+                        "Authorization": f"Bearer {login['access_token']}",
+                    },
                 )
 
                 data = json.loads(results.data)
@@ -245,9 +287,16 @@ class TestProjectResource(BaseTest):
     def test_delete_project_404(self):
         with self.client as c:
             with self.app_context:
+                self.add_permissions_to_admin()
+                member = self.member_1.save_to_db()
+                login = self.login(c, member.email, TEST_MEMBER_1["password"])
+
                 results = c.delete(
                     f"/projects/99",
-                    headers={"Content-Type": "application/json"},
+                    headers={
+                        "Content-Type": "application/json",
+                        "Authorization": f"Bearer {login['access_token']}",
+                    },
                 )
 
                 data = json.loads(results.data)

@@ -1,5 +1,7 @@
 from flask import abort, Blueprint, jsonify, request
+from flask_jwt_extended import jwt_required
 
+from auth import requires_auth
 from custom_types import ApiResponse
 from models.speaker import SpeakerModel
 from resources.message import (
@@ -7,7 +9,6 @@ from resources.message import (
     DELETED,
     ERROR_404,
     ERROR_404_LIST,
-    ERROR_409,
     MODIFIED,
 )
 from schemas.speaker import SpeakerSchema
@@ -19,6 +20,8 @@ speaker_list_schema = SpeakerSchema(many=True)
 
 
 @speakers.route("/<int:speaker_id>")
+@jwt_required()
+@requires_auth("get:member")
 def get_speaker(speaker_id: int) -> ApiResponse:
     speaker = SpeakerModel.find_by_id(speaker_id)
 
@@ -39,6 +42,8 @@ def get_speaker(speaker_id: int) -> ApiResponse:
 
 
 @speakers.route("", methods=["POST"])
+@jwt_required()
+@requires_auth("post:speaker")
 def post_speaker() -> ApiResponse:
     speaker_json = request.get_json()
 
@@ -57,6 +62,8 @@ def post_speaker() -> ApiResponse:
 
 
 @speakers.route("/<int:speaker_id>", methods=["PUT"])
+@jwt_required()
+@requires_auth("post:speaker")
 def put_speaker(speaker_id: int) -> ApiResponse:
     speaker = SpeakerModel.find_by_id(speaker_id)
 
@@ -89,6 +96,8 @@ def put_speaker(speaker_id: int) -> ApiResponse:
 
 
 @speakers.route("/<int:speaker_id>", methods=["DELETE"])
+@jwt_required()
+@requires_auth("post:speaker")
 def delete_speaker(speaker_id: int) -> ApiResponse:
     speaker = SpeakerModel.find_by_id(speaker_id)
 
@@ -112,6 +121,8 @@ def delete_speaker(speaker_id: int) -> ApiResponse:
 
 
 @speakers.route("")
+@jwt_required()
+@requires_auth("get:member")
 def get_speakers() -> ApiResponse:
     speaker_list = SpeakerModel.find_all()
 

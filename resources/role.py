@@ -1,12 +1,13 @@
 from flask import abort, Blueprint, jsonify, request
+from flask_jwt_extended import jwt_required
 
+from auth import requires_auth
 from custom_types import ApiResponse
 from models.role import RoleModel
 from resources.message import (
     CREATED,
     DELETED,
     ERROR_404,
-    ERROR_404_LIST,
     ERROR_409,
     MODIFIED,
 )
@@ -19,6 +20,8 @@ role_list_schema = RoleSchema(many=True)
 
 
 @roles.route("/<int:role_id>")
+@jwt_required()
+@requires_auth("post:role")
 def get_role(role_id: int) -> ApiResponse:
     role = RoleModel.find_by_id(role_id)
 
@@ -39,6 +42,8 @@ def get_role(role_id: int) -> ApiResponse:
 
 
 @roles.route("", methods=["POST"])
+@jwt_required()
+@requires_auth("post:role")
 def post_role() -> ApiResponse:
     role_json = request.get_json()
 
@@ -67,6 +72,8 @@ def post_role() -> ApiResponse:
 
 
 @roles.route("/<int:role_id>", methods=["PUT"])
+@jwt_required()
+@requires_auth("post:role")
 def put_role(role_id: int) -> ApiResponse:
     role = RoleModel.find_by_id(role_id)
 
@@ -105,6 +112,8 @@ def put_role(role_id: int) -> ApiResponse:
 
 
 @roles.route("/<int:role_id>", methods=["DELETE"])
+@jwt_required()
+@requires_auth("post:role")
 def delete_role(role_id: int) -> ApiResponse:
     role = RoleModel.find_by_id(role_id)
 
@@ -128,11 +137,10 @@ def delete_role(role_id: int) -> ApiResponse:
 
 
 @roles.route("")
+@jwt_required()
+@requires_auth("post:role")
 def get_roles() -> ApiResponse:
     role_list = RoleModel.find_all()
-
-    if not role_list:
-        abort(404, description=ERROR_404_LIST.format("roles"))
 
     return (
         jsonify({"roles": role_list_schema.dump(role_list)}),

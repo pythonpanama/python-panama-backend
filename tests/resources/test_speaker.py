@@ -3,6 +3,7 @@ import unittest
 
 from tests.base_test import BaseTest
 from tests.model_test_data import (
+    TEST_MEMBER_1,
     TEST_SPEAKER_1,
     TEST_SPEAKER_2,
     TEST_SPEAKER_400,
@@ -16,11 +17,17 @@ class TestSpeakerResource(BaseTest):
     def test_get_speaker_200(self):
         with self.client as c:
             with self.app_context:
+                self.add_permissions_to_admin()
+                member = self.member_1.save_to_db()
+                login = self.login(c, member.email, TEST_MEMBER_1["password"])
                 speaker_id = self.speaker_1.save_to_db().id
 
                 results = c.get(
                     f"/speakers/{speaker_id}",
-                    headers={"Content-Type": "application/json"},
+                    headers={
+                        "Content-Type": "application/json",
+                        "Authorization": f"Bearer {login['access_token']}",
+                    },
                 )
 
                 data = json.loads(results.data)
@@ -52,9 +59,16 @@ class TestSpeakerResource(BaseTest):
     def test_get_speaker_404(self):
         with self.client as c:
             with self.app_context:
+                self.add_permissions_to_admin()
+                member = self.member_1.save_to_db()
+                login = self.login(c, member.email, TEST_MEMBER_1["password"])
+
                 results = c.get(
                     f"/speakers/99",
-                    headers={"Content-Type": "application/json"},
+                    headers={
+                        "Content-Type": "application/json",
+                        "Authorization": f"Bearer {login['access_token']}",
+                    },
                 )
 
                 data = json.loads(results.data)
@@ -67,10 +81,17 @@ class TestSpeakerResource(BaseTest):
     def test_post_speaker_201(self):
         with self.client as c:
             with self.app_context:
+                self.add_permissions_to_admin()
+                member = self.member_1.save_to_db()
+                login = self.login(c, member.email, TEST_MEMBER_1["password"])
+
                 results = c.post(
                     "/speakers",
                     data=json.dumps(TEST_SPEAKER_1),
-                    headers={"Content-Type": "application/json"},
+                    headers={
+                        "Content-Type": "application/json",
+                        "Authorization": f"Bearer {login['access_token']}",
+                    },
                 )
 
                 data = json.loads(results.data)
@@ -105,10 +126,17 @@ class TestSpeakerResource(BaseTest):
     def test_post_speaker_400(self):
         with self.client as c:
             with self.app_context:
+                self.add_permissions_to_admin()
+                member = self.member_1.save_to_db()
+                login = self.login(c, member.email, TEST_MEMBER_1["password"])
+
                 results = c.post(
                     "/speakers",
                     data=json.dumps(TEST_SPEAKER_400),
-                    headers={"Content-Type": "application/json"},
+                    headers={
+                        "Content-Type": "application/json",
+                        "Authorization": f"Bearer {login['access_token']}",
+                    },
                 )
 
                 data = json.loads(results.data)
@@ -119,7 +147,10 @@ class TestSpeakerResource(BaseTest):
 
                 results = c.post(
                     "/speakers",
-                    headers={"Content-Type": "application/json"},
+                    headers={
+                        "Content-Type": "application/json",
+                        "Authorization": f"Bearer {login['access_token']}",
+                    },
                 )
 
                 self.assertEqual(results.status, "400 BAD REQUEST")
@@ -127,12 +158,18 @@ class TestSpeakerResource(BaseTest):
     def test_put_speaker_200(self):
         with self.client as c:
             with self.app_context:
+                self.add_permissions_to_admin()
+                member = self.member_1.save_to_db()
+                login = self.login(c, member.email, TEST_MEMBER_1["password"])
                 speaker_id = self.speaker_1.save_to_db().id
 
                 results = c.put(
                     f"/speakers/{speaker_id}",
                     data=json.dumps(TEST_SPEAKER_2),
-                    headers={"Content-Type": "application/json"},
+                    headers={
+                        "Content-Type": "application/json",
+                        "Authorization": f"Bearer {login['access_token']}",
+                    },
                 )
 
                 data = json.loads(results.data)
@@ -167,11 +204,17 @@ class TestSpeakerResource(BaseTest):
     def test_put_speaker_400(self):
         with self.client as c:
             with self.app_context:
+                self.add_permissions_to_admin()
+                member = self.member_1.save_to_db()
+                login = self.login(c, member.email, TEST_MEMBER_1["password"])
                 speaker_id = self.speaker_1.save_to_db().id
 
                 results = c.put(
                     f"/speakers/{speaker_id}",
-                    headers={"Content-Type": "application/json"},
+                    headers={
+                        "Content-Type": "application/json",
+                        "Authorization": f"Bearer {login['access_token']}",
+                    },
                 )
 
                 self.assertEqual(results.status, "400 BAD REQUEST")
@@ -179,10 +222,17 @@ class TestSpeakerResource(BaseTest):
     def test_put_speaker_404(self):
         with self.client as c:
             with self.app_context:
+                self.add_permissions_to_admin()
+                member = self.member_1.save_to_db()
+                login = self.login(c, member.email, TEST_MEMBER_1["password"])
+
                 results = c.put(
                     f"/speakers/99",
                     data=json.dumps(TEST_SPEAKER_2),
-                    headers={"Content-Type": "application/json"},
+                    headers={
+                        "Content-Type": "application/json",
+                        "Authorization": f"Bearer {login['access_token']}",
+                    },
                 )
 
                 data = json.loads(results.data)
@@ -195,11 +245,17 @@ class TestSpeakerResource(BaseTest):
     def test_delete_speaker_200(self):
         with self.client as c:
             with self.app_context:
+                self.add_permissions_to_admin()
+                member = self.member_1.save_to_db()
+                login = self.login(c, member.email, TEST_MEMBER_1["password"])
                 speaker_id = self.speaker_1.save_to_db().id
 
                 results = c.delete(
                     f"/speakers/{speaker_id}",
-                    headers={"Content-Type": "application/json"},
+                    headers={
+                        "Content-Type": "application/json",
+                        "Authorization": f"Bearer {login['access_token']}",
+                    },
                 )
 
                 data = json.loads(results.data)
@@ -212,9 +268,16 @@ class TestSpeakerResource(BaseTest):
     def test_delete_speaker_404(self):
         with self.client as c:
             with self.app_context:
+                self.add_permissions_to_admin()
+                member = self.member_1.save_to_db()
+                login = self.login(c, member.email, TEST_MEMBER_1["password"])
+
                 results = c.delete(
                     f"/speakers/99",
-                    headers={"Content-Type": "application/json"},
+                    headers={
+                        "Content-Type": "application/json",
+                        "Authorization": f"Bearer {login['access_token']}",
+                    },
                 )
 
                 data = json.loads(results.data)
@@ -227,12 +290,18 @@ class TestSpeakerResource(BaseTest):
     def test_get_speakers_200(self):
         with self.client as c:
             with self.app_context:
+                self.add_permissions_to_admin()
+                member = self.member_1.save_to_db()
+                login = self.login(c, member.email, TEST_MEMBER_1["password"])
                 speaker_1_id = self.speaker_1.save_to_db().id
                 speaker_2_id = self.speaker_2.save_to_db().id
 
                 results = c.get(
                     f"/speakers",
-                    headers={"Content-Type": "application/json"},
+                    headers={
+                        "Content-Type": "application/json",
+                        "Authorization": f"Bearer {login['access_token']}",
+                    },
                 )
 
                 data = json.loads(results.data)
@@ -244,9 +313,16 @@ class TestSpeakerResource(BaseTest):
     def test_get_speakers_404(self):
         with self.client as c:
             with self.app_context:
+                self.add_permissions_to_admin()
+                member = self.member_1.save_to_db()
+                login = self.login(c, member.email, TEST_MEMBER_1["password"])
+
                 results = c.get(
                     f"/speakers",
-                    headers={"Content-Type": "application/json"},
+                    headers={
+                        "Content-Type": "application/json",
+                        "Authorization": f"Bearer {login['access_token']}",
+                    },
                 )
 
                 data = json.loads(results.data)

@@ -1,4 +1,5 @@
 import json
+from typing import Tuple
 from unittest import TestCase
 
 from app import create_app, db
@@ -120,3 +121,41 @@ class BaseTest(TestCase):
         role_1.permissions.append(permission_8)
 
         return role_1
+
+    def add_keynote_to_db(
+        self,
+        keynote: KeynoteModel,
+        role: RoleModel,
+        member: MemberModel,
+        speaker: SpeakerModel,
+        meeting: MeetingModel,
+    ) -> Tuple[
+        KeynoteModel, MemberModel, RoleModel, SpeakerModel, MeetingModel
+    ]:
+        speaker = self.add_speaker_to_db(speaker)
+        meeting, member, role = self.add_meeting_to_db(meeting, member, role)
+        keynote = keynote.save_to_db()
+        return keynote, member, role, speaker, meeting
+
+    def add_meeting_to_db(
+        self, meeting: MeetingModel, member: MemberModel, role: RoleModel
+    ) -> Tuple[MeetingModel, MemberModel, RoleModel]:
+        member, role = self.add_member_to_db(member, role)
+        meeting = meeting.save_to_db()
+        return meeting, member, role
+
+    def add_member_to_db(
+        self, member: MemberModel, role: RoleModel
+    ) -> Tuple[MemberModel, RoleModel]:
+        role = self.add_role_to_db(role)
+        member = member.save_to_db()
+        return member, role
+
+    def add_permission_to_db(self, permission):
+        pass
+
+    def add_role_to_db(self, role: RoleModel) -> RoleModel:
+        return role.save_to_db()
+
+    def add_speaker_to_db(self, speaker: SpeakerModel) -> SpeakerModel:
+        return speaker.save_to_db()

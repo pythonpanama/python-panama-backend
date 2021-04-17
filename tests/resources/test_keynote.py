@@ -14,18 +14,36 @@ from tests.model_test_data import (
 class TestKeynoteResource(BaseTest):
     """Test all endpoints for the keynote resource"""
 
+    TITLE_1 = TEST_KEYNOTE_1["title"]
+    DESCRIPTION_1 = TEST_KEYNOTE_1["description"]
+    SPEAKER_ID_1 = TEST_KEYNOTE_1["speaker_id"]
+    MEETING_1 = TEST_KEYNOTE_2["meeting_id"]
+    TITLE_2 = TEST_KEYNOTE_2["title"]
+    DESCRIPTION_2 = TEST_KEYNOTE_2["description"]
+    SPEAKER_ID_2 = TEST_KEYNOTE_2["speaker_id"]
+    MEETING_2 = TEST_KEYNOTE_2["meeting_id"]
+    MSG_200 = "Keynote modified successfully."
+    MSG_201 = "Keynote created successfully."
+    MSG_400 = "400 BAD REQUEST"
+    MSG_404 = "404 Not Found: Keynote with id '99' was not found."
+    MSG_404_L = "404 Not Found: No keynotes found."
+    MSG_DEL = "Keynote deleted successfully."
+
     def test_get_keynote_200(self):
         with self.client as c:
             with self.app_context:
                 self.add_permissions_to_admin()
-                member = self.member_1.save_to_db()
+                keynote, member, _, _, _ = self.add_keynote_to_db(
+                    self.keynote_1,
+                    self.role_1,
+                    self.member_1,
+                    self.speaker_1,
+                    self.meeting_1,
+                )
                 login = self.login(c, member.email, TEST_MEMBER_1["password"])
-                self.speaker_1.save_to_db()
-                self.meeting_1.save_to_db()
-                keynote_id = self.keynote_1.save_to_db().id
 
                 results = c.get(
-                    f"/keynotes/{keynote_id}",
+                    f"/keynotes/{keynote.id}",
                     headers={
                         "Content-Type": "application/json",
                         "Authorization": f"Bearer {login['access_token']}",
@@ -34,21 +52,20 @@ class TestKeynoteResource(BaseTest):
 
                 data = json.loads(results.data)
 
+                self.assertEqual(data["keynote"]["title"], self.TITLE_1)
                 self.assertEqual(
-                    data["keynote"]["title"], "Uso de type hints en Python"
+                    data["keynote"]["description"], self.DESCRIPTION_1
                 )
                 self.assertEqual(
-                    data["keynote"]["description"],
-                    "Que son los type hints y por qué debemos usarlos",
+                    data["keynote"]["speaker_id"], self.SPEAKER_ID_1
                 )
-                self.assertEqual(data["keynote"]["speaker_id"], 1)
-                self.assertEqual(data["keynote"]["meeting_id"], 1)
+                self.assertEqual(data["keynote"]["meeting_id"], self.MEETING_1)
 
     def test_get_keynote_404(self):
         with self.client as c:
             with self.app_context:
                 self.add_permissions_to_admin()
-                member = self.member_1.save_to_db()
+                member, _ = self.add_member_to_db(self.member_1, self.role_1)
                 login = self.login(c, member.email, TEST_MEMBER_1["password"])
 
                 results = c.get(
@@ -61,19 +78,20 @@ class TestKeynoteResource(BaseTest):
 
                 data = json.loads(results.data)
 
-                self.assertEqual(
-                    data["error"],
-                    "404 Not Found: Keynote with id '99' was not found.",
-                )
+                self.assertEqual(data["error"], self.MSG_404)
 
     def test_post_keynote_201(self):
         with self.client as c:
             with self.app_context:
                 self.add_permissions_to_admin()
-                member = self.member_1.save_to_db()
+                keynote, member, _, _, _ = self.add_keynote_to_db(
+                    self.keynote_1,
+                    self.role_1,
+                    self.member_1,
+                    self.speaker_1,
+                    self.meeting_1,
+                )
                 login = self.login(c, member.email, TEST_MEMBER_1["password"])
-                self.speaker_1.save_to_db()
-                self.meeting_1.save_to_db()
 
                 results = c.post(
                     "/keynotes",
@@ -86,27 +104,28 @@ class TestKeynoteResource(BaseTest):
 
                 data = json.loads(results.data)
 
+                self.assertEqual(data["message"], self.MSG_201)
+                self.assertEqual(data["keynote"]["title"], self.TITLE_1)
                 self.assertEqual(
-                    data["message"], "Keynote created successfully."
+                    data["keynote"]["description"], self.DESCRIPTION_1
                 )
                 self.assertEqual(
-                    data["keynote"]["title"], "Uso de type hints en Python"
+                    data["keynote"]["speaker_id"], self.SPEAKER_ID_1
                 )
-                self.assertEqual(
-                    data["keynote"]["description"],
-                    "Que son los type hints y por qué debemos usarlos",
-                )
-                self.assertEqual(data["keynote"]["speaker_id"], 1)
-                self.assertEqual(data["keynote"]["meeting_id"], 1)
+                self.assertEqual(data["keynote"]["meeting_id"], self.MEETING_1)
 
     def test_post_keynote_400(self):
         with self.client as c:
             with self.app_context:
                 self.add_permissions_to_admin()
-                member = self.member_1.save_to_db()
+                _, member, _, _, _ = self.add_keynote_to_db(
+                    self.keynote_1,
+                    self.role_1,
+                    self.member_1,
+                    self.speaker_1,
+                    self.meeting_1,
+                )
                 login = self.login(c, member.email, TEST_MEMBER_1["password"])
-                self.speaker_1.save_to_db()
-                self.meeting_1.save_to_db()
 
                 results = c.post(
                     "/keynotes",
@@ -130,20 +149,23 @@ class TestKeynoteResource(BaseTest):
                     },
                 )
 
-                self.assertEqual(results.status, "400 BAD REQUEST")
+                self.assertEqual(results.status, self.MSG_400)
 
     def test_put_keynote_200(self):
         with self.client as c:
             with self.app_context:
                 self.add_permissions_to_admin()
-                member = self.member_1.save_to_db()
+                keynote, member, _, _, _ = self.add_keynote_to_db(
+                    self.keynote_1,
+                    self.role_1,
+                    self.member_1,
+                    self.speaker_1,
+                    self.meeting_1,
+                )
                 login = self.login(c, member.email, TEST_MEMBER_1["password"])
-                self.speaker_1.save_to_db()
-                self.meeting_1.save_to_db()
-                keynote_id = self.keynote_1.save_to_db().id
 
                 results = c.put(
-                    f"/keynotes/{keynote_id}",
+                    f"/keynotes/{keynote.id}",
                     data=json.dumps(TEST_KEYNOTE_2),
                     headers={
                         "Content-Type": "application/json",
@@ -153,44 +175,50 @@ class TestKeynoteResource(BaseTest):
 
                 data = json.loads(results.data)
 
+                self.assertEqual(data["message"], self.MSG_200)
+                self.assertEqual(data["keynote"]["title"], self.TITLE_2)
                 self.assertEqual(
-                    data["message"], "Keynote modified successfully."
+                    data["keynote"]["description"], self.DESCRIPTION_2
                 )
                 self.assertEqual(
-                    data["keynote"]["title"], "Creando pruebas con UnitTest"
+                    data["keynote"]["speaker_id"], self.SPEAKER_ID_2
                 )
-                self.assertEqual(
-                    data["keynote"]["description"],
-                    "Cómo usar UnitTest para control de calidad de la código",
-                )
-                self.assertEqual(data["keynote"]["speaker_id"], 1)
-                self.assertEqual(data["keynote"]["meeting_id"], 1)
+                self.assertEqual(data["keynote"]["meeting_id"], self.MEETING_2)
 
     def test_put_keynote_400(self):
         with self.client as c:
             with self.app_context:
                 self.add_permissions_to_admin()
-                member = self.member_1.save_to_db()
+                keynote, member, _, _, _ = self.add_keynote_to_db(
+                    self.keynote_1,
+                    self.role_1,
+                    self.member_1,
+                    self.speaker_1,
+                    self.meeting_1,
+                )
                 login = self.login(c, member.email, TEST_MEMBER_1["password"])
-                self.speaker_1.save_to_db()
-                self.meeting_1.save_to_db()
-                keynote_id = self.keynote_1.save_to_db().id
 
                 results = c.put(
-                    f"/keynotes/{keynote_id}",
+                    f"/keynotes/{keynote.id}",
                     headers={
                         "Content-Type": "application/json",
                         "Authorization": f"Bearer {login['access_token']}",
                     },
                 )
 
-                self.assertEqual(results.status, "400 BAD REQUEST")
+                self.assertEqual(results.status, self.MSG_400)
 
     def test_put_keynote_404(self):
         with self.client as c:
             with self.app_context:
                 self.add_permissions_to_admin()
-                member = self.member_1.save_to_db()
+                _, member, _, _, _ = self.add_keynote_to_db(
+                    self.keynote_1,
+                    self.role_1,
+                    self.member_1,
+                    self.speaker_1,
+                    self.meeting_1,
+                )
                 login = self.login(c, member.email, TEST_MEMBER_1["password"])
 
                 results = c.put(
@@ -206,21 +234,24 @@ class TestKeynoteResource(BaseTest):
 
                 self.assertEqual(
                     data["error"],
-                    "404 Not Found: Keynote with id '99' was not found.",
+                    self.MSG_404,
                 )
 
     def test_delete_keynote_200(self):
         with self.client as c:
             with self.app_context:
                 self.add_permissions_to_admin()
-                member = self.member_1.save_to_db()
+                keynote, member, _, _, _ = self.add_keynote_to_db(
+                    self.keynote_1,
+                    self.role_1,
+                    self.member_1,
+                    self.speaker_1,
+                    self.meeting_1,
+                )
                 login = self.login(c, member.email, TEST_MEMBER_1["password"])
-                self.speaker_1.save_to_db()
-                self.meeting_1.save_to_db()
-                keynote_id = self.keynote_1.save_to_db().id
 
                 results = c.delete(
-                    f"/keynotes/{keynote_id}",
+                    f"/keynotes/{keynote.id}",
                     headers={
                         "Content-Type": "application/json",
                         "Authorization": f"Bearer {login['access_token']}",
@@ -229,18 +260,20 @@ class TestKeynoteResource(BaseTest):
 
                 data = json.loads(results.data)
 
-                self.assertEqual(
-                    data["keynote"]["title"], "Uso de type hints en Python"
-                )
-                self.assertEqual(
-                    data["message"], "Keynote deleted successfully."
-                )
+                self.assertEqual(data["keynote"]["title"], self.TITLE_1)
+                self.assertEqual(data["message"], self.MSG_DEL)
 
     def test_delete_keynote_404(self):
         with self.client as c:
             with self.app_context:
                 self.add_permissions_to_admin()
-                member = self.member_1.save_to_db()
+                _, member, _, _, _ = self.add_keynote_to_db(
+                    self.keynote_1,
+                    self.role_1,
+                    self.member_1,
+                    self.speaker_1,
+                    self.meeting_1,
+                )
                 login = self.login(c, member.email, TEST_MEMBER_1["password"])
 
                 results = c.delete(
@@ -253,21 +286,21 @@ class TestKeynoteResource(BaseTest):
 
                 data = json.loads(results.data)
 
-                self.assertEqual(
-                    data["error"],
-                    "404 Not Found: Keynote with id '99' was not found.",
-                )
+                self.assertEqual(data["error"], self.MSG_404)
 
     def test_get_keynotes_200(self):
         with self.client as c:
             with self.app_context:
                 self.add_permissions_to_admin()
-                member = self.member_1.save_to_db()
+                keynote_1, member, _, _, _ = self.add_keynote_to_db(
+                    self.keynote_1,
+                    self.role_1,
+                    self.member_1,
+                    self.speaker_1,
+                    self.meeting_1,
+                )
+                keynote_2 = self.keynote_2.save_to_db()
                 login = self.login(c, member.email, TEST_MEMBER_1["password"])
-                self.speaker_1.save_to_db()
-                self.meeting_1.save_to_db()
-                keynote_1_id = self.keynote_1.save_to_db().id
-                keynote_2_id = self.keynote_2.save_to_db().id
 
                 results = c.get(
                     f"/keynotes",
@@ -280,14 +313,14 @@ class TestKeynoteResource(BaseTest):
                 data = json.loads(results.data)
 
                 self.assertEqual(len(data["keynotes"]), 2)
-                self.assertEqual(data["keynotes"][0]["id"], keynote_1_id)
-                self.assertEqual(data["keynotes"][1]["id"], keynote_2_id)
+                self.assertEqual(data["keynotes"][0]["id"], keynote_1.id)
+                self.assertEqual(data["keynotes"][1]["id"], keynote_2.id)
 
     def test_get_keynotes_404(self):
         with self.client as c:
             with self.app_context:
                 self.add_permissions_to_admin()
-                member = self.member_1.save_to_db()
+                member, _ = self.add_member_to_db(self.member_1, self.role_1)
                 login = self.login(c, member.email, TEST_MEMBER_1["password"])
 
                 results = c.get(
@@ -300,10 +333,7 @@ class TestKeynoteResource(BaseTest):
 
                 data = json.loads(results.data)
 
-                self.assertEqual(
-                    data["error"],
-                    "404 Not Found: No keynotes found.",
-                )
+                self.assertEqual(data["error"], self.MSG_404_L)
 
 
 if __name__ == "__main__":  # pragma: no cover

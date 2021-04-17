@@ -118,13 +118,7 @@ class TestKeynoteResource(BaseTest):
         with self.client as c:
             with self.app_context:
                 self.add_permissions_to_admin()
-                _, member, _, _, _ = self.add_keynote_to_db(
-                    self.keynote_1,
-                    self.role_1,
-                    self.member_1,
-                    self.speaker_1,
-                    self.meeting_1,
-                )
+                member, _ = self.add_member_to_db(self.member_1, self.role_1)
                 login = self.login(c, member.email, TEST_MEMBER_1["password"])
 
                 results = c.post(
@@ -212,13 +206,7 @@ class TestKeynoteResource(BaseTest):
         with self.client as c:
             with self.app_context:
                 self.add_permissions_to_admin()
-                _, member, _, _, _ = self.add_keynote_to_db(
-                    self.keynote_1,
-                    self.role_1,
-                    self.member_1,
-                    self.speaker_1,
-                    self.meeting_1,
-                )
+                member, _ = self.add_member_to_db(self.member_1, self.role_1)
                 login = self.login(c, member.email, TEST_MEMBER_1["password"])
 
                 results = c.put(
@@ -267,13 +255,7 @@ class TestKeynoteResource(BaseTest):
         with self.client as c:
             with self.app_context:
                 self.add_permissions_to_admin()
-                _, member, _, _, _ = self.add_keynote_to_db(
-                    self.keynote_1,
-                    self.role_1,
-                    self.member_1,
-                    self.speaker_1,
-                    self.meeting_1,
-                )
+                member, _ = self.add_member_to_db(self.member_1, self.role_1)
                 login = self.login(c, member.email, TEST_MEMBER_1["password"])
 
                 results = c.delete(

@@ -14,16 +14,34 @@ from tests.model_test_data import (
 class TestMeetingResource(BaseTest):
     """Test all endpoints for the meeting resource"""
 
+    DATETIME_1 = TEST_MEETING_1["datetime"].replace(" ", "T")
+    TYPE_1 = TEST_MEETING_1["type"]
+    LOCATION_1 = TEST_MEETING_1["location"]
+    DESCRIPTION_1 = TEST_MEETING_1["description"]
+    CREATOR_ID_1 = TEST_MEETING_1["creator_id"]
+    DATETIME_2 = TEST_MEETING_2["datetime"].replace(" ", "T")
+    TYPE_2 = TEST_MEETING_2["type"]
+    LOCATION_2 = TEST_MEETING_2["location"]
+    DESCRIPTION_2 = TEST_MEETING_2["description"]
+    CREATOR_ID_2 = TEST_MEETING_2["creator_id"]
+    MSG_200 = "Meeting modified successfully."
+    MSG_201 = "Meeting created successfully."
+    MSG_400 = "400 BAD REQUEST"
+    MSG_404 = "404 Not Found: Meeting with id '99' was not found."
+    MSG_404_L = "404 Not Found: No meetings found."
+    MSG_DEL = "Meeting deleted successfully."
+
     def test_get_meeting_200(self):
         with self.client as c:
             with self.app_context:
                 self.add_permissions_to_admin()
-                member = self.member_1.save_to_db()
+                meeting, member, _ = self.add_meeting_to_db(
+                    self.meeting_1, self.member_1, self.role_1
+                )
                 login = self.login(c, member.email, TEST_MEMBER_1["password"])
-                meeting_id = self.meeting_1.save_to_db().id
 
                 results = c.get(
-                    f"/meetings/{meeting_id}",
+                    f"/meetings/{meeting.id}",
                     headers={
                         "Content-Type": "application/json",
                         "Authorization": f"Bearer {login['access_token']}",
@@ -32,25 +50,21 @@ class TestMeetingResource(BaseTest):
 
                 data = json.loads(results.data)
 
+                self.assertEqual(data["meeting"]["datetime"], self.DATETIME_1)
+                self.assertEqual(data["meeting"]["type"], self.TYPE_1)
+                self.assertEqual(data["meeting"]["location"], self.LOCATION_1)
                 self.assertEqual(
-                    data["meeting"]["datetime"], "2021-03-31T20:00:00"
-                )
-                self.assertEqual(data["meeting"]["type"], "online")
-                self.assertEqual(
-                    data["meeting"]["location"],
-                    "https://www.meetup.com/Python-Panama/events/276661559",
+                    data["meeting"]["description"], self.DESCRIPTION_1
                 )
                 self.assertEqual(
-                    data["meeting"]["description"],
-                    "Python Meetup Vol. 25",
+                    data["meeting"]["creator_id"], self.CREATOR_ID_1
                 )
-                self.assertEqual(data["meeting"]["creator_id"], 1)
 
     def test_get_meeting_404(self):
         with self.client as c:
             with self.app_context:
                 self.add_permissions_to_admin()
-                member = self.member_1.save_to_db()
+                member, _ = self.add_member_to_db(self.member_1, self.role_1)
                 login = self.login(c, member.email, TEST_MEMBER_1["password"])
                 results = c.get(
                     f"/meetings/99",
@@ -62,21 +76,20 @@ class TestMeetingResource(BaseTest):
 
                 data = json.loads(results.data)
 
-                self.assertEqual(
-                    data["error"],
-                    "404 Not Found: Meeting with id '99' was not found.",
-                )
+                self.assertEqual(data["error"], self.MSG_404)
 
     def test_post_meeting_201(self):
         with self.client as c:
             with self.app_context:
                 self.add_permissions_to_admin()
-                member = self.member_1.save_to_db()
+                meeting, member, _ = self.add_meeting_to_db(
+                    self.meeting_1, self.member_1, self.role_1
+                )
                 login = self.login(c, member.email, TEST_MEMBER_1["password"])
 
                 results = c.post(
                     "/meetings",
-                    data=json.dumps(TEST_MEETING_1),
+                    data=json.dumps(TEST_MEETING_2),
                     headers={
                         "Content-Type": "application/json",
                         "Authorization": f"Bearer {login['access_token']}",
@@ -85,28 +98,25 @@ class TestMeetingResource(BaseTest):
 
                 data = json.loads(results.data)
 
-                self.assertEqual(
-                    data["message"], "Meeting created successfully."
-                )
-                self.assertEqual(
-                    data["meeting"]["datetime"], "2021-03-31T20:00:00"
-                )
-                self.assertEqual(data["meeting"]["type"], "online")
-                self.assertEqual(
-                    data["meeting"]["location"],
-                    "https://www.meetup.com/Python-Panama/events/276661559",
-                )
+                self.assertEqual(data["message"], self.MSG_201)
+                self.assertEqual(data["meeting"]["datetime"], self.DATETIME_2)
+                self.assertEqual(data["meeting"]["type"], self.TYPE_2)
+                self.assertEqual(data["meeting"]["location"], self.LOCATION_2)
                 self.assertEqual(
                     data["meeting"]["description"],
-                    "Python Meetup Vol. 25",
+                    self.DESCRIPTION_2,
                 )
-                self.assertEqual(data["meeting"]["creator_id"], 1)
+                self.assertEqual(
+                    data["meeting"]["creator_id"], self.CREATOR_ID_2
+                )
 
     def test_post_meeting_400(self):
         with self.client as c:
             with self.app_context:
                 self.add_permissions_to_admin()
-                member = self.member_1.save_to_db()
+                meeting, member, _ = self.add_meeting_to_db(
+                    self.meeting_1, self.member_1, self.role_1
+                )
                 login = self.login(c, member.email, TEST_MEMBER_1["password"])
 
                 results = c.post(
@@ -133,18 +143,19 @@ class TestMeetingResource(BaseTest):
                     },
                 )
 
-                self.assertEqual(results.status, "400 BAD REQUEST")
+                self.assertEqual(results.status, self.MSG_400)
 
     def test_put_meeting_200(self):
         with self.client as c:
             with self.app_context:
                 self.add_permissions_to_admin()
-                member = self.member_1.save_to_db()
+                meeting, member, _ = self.add_meeting_to_db(
+                    self.meeting_1, self.member_1, self.role_1
+                )
                 login = self.login(c, member.email, TEST_MEMBER_1["password"])
-                meeting_id = self.meeting_1.save_to_db().id
 
                 results = c.put(
-                    f"/meetings/{meeting_id}",
+                    f"/meetings/{meeting.id}",
                     data=json.dumps(TEST_MEETING_2),
                     headers={
                         "Content-Type": "application/json",
@@ -154,46 +165,41 @@ class TestMeetingResource(BaseTest):
 
                 data = json.loads(results.data)
 
+                self.assertEqual(data["message"], self.MSG_200)
+                self.assertEqual(data["meeting"]["datetime"], self.DATETIME_2)
+                self.assertEqual(data["meeting"]["type"], self.TYPE_2)
+                self.assertEqual(data["meeting"]["location"], self.LOCATION_2)
                 self.assertEqual(
-                    data["message"], "Meeting modified successfully."
+                    data["meeting"]["description"], self.DESCRIPTION_2
                 )
                 self.assertEqual(
-                    data["meeting"]["datetime"], "2021-04-15T20:00:00"
+                    data["meeting"]["creator_id"], self.CREATOR_ID_2
                 )
-                self.assertEqual(data["meeting"]["type"], "online")
-                self.assertEqual(
-                    data["meeting"]["location"],
-                    "https://www.meetup.com/Python-Panama/events/276661571",
-                )
-                self.assertEqual(
-                    data["meeting"]["description"],
-                    "Python Meetup Vol. 26",
-                )
-                self.assertEqual(data["meeting"]["creator_id"], 1)
 
     def test_put_meeting_400(self):
         with self.client as c:
             with self.app_context:
                 self.add_permissions_to_admin()
-                member = self.member_1.save_to_db()
+                meeting, member, _ = self.add_meeting_to_db(
+                    self.meeting_1, self.member_1, self.role_1
+                )
                 login = self.login(c, member.email, TEST_MEMBER_1["password"])
-                meeting_id = self.meeting_1.save_to_db().id
 
                 results = c.put(
-                    f"/meetings/{meeting_id}",
+                    f"/meetings/{meeting.id}",
                     headers={
                         "Content-Type": "application/json",
                         "Authorization": f"Bearer {login['access_token']}",
                     },
                 )
 
-                self.assertEqual(results.status, "400 BAD REQUEST")
+                self.assertEqual(results.status, self.MSG_400)
 
     def test_put_meeting_404(self):
         with self.client as c:
             with self.app_context:
                 self.add_permissions_to_admin()
-                member = self.member_1.save_to_db()
+                member, _ = self.add_member_to_db(self.member_1, self.role_1)
                 login = self.login(c, member.email, TEST_MEMBER_1["password"])
 
                 results = c.put(
@@ -207,21 +213,19 @@ class TestMeetingResource(BaseTest):
 
                 data = json.loads(results.data)
 
-                self.assertEqual(
-                    data["error"],
-                    "404 Not Found: Meeting with id '99' was not found.",
-                )
+                self.assertEqual(data["error"], self.MSG_404)
 
     def test_delete_meeting_200(self):
         with self.client as c:
             with self.app_context:
                 self.add_permissions_to_admin()
-                member = self.member_1.save_to_db()
+                meeting, member, _ = self.add_meeting_to_db(
+                    self.meeting_1, self.member_1, self.role_1
+                )
                 login = self.login(c, member.email, TEST_MEMBER_1["password"])
-                meeting_id = self.meeting_1.save_to_db().id
 
                 results = c.delete(
-                    f"/meetings/{meeting_id}",
+                    f"/meetings/{meeting.id}",
                     headers={
                         "Content-Type": "application/json",
                         "Authorization": f"Bearer {login['access_token']}",
@@ -231,17 +235,15 @@ class TestMeetingResource(BaseTest):
                 data = json.loads(results.data)
 
                 self.assertEqual(
-                    data["meeting"]["description"], "Python Meetup Vol. 25"
+                    data["meeting"]["description"], self.DESCRIPTION_1
                 )
-                self.assertEqual(
-                    data["message"], "Meeting deleted successfully."
-                )
+                self.assertEqual(data["message"], self.MSG_DEL)
 
     def test_delete_meeting_404(self):
         with self.client as c:
             with self.app_context:
                 self.add_permissions_to_admin()
-                member = self.member_1.save_to_db()
+                member, _ = self.add_member_to_db(self.member_1, self.role_1)
                 login = self.login(c, member.email, TEST_MEMBER_1["password"])
 
                 results = c.delete(
@@ -254,22 +256,17 @@ class TestMeetingResource(BaseTest):
 
                 data = json.loads(results.data)
 
-                self.assertEqual(
-                    data["error"],
-                    "404 Not Found: Meeting with id '99' was not found.",
-                )
+                self.assertEqual(data["error"], self.MSG_404)
 
     def test_get_meetings_200(self):
         with self.client as c:
             with self.app_context:
                 self.add_permissions_to_admin()
-                member = self.member_1.save_to_db()
+                meeting_1, member, _ = self.add_meeting_to_db(
+                    self.meeting_1, self.member_1, self.role_1
+                )
+                meeting_2 = self.meeting_2.save_to_db()
                 login = self.login(c, member.email, TEST_MEMBER_1["password"])
-
-                self.role_1.save_to_db()
-                self.member_1.save_to_db()
-                meeting_1_id = self.meeting_1.save_to_db().id
-                meeting_2_id = self.meeting_2.save_to_db().id
 
                 results = c.get(
                     f"/meetings",
@@ -282,14 +279,14 @@ class TestMeetingResource(BaseTest):
                 data = json.loads(results.data)
 
                 self.assertEqual(len(data["meetings"]), 2)
-                self.assertEqual(data["meetings"][0]["id"], meeting_2_id)
-                self.assertEqual(data["meetings"][1]["id"], meeting_1_id)
+                self.assertEqual(data["meetings"][0]["id"], meeting_2.id)
+                self.assertEqual(data["meetings"][1]["id"], meeting_1.id)
 
     def test_get_meetings_404(self):
         with self.client as c:
             with self.app_context:
                 self.add_permissions_to_admin()
-                member = self.member_1.save_to_db()
+                member, _ = self.add_member_to_db(self.member_1, self.role_1)
                 login = self.login(c, member.email, TEST_MEMBER_1["password"])
 
                 results = c.get(
@@ -302,10 +299,7 @@ class TestMeetingResource(BaseTest):
 
                 data = json.loads(results.data)
 
-                self.assertEqual(
-                    data["error"],
-                    "404 Not Found: No meetings found.",
-                )
+                self.assertEqual(data["error"], self.MSG_404_L)
 
 
 if __name__ == "__main__":  # pragma: no cover

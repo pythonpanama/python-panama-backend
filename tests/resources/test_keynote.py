@@ -95,7 +95,7 @@ class TestKeynoteResource(BaseTest):
 
                 results = c.post(
                     "/keynotes",
-                    data=json.dumps(TEST_KEYNOTE_1),
+                    data=json.dumps(TEST_KEYNOTE_2),
                     headers={
                         "Content-Type": "application/json",
                         "Authorization": f"Bearer {login['access_token']}",
@@ -105,14 +105,14 @@ class TestKeynoteResource(BaseTest):
                 data = json.loads(results.data)
 
                 self.assertEqual(data["message"], self.MSG_201)
-                self.assertEqual(data["keynote"]["title"], self.TITLE_1)
+                self.assertEqual(data["keynote"]["title"], self.TITLE_2)
                 self.assertEqual(
-                    data["keynote"]["description"], self.DESCRIPTION_1
+                    data["keynote"]["description"], self.DESCRIPTION_2
                 )
                 self.assertEqual(
-                    data["keynote"]["speaker_id"], self.SPEAKER_ID_1
+                    data["keynote"]["speaker_id"], self.SPEAKER_ID_2
                 )
-                self.assertEqual(data["keynote"]["meeting_id"], self.MEETING_1)
+                self.assertEqual(data["keynote"]["meeting_id"], self.MEETING_2)
 
     def test_post_keynote_400(self):
         with self.client as c:

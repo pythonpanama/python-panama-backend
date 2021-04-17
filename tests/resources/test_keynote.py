@@ -17,11 +17,11 @@ class TestKeynoteResource(BaseTest):
     TITLE_1 = TEST_KEYNOTE_1["title"]
     DESCRIPTION_1 = TEST_KEYNOTE_1["description"]
     SPEAKER_ID_1 = TEST_KEYNOTE_1["speaker_id"]
-    MEETING_1 = TEST_KEYNOTE_2["meeting_id"]
+    MEETING_ID_1 = TEST_KEYNOTE_2["meeting_id"]
     TITLE_2 = TEST_KEYNOTE_2["title"]
     DESCRIPTION_2 = TEST_KEYNOTE_2["description"]
     SPEAKER_ID_2 = TEST_KEYNOTE_2["speaker_id"]
-    MEETING_2 = TEST_KEYNOTE_2["meeting_id"]
+    MEETING_ID_2 = TEST_KEYNOTE_2["meeting_id"]
     MSG_200 = "Keynote modified successfully."
     MSG_201 = "Keynote created successfully."
     MSG_400 = "400 BAD REQUEST"
@@ -59,7 +59,9 @@ class TestKeynoteResource(BaseTest):
                 self.assertEqual(
                     data["keynote"]["speaker_id"], self.SPEAKER_ID_1
                 )
-                self.assertEqual(data["keynote"]["meeting_id"], self.MEETING_1)
+                self.assertEqual(
+                    data["keynote"]["meeting_id"], self.MEETING_ID_1
+                )
 
     def test_get_keynote_404(self):
         with self.client as c:
@@ -112,7 +114,9 @@ class TestKeynoteResource(BaseTest):
                 self.assertEqual(
                     data["keynote"]["speaker_id"], self.SPEAKER_ID_2
                 )
-                self.assertEqual(data["keynote"]["meeting_id"], self.MEETING_2)
+                self.assertEqual(
+                    data["keynote"]["meeting_id"], self.MEETING_ID_2
+                )
 
     def test_post_keynote_400(self):
         with self.client as c:
@@ -177,7 +181,9 @@ class TestKeynoteResource(BaseTest):
                 self.assertEqual(
                     data["keynote"]["speaker_id"], self.SPEAKER_ID_2
                 )
-                self.assertEqual(data["keynote"]["meeting_id"], self.MEETING_2)
+                self.assertEqual(
+                    data["keynote"]["meeting_id"], self.MEETING_ID_2
+                )
 
     def test_put_keynote_400(self):
         with self.client as c:

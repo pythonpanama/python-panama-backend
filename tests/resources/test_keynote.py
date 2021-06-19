@@ -26,8 +26,9 @@ class TestKeynoteResource(BaseTest):
     MSG_201 = "Keynote created successfully."
     MSG_400 = "400 BAD REQUEST"
     MSG_404 = "404 Not Found: Keynote with id '99' was not found."
-    MSG_404_M = "404 Not Found: Keynotes with meeting_id '99' was not found."
     MSG_404_L = "404 Not Found: No keynotes found."
+    MSG_404_M = "404 Not Found: Keynotes with meeting_id '99' was not found."
+    MSG_404_S = "404 Not Found: Keynotes with speaker_id '99' was not found."
     MSG_DEL = "Keynote deleted successfully."
 
     def test_get_keynote_200(self):
@@ -132,8 +133,60 @@ class TestKeynoteResource(BaseTest):
                 )
 
                 data = json.loads(results.data)
-                print(data)
+
                 self.assertEqual(data["error"], self.MSG_404_M)
+
+    def test_get_keynotes_by_speaker_id_200(self):
+        with self.client as c:
+            with self.app_context:
+                self.add_permissions_to_admin()
+                keynote, member, _, speaker, _ = self.add_keynote_to_db(
+                    self.keynote_1,
+                    self.role_1,
+                    self.member_1,
+                    self.speaker_1,
+                    self.meeting_1,
+                )
+                login = self.login(c, member.email, TEST_MEMBER_1["password"])
+
+                results = c.get(
+                    f"/keynotes/speaker/{speaker.id}",
+                    headers={
+                        "Content-Type": "application/json",
+                        "Authorization": f"Bearer {login['access_token']}",
+                    },
+                )
+
+                data = json.loads(results.data)
+                print(data)
+                self.assertEqual(len(data["keynotes"]), 1)
+                self.assertEqual(data["keynotes"][0]["title"], self.TITLE_1)
+                self.assertEqual(
+                    data["keynotes"][0]["description"], self.DESCRIPTION_1
+                )
+                self.assertEqual(
+                    data["keynotes"][0]["speaker_id"], speaker.id
+                )
+                self.assertEqual(data["keynotes"][0]["meeting_id"], self.MEETING_ID_1)
+
+    def test_get_keynotes_by_speaker_id_404(self):
+        with self.client as c:
+            with self.app_context:
+                self.add_permissions_to_admin()
+                member, _ = self.add_member_to_db(self.member_1, self.role_1)
+                login = self.login(c, member.email, TEST_MEMBER_1["password"])
+
+                results = c.get(
+                    f"/keynotes/speaker/99",
+                    headers={
+                        "Content-Type": "application/json",
+                        "Authorization": f"Bearer {login['access_token']}",
+                    },
+                )
+
+                data = json.loads(results.data)
+
+                self.assertEqual(data["error"], self.MSG_404_S)
 
     def test_post_keynote_201(self):
         with self.client as c:

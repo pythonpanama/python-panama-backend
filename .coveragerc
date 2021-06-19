@@ -1,4 +1,36 @@
 [run]
+include  =
+    models/*
+    resources/*
+    schemas/*
+    app.py
+    auth.py
+    config.py
+    custom_types.py
+    db.py
+    ma.py
+    run.py
+
 omit =
     venv/**/*
-    run.py
+    tests/**/*
+    */__init__.py
+    */__pycache__
+
+[paths]
+source =
+    models/*
+    resources/*
+    schemas/*
+
+[report]
+exclude_lines =
+    pragma: no cover
+    if __name__== .__main__.:
+    app.run()
+
+show_missing = true
+precision = 2
+
+[html]
+directory = coverage_html_report

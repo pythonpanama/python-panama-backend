@@ -13,10 +13,6 @@ class Config:
         os.environ.get("SQLALCHEMY_DATABASE_URI")
         or "postgresql://ppty:pass@localhost:5432/ppty_dev"
     )
-    PROPAGATE_EXCEPTIONS = os.environ.get("PROPAGATE_EXCEPTIONS") or True
-    POPULATE_DB = os.environ.get("POPULATE_DB") or True
-    TESTING = os.environ.get("TESTING") or False
-    DEBUG = os.environ.get("DEBUG") or True
 
     @staticmethod
     def init_app(app):
@@ -26,16 +22,20 @@ class Config:
 class DevelopmentConfig(Config):
     DEBUG = True
     TESTING = False
+    PROPAGATE_EXCEPTIONS = True
 
 
 class TestingConfig(Config):
     DEBUG = False
     TESTING = True
+    PROPAGATE_EXCEPTIONS = True
     SQLALCHEMY_DATABASE_URI = "postgresql://ppty:pass@localhost:5432/ppty_test"
 
 
 class ProductionConfig(Config):
-    pass
+    DEBUG = False
+    TESTING = False
+    PROPAGATE_EXCEPTIONS = False
 
 
 config = {

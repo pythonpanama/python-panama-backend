@@ -73,6 +73,8 @@ class TestKeynote(BaseTest):
             )
 
             keynotes = KeynoteModel.find_by_speaker_id(speaker.id)
+            print(keynote.meeting.id)
+            print(keynote.speaker.id)
 
             self.assertEqual(keynotes[0].id, keynote.id)
 

@@ -38,6 +38,42 @@ def get_keynote(keynote_id: int) -> ApiResponse:
     )
 
 
+@keynotes.route("/meeting/<int:meeting_id>")
+@jwt_required()
+@requires_auth("get:member")
+def get_keynotes_for_meeting(meeting_id: int) -> ApiResponse:
+    keynote_list = KeynoteModel.find_by_meeting_id(meeting_id)
+
+    if not keynote_list:
+        abort(
+            404,
+            description=ERROR_404.format("Keynotes", "meeting_id", meeting_id),
+        )
+
+    return (
+        jsonify({"keynotes": keynote_list_schema.dump(keynote_list)}),
+        200,
+    )
+
+
+@keynotes.route("/speaker/<int:speaker_id>")
+@jwt_required()
+@requires_auth("get:member")
+def get_keynotes_for_speaker(speaker_id: int) -> ApiResponse:
+    keynote_list = KeynoteModel.find_by_speaker_id(speaker_id)
+
+    if not keynote_list:
+        abort(
+            404,
+            description=ERROR_404.format("Keynotes", "speaker_id", speaker_id),
+        )
+
+    return (
+        jsonify({"keynotes": keynote_list_schema.dump(keynote_list)}),
+        200,
+    )
+
+
 @keynotes.route("", methods=["POST"])
 @jwt_required()
 @requires_auth("post:keynote")

@@ -151,8 +151,10 @@ class BaseTest(TestCase):
         member = member.save_to_db()
         return member, role
 
-    def add_permission_to_db(self, permission):
-        pass
+    def add_permission_to_db(
+        self, permission: PermissionModel
+    ) -> PermissionModel:
+        return permission.save_to_db()
 
     def add_role_to_db(self, role: RoleModel) -> RoleModel:
         return role.save_to_db()

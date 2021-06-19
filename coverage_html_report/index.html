@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <title>Coverage report</title>
+    <link rel="icon" sizes="32x32" href="favicon_32.png">
+    <link rel="stylesheet" href="style.css" type="text/css">
+    <script type="text/javascript" src="jquery.min.js"></script>
+    <script type="text/javascript" src="jquery.ba-throttle-debounce.min.js"></script>
+    <script type="text/javascript" src="jquery.tablesorter.min.js"></script>
+    <script type="text/javascript" src="jquery.hotkeys.js"></script>
+    <script type="text/javascript" src="coverage_html.js"></script>
+    <script type="text/javascript">
+        jQuery(document).ready(coverage.index_ready);
+    </script>
+</head>
+<body class="indexfile">
+<div id="header">
+    <div class="content">
+        <h1>Coverage report:
+            <span class="pc_cov">99.34%</span>
+        </h1>
+        <img id="keyboard_icon" src="keybd_closed.png" alt="Show keyboard shortcuts" />
+        <form id="filter_container">
+            <input id="filter" type="text" value="" placeholder="filter..." />
+        </form>
+    </div>
+</div>
+<div class="help_panel">
+    <img id="panel_icon" src="keybd_open.png" alt="Hide keyboard shortcuts" />
+    <p class="legend">Hot-keys on this page</p>
+    <div>
+    <p class="keyhelp">
+        <span class="key">n</span>
+        <span class="key">s</span>
+        <span class="key">m</span>
+        <span class="key">x</span>
+        <span class="key">c</span> &nbsp; change column sorting
+    </p>
+    </div>
+</div>
+<div id="index">
+    <table class="index">
+        <thead>
+            <tr class="tablehead" title="Click to sort">
+                <th class="name left headerSortDown shortkey_n">Module</th>
+                <th class="shortkey_s">statements</th>
+                <th class="shortkey_m">missing</th>
+                <th class="shortkey_x">excluded</th>
+                <th class="right shortkey_c">coverage</th>
+            </tr>
+        </thead>
+        <tfoot>
+            <tr class="total">
+                <td class="name left">Total</td>
+                <td>912</td>
+                <td>6</td>
+                <td>6</td>
+                <td class="right" data-ratio="906 912">99.34%</td>
+            </tr>
+        </tfoot>
+        <tbody>
+            <tr class="file">
+                <td class="name left"><a href="app_py.html">app.py</a></td>
+                <td>36</td>
+                <td>0</td>
+                <td>0</td>
+                <td class="right" data-ratio="36 36">100.00%</td>
+            </tr>
+            <tr class="file">
+                <td class="name left"><a href="auth_py.html">auth.py</a></td>
+                <td>46</td>
+                <td>6</td>
+                <td>0</td>
+                <td class="right" data-ratio="40 46">86.96%</td>
+            </tr>
+            <tr class="file">
+                <td class="name left"><a href="config_py.html">config.py</a></td>
+                <td>25</td>
+                <td>0</td>
+                <td>0</td>
+                <td class="right" data-ratio="25 25">100.00%</td>
+            </tr>
+            <tr class="file">
+                <td class="name left"><a href="custom_types_py.html">custom_types.py</a></td>
+                <td>5</td>
+                <td>0</td>
+                <td>0</td>
+                <td class="right" data-ratio="5 5">100.00%</td>
+            </tr>
+            <tr class="file">
+                <td class="name left"><a href="db_py.html">db.py</a></td>
+                <td>2</td>
+                <td>0</td>
+                <td>0</td>
+                <td class="right" data-ratio="2 2">100.00%</td>
+            </tr>
+            <tr class="file">
+                <td class="name left"><a href="ma_py.html">ma.py</a></td>
+                <td>2</td>
+                <td>0</td>
+                <td>0</td>
+                <td class="right" data-ratio="2 2">100.00%</td>
+            </tr>
+            <tr class="file">
+                <td class="name left"><a href="models_keynote_py.html">models/keynote.py</a></td>
+                <td>27</td>
+                <td>0</td>
+                <td>0</td>
+                <td class="right" data-ratio="27 27">100.00%</td>
+            </tr>
+            <tr class="file">
+                <td class="name left"><a href="models_meeting_py.html">models/meeting.py</a></td>
+                <td>25</td>
+                <td>0</td>
+                <td>0</td>
+                <td class="right" data-ratio="25 25">100.00%</td>
+            </tr>
+            <tr class="file">
+                <td class="name left"><a href="models_member_py.html">models/member.py</a></td>
+                <td>38</td>
+                <td>0</td>
+                <td>0</td>
+                <td class="right" data-ratio="38 38">100.00%</td>
+            </tr>
+            <tr class="file">
+                <td class="name left"><a href="models_model_mixin_py.html">models/model_mixin.py</a></td>
+                <td>13</td>
+                <td>0</td>
+                <td>6</td>
+                <td class="right" data-ratio="13 13">100.00%</td>
+            </tr>
+            <tr class="file">
+                <td class="name left"><a href="models_permission_py.html">models/permission.py</a></td>
+                <td>16</td>
+                <td>0</td>
+                <td>0</td>
+                <td class="right" data-ratio="16 16">100.00%</td>
+            </tr>
+            <tr class="file">
+                <td class="name left"><a href="models_project_py.html">models/project.py</a></td>
+                <td>32</td>
+                <td>0</td>
+                <td>0</td>
+                <td class="right" data-ratio="32 32">100.00%</td>
+            </tr>
+            <tr class="file">
+                <td class="name left"><a href="models_role_py.html">models/role.py</a></td>
+                <td>19</td>
+                <td>0</td>
+                <td>0</td>
+                <td class="right" data-ratio="19 19">100.00%</td>
+            </tr>
+            <tr class="file">
+                <td class="name left"><a href="models_speaker_py.html">models/speaker.py</a></td>
+                <td>23</td>
+                <td>0</td>
+                <td>0</td>
+                <td class="right" data-ratio="23 23">100.00%</td>
+            </tr>
+            <tr class="file">
+                <td class="name left"><a href="models_token_py.html">models/token.py</a></td>
+                <td>29</td>
+                <td>0</td>
+                <td>0</td>
+                <td class="right" data-ratio="29 29">100.00%</td>
+            </tr>
+            <tr class="file">
+                <td class="name left"><a href="resources_keynote_py.html">resources/keynote.py</a></td>
+                <td>73</td>
+                <td>0</td>
+                <td>0</td>
+                <td class="right" data-ratio="73 73">100.00%</td>
+            </tr>
+            <tr class="file">
+                <td class="name left"><a href="resources_meeting_py.html">resources/meeting.py</a></td>
+                <td>58</td>
+                <td>0</td>
+                <td>0</td>
+                <td class="right" data-ratio="58 58">100.00%</td>
+            </tr>
+            <tr class="file">
+                <td class="name left"><a href="resources_member_py.html">resources/member.py</a></td>
+                <td>111</td>
+                <td>0</td>
+                <td>0</td>
+                <td class="right" data-ratio="111 111">100.00%</td>
+            </tr>
+            <tr class="file">
+                <td class="name left"><a href="resources_message_py.html">resources/message.py</a></td>
+                <td>13</td>
+                <td>0</td>
+                <td>0</td>
+                <td class="right" data-ratio="13 13">100.00%</td>
+            </tr>
+            <tr class="file">
+                <td class="name left"><a href="resources_permission_py.html">resources/permission.py</a></td>
+                <td>57</td>
+                <td>0</td>
+                <td>0</td>
+                <td class="right" data-ratio="57 57">100.00%</td>
+            </tr>
+            <tr class="file">
+                <td class="name left"><a href="resources_project_py.html">resources/project.py</a></td>
+                <td>61</td>
+                <td>0</td>
+                <td>0</td>
+                <td class="right" data-ratio="61 61">100.00%</td>
+            </tr>
+            <tr class="file">
+                <td class="name left"><a href="resources_role_py.html">resources/role.py</a></td>
+                <td>57</td>
+                <td>0</td>
+                <td>0</td>
+                <td class="right" data-ratio="57 57">100.00%</td>
+            </tr>
+            <tr class="file">
+                <td class="name left"><a href="resources_speaker_py.html">resources/speaker.py</a></td>
+                <td>61</td>
+                <td>0</td>
+                <td>0</td>
+                <td class="right" data-ratio="61 61">100.00%</td>
+            </tr>
+            <tr class="file">
+                <td class="name left"><a href="schemas_keynote_py.html">schemas/keynote.py</a></td>
+                <td>8</td>
+                <td>0</td>
+                <td>0</td>
+                <td class="right" data-ratio="8 8">100.00%</td>
+            </tr>
+            <tr class="file">
+                <td class="name left"><a href="schemas_meeting_py.html">schemas/meeting.py</a></td>
+                <td>9</td>
+                <td>0</td>
+                <td>0</td>
+                <td class="right" data-ratio="9 9">100.00%</td>
+            </tr>
+            <tr class="file">
+                <td class="name left"><a href="schemas_member_py.html">schemas/member.py</a></td>
+                <td>19</td>
+                <td>0</td>
+                <td>0</td>
+                <td class="right" data-ratio="19 19">100.00%</td>
+            </tr>
+            <tr class="file">
+                <td class="name left"><a href="schemas_permission_py.html">schemas/permission.py</a></td>
+                <td>9</td>
+                <td>0</td>
+                <td>0</td>
+                <td class="right" data-ratio="9 9">100.00%</td>
+            </tr>
+            <tr class="file">
+                <td class="name left"><a href="schemas_project_py.html">schemas/project.py</a></td>
+                <td>9</td>
+                <td>0</td>
+                <td>0</td>
+                <td class="right" data-ratio="9 9">100.00%</td>
+            </tr>
+            <tr class="file">
+                <td class="name left"><a href="schemas_role_py.html">schemas/role.py</a></td>
+                <td>12</td>
+                <td>0</td>
+                <td>0</td>
+                <td class="right" data-ratio="12 12">100.00%</td>
+            </tr>
+            <tr class="file">
+                <td class="name left"><a href="schemas_speaker_py.html">schemas/speaker.py</a></td>
+                <td>8</td>
+                <td>0</td>
+                <td>0</td>
+                <td class="right" data-ratio="8 8">100.00%</td>
+            </tr>
+            <tr class="file">
+                <td class="name left"><a href="schemas_token_py.html">schemas/token.py</a></td>
+                <td>9</td>
+                <td>0</td>
+                <td>0</td>
+                <td class="right" data-ratio="9 9">100.00%</td>
+            </tr>
+        </tbody>
+    </table>
+    <p id="no_rows">
+        No items found using the specified filter.
+    </p>
+</div>
+<div id="footer">
+    <div class="content">
+        <p>
+            <a class="nav" href="https://coverage.readthedocs.io">coverage.py v5.5</a>,
+            created at 2021-06-19 16:13 -0500
+        </p>
+    </div>
+</div>
+</body>
+</html>

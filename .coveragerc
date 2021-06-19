@@ -15,6 +15,7 @@ omit =
     venv/**/*
     tests/**/*
     */__init__.py
+    */__pycache__
 
 [paths]
 source =

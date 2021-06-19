@@ -158,7 +158,7 @@ class TestKeynoteResource(BaseTest):
                 )
 
                 data = json.loads(results.data)
-                print(data)
+
                 self.assertEqual(len(data["keynotes"]), 1)
                 self.assertEqual(data["keynotes"][0]["title"], self.TITLE_1)
                 self.assertEqual(

@@ -10,7 +10,7 @@
   <a href="https://htmlpreview.github.io/?https://github.com/pythonpanama/python-panama-backend/blob/main/coverage_html_report/index.html">
     <img alt="Coverage" src="https://img.shields.io/badge/coverage-99%25-brightgreen.svg" target="_blank" />
   </a>  
-  <a href="https://github.com/pythonpanama/python-panama-backend/blob/master/LICENSE.md">
+  <a href="https://github.com/pythonpanama/python-panama-backend/blob/main/LICENSE">
     <img alt="License: MIT" src="https://img.shields.io/badge/License-MIT-yellow.svg" target="_blank" />
   </a>
   <a href="https://twitter.com/JavierFeliuA">
@@ -99,7 +99,7 @@ Give a ⭐️ if this project helped you!
 
 ## 📝 License
 
-This project is [MIT](https://github.com/pythonpanama/python-panama-backend/blob/main/master/LICENSE.md) licensed.
+This project is [MIT](https://github.com/pythonpanama/python-panama-backend/blob/main/main/LICENSE) licensed.
 
 ***
 _This README was generated with ❤️ by [readme-md-generator](https://github.com/kefranabg/readme-md-generator)_

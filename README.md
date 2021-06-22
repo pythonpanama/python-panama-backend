@@ -20,7 +20,7 @@
 
 ## About
 This project contains a REST API for performing CRUD operations on the Python 
-Panama group's website [database](https://github.com/pythonpanama/python-panama-backend/blob/main/erp.png). 
+Panama group's website [database](https://github.com/pythonpanama/python-panama-backend/blob/main/erd/erd.html). 
 
 The project was built with Flask, using SQLAlchemy, Marshmallow, and JWT_Extended. For testing,
 we used UnitTest.
@@ -83,7 +83,7 @@ If you wish to run the tests with coverage, use instead:
 ```sh
 coverage run -m unittest tests/**/*
 ```
-The included tests provide 99% coverage for the codebase.  You can find the coverage report [here](https://htmlpreview.github.io/?https://github.com/pythonpanama/python-panama-backend/blob/main/master/coverage_html_report/index.html).
+The included tests provide 99% coverage for the codebase.  You can find the coverage report [here](https://htmlpreview.github.io/?https://github.com/pythonpanama/python-panama-backend/blob/main/coverage_html_report/index.html).
 
 ## Mantainer
 
@@ -99,7 +99,7 @@ Give a ⭐️ if this project helped you!
 
 ## 📝 License
 
-This project is [MIT](https://github.com/pythonpanama/python-panama-backend/blob/main/main/LICENSE) licensed.
+This project is [MIT](https://github.com/pythonpanama/python-panama-backend/blob/main/LICENSE) licensed.
 
 ***
 _This README was generated with ❤️ by [readme-md-generator](https://github.com/kefranabg/readme-md-generator)_

@@ -20,7 +20,7 @@
 
 ## About
 This project contains a REST API for performing CRUD operations on the Python 
-Panama group's website [database](https://github.com/pythonpanama/python-panama-backend/blob/main/erd/erd.html). 
+Panama group's website [database](https://htmlpreview.github.io/?https://github.com/pythonpanama/python-panama-backend/blob/main/erd/erd.html). 
 
 The project was built with Flask, using SQLAlchemy, Marshmallow, and JWT_Extended. For testing,
 we used UnitTest.

@@ -24,3 +24,4 @@ class ModelMixin:
         except exc.SQLAlchemyError as e:  # pragma: no cover
             db.session.rollback()
             abort(500, description=e)
+            
